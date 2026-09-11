@@ -303,17 +303,18 @@
   <div class="toolbar glass-hud">
     <div class="group-pill">
       <button class="tool-btn active" data-view="default">🎥 3/4 Perspective</button>
-      <button class="tool-btn" data-view="espresso">☕ Espresso Hub</button>
+      <button class="tool-btn" data-view="sunset">☀️ Sunset Window</button>
+      <button class="tool-btn" data-view="mojito">🍸 Mojito Table</button>
+      <button class="tool-btn" data-view="espresso">☕ Barista Hub</button>
       <button class="tool-btn" data-view="siphon">🧪 Siphon Bar</button>
-      <button class="tool-btn" data-view="juice">🍹 Hydration Bar</button>
-      <button class="tool-btn" data-view="lounge">🛋️ Oak Lounge</button>
+      <button class="tool-btn" data-view="entrance">🚪 Entrance Sign</button>
     </div>
 
     <div class="sep"></div>
 
     <div class="group-pill">
-      <button class="tool-btn active" data-light="daylight">☀️ 5000K Morning</button>
-      <button class="tool-btn" data-light="golden">🌅 2200K Sunset</button>
+      <button class="tool-btn active" data-light="golden">🌅 Golden Sunset</button>
+      <button class="tool-btn" data-light="daylight">☀️ 5000K Morning</button>
       <button class="tool-btn" data-light="evening">🌙 Midnight Ambiance</button>
     </div>
 
@@ -900,6 +901,194 @@
       return new THREE.CanvasTexture(canvas);
     }
 
+    // Exterior Sunset Sky Panorama Backdrop Texture (1024x512)
+    function generateSunsetPanoramaTexture() {
+      const canvas = document.createElement('canvas');
+      canvas.width = 1024;
+      canvas.height = 512;
+      const ctx = canvas.getContext('2d');
+
+      // Radiant Sunset Sky Gradient: Deep purple to rose, vibrant crimson, gold-orange, and horizon amber
+      const grad = ctx.createLinearGradient(0, 0, 0, 512);
+      grad.addColorStop(0.0, '#1c1033'); // Deep twilight purple
+      grad.addColorStop(0.25, '#43194a'); // Rich plum
+      grad.addColorStop(0.48, '#8c284e'); // Warm rose magenta
+      grad.addColorStop(0.66, '#d44933'); // Vibrant sunset crimson
+      grad.addColorStop(0.80, '#ff7a18'); // Radiant gold-orange
+      grad.addColorStop(0.92, '#ffaa2b'); // Brilliant warm golden amber
+      grad.addColorStop(1.0, '#ffd166');  // Horizon glow
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, 1024, 512);
+
+      // Glowing Sunset Sun Orb
+      const sunGrad = ctx.createRadialGradient(420, 390, 0, 420, 390, 180);
+      sunGrad.addColorStop(0.0, 'rgba(255, 255, 240, 1.0)');
+      sunGrad.addColorStop(0.12, 'rgba(255, 235, 160, 0.95)');
+      sunGrad.addColorStop(0.35, 'rgba(255, 150, 40, 0.7)');
+      sunGrad.addColorStop(0.70, 'rgba(255, 100, 20, 0.25)');
+      sunGrad.addColorStop(1.0, 'rgba(255, 70, 10, 0)');
+      ctx.fillStyle = sunGrad;
+      ctx.beginPath();
+      ctx.arc(420, 390, 180, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Soft Altocumulus Clouds Catching Warm Golden Rim Light
+      for (let c = 0; c < 14; c++) {
+        const cx = 80 + c * 75 + (c % 3) * 20;
+        const cy = 200 + (c % 5) * 32;
+        const cw = 110 + (c % 4) * 30;
+        const ch = 12 + (c % 3) * 6;
+        const cGrad = ctx.createRadialGradient(cx, cy, 0, cx, cy, cw / 2);
+        cGrad.addColorStop(0, 'rgba(255, 175, 85, 0.38)');
+        cGrad.addColorStop(0.7, 'rgba(255, 110, 50, 0.15)');
+        cGrad.addColorStop(1, 'rgba(255, 100, 50, 0)');
+        ctx.fillStyle = cGrad;
+        ctx.fillRect(cx - cw / 2, cy - ch / 2, cw, ch);
+      }
+
+      // Low Urban City & Distant Mountain Silhouette along Horizon
+      ctx.fillStyle = '#160c18';
+      ctx.beginPath();
+      ctx.moveTo(0, 512);
+      ctx.lineTo(0, 420);
+      const skyline = [
+        [50, 415], [100, 408], [140, 395], [175, 412], [215, 405], [255, 418],
+        [300, 400], [345, 404], [390, 388], [435, 410], [480, 402], [525, 415],
+        [570, 398], [620, 406], [670, 418], [725, 392], [780, 410], [840, 405],
+        [910, 416], [970, 410], [1024, 415], [1024, 512]
+      ];
+      skyline.forEach(([x, y]) => ctx.lineTo(x, y));
+      ctx.closePath();
+      ctx.fill();
+
+      const tex = new THREE.CanvasTexture(canvas);
+      return tex;
+    }
+
+    // Entrance Solid Oak A-Frame Sidewalk Chalkboard Texture (512x1024)
+    function generateEntranceChalkboardTexture() {
+      const canvas = document.createElement('canvas');
+      canvas.width = 512;
+      canvas.height = 1024;
+      const ctx = canvas.getContext('2d');
+
+      // Matte Black Slate Surface with Micro Chalk Dust
+      ctx.fillStyle = '#141416';
+      ctx.fillRect(0, 0, 512, 1024);
+
+      for (let i = 0; i < 45; i++) {
+        const x = Math.random() * 512;
+        const y = Math.random() * 1024;
+        const r = 15 + Math.random() * 85;
+        const grad = ctx.createRadialGradient(x, y, 0, x, y, r);
+        grad.addColorStop(0, 'rgba(255, 255, 255, 0.045)');
+        grad.addColorStop(1, 'rgba(255, 255, 255, 0)');
+        ctx.fillStyle = grad;
+        ctx.beginPath();
+        ctx.arc(x, y, r, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      // Ornate Double Chalk Border
+      ctx.strokeStyle = 'rgba(255, 250, 240, 0.85)';
+      ctx.lineWidth = 3;
+      ctx.strokeRect(24, 24, 464, 976);
+      ctx.strokeStyle = 'rgba(255, 245, 230, 0.45)';
+      ctx.lineWidth = 1;
+      ctx.strokeRect(32, 32, 448, 960);
+
+      // Corner flourishes
+      [[24, 24], [488, 24], [24, 1000], [488, 1000]].forEach(([cx, cy]) => {
+        ctx.fillStyle = 'rgba(255, 250, 240, 0.8)';
+        ctx.beginPath();
+        ctx.arc(cx, cy, 5, 0, Math.PI * 2);
+        ctx.fill();
+      });
+
+      // Header Typography
+      ctx.textAlign = 'center';
+      ctx.fillStyle = '#f7eedf';
+      ctx.font = 'bold 36px "Cinzel", Georgia, serif';
+      ctx.fillText('CAFÉ ADDIS', 256, 95);
+
+      ctx.fillStyle = '#d4902a';
+      ctx.font = '600 16px "Plus Jakarta Sans", sans-serif';
+      ctx.fillText('★ ARTISAN SLOW-BAR & LOUNGE ★', 256, 130);
+
+      // Decorative divider
+      ctx.strokeStyle = 'rgba(212, 144, 42, 0.6)';
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.moveTo(80, 155);
+      ctx.lineTo(432, 155);
+      ctx.stroke();
+
+      // Today's Specials Header
+      ctx.fillStyle = '#ffffff';
+      ctx.font = 'italic 24px Georgia, serif';
+      ctx.fillText("Today's Handcrafted Specials", 256, 210);
+
+      // Special items
+      const specials = [
+        { name: "FRESH MINT MOJITO", desc: "Key Lime, Organic Spearmint, Cane Soda", price: "$7.50", tag: "🍹 FEATURED" },
+        { name: "VACUUM SIPHON RESERVE", desc: "Yirgacheffe G1 Washed, Slow 92.8°C", price: "$6.00", tag: "🧪 MICRO-LOT" },
+        { name: "SONIFER DOUBLE ESPRESSO", desc: "Guji Hambela, 9.2 Bar Velvet Crema", price: "$4.25", tag: "☕ HOUSE" },
+        { name: "COLD-PRESSED JUICES", desc: "Golden Mango Nectar & Ruby Beetroot", price: "$5.50", tag: "🍊 FRESH" }
+      ];
+
+      specials.forEach((item, idx) => {
+        const itemY = 280 + idx * 135;
+
+        // Tag
+        ctx.fillStyle = '#d4902a';
+        ctx.font = '700 13px "Plus Jakarta Sans", sans-serif';
+        ctx.fillText(item.tag, 256, itemY - 20);
+
+        // Name
+        ctx.fillStyle = '#faf6f0';
+        ctx.font = 'bold 22px "Cinzel", serif';
+        ctx.fillText(item.name, 256, itemY + 8);
+
+        // Desc
+        ctx.fillStyle = 'rgba(220, 210, 195, 0.85)';
+        ctx.font = '14px "Plus Jakarta Sans", sans-serif';
+        ctx.fillText(item.desc, 256, itemY + 34);
+
+        // Price
+        ctx.fillStyle = '#ffd166';
+        ctx.font = 'bold 20px "Cinzel", serif';
+        ctx.fillText(item.price, 256, itemY + 62);
+
+        // Dotted separator
+        if (idx < specials.length - 1) {
+          ctx.strokeStyle = 'rgba(255, 255, 255, 0.18)';
+          ctx.setLineDash([4, 4]);
+          ctx.beginPath();
+          ctx.moveTo(110, itemY + 80);
+          ctx.lineTo(402, itemY + 80);
+          ctx.stroke();
+          ctx.setLineDash([]);
+        }
+      });
+
+      // Bottom Golden Hour Banner
+      ctx.fillStyle = 'rgba(212, 144, 42, 0.2)';
+      ctx.fillRect(50, 850, 412, 75);
+      ctx.strokeStyle = '#d4902a';
+      ctx.lineWidth = 1;
+      ctx.strokeRect(50, 850, 412, 75);
+
+      ctx.fillStyle = '#ffe082';
+      ctx.font = 'bold 18px "Plus Jakarta Sans", sans-serif';
+      ctx.fillText('✨ SUNSET GOLDEN HOUR ✨', 256, 882);
+      ctx.fillStyle = '#ffffff';
+      ctx.font = '14px "Plus Jakarta Sans", sans-serif';
+      ctx.fillText('4:00 PM – 7:00 PM Daily', 256, 908);
+
+      const tex = new THREE.CanvasTexture(canvas);
+      return tex;
+    }
+
     // =========================================================================
     // 2. Scene, Photometric Pipeline & Renderer Setup
     // =========================================================================
@@ -907,11 +1096,11 @@
     const canvas = document.getElementById('webgl-canvas');
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0x0b0907);
-    scene.fog = new THREE.FogExp2(0x130e09, 0.026);
+    scene.fog = new THREE.FogExp2(0x24140d, 0.016);
 
-    // Default Architectural Perspective: Eye-level (X = -2.8m, Y = 1.55m, Z = 3.2m), FOV 42°
-    const camera = new THREE.PerspectiveCamera(42, window.innerWidth / window.innerHeight, 0.1, 35);
-    camera.position.set(-2.8, 1.55, 3.2);
+    // Default Architectural Perspective: Eye-level (X = -2.5m, Y = 1.55m, Z = 3.5m), FOV 42°
+    const camera = new THREE.PerspectiveCamera(42, window.innerWidth / window.innerHeight, 0.1, 45);
+    camera.position.set(-2.5, 1.55, 3.5);
 
     const renderer = new THREE.WebGLRenderer({
       canvas,
@@ -923,7 +1112,7 @@
     renderer.outputColorSpace = THREE.SRGBColorSpace;
     renderer.outputEncoding = THREE.sRGBEncoding;
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.10;
+    renderer.toneMappingExposure = 1.25;
 
     // High-Resolution Shadow Map Configuration
     renderer.shadowMap.enabled = true;
@@ -935,8 +1124,8 @@
     controls.dampingFactor = 0.05;
     controls.maxPolarAngle = Math.PI / 2 - 0.03; // Restrict clipping below floor
     controls.minDistance = 0.8;
-    controls.maxDistance = 12.0;
-    controls.target.set(0, 1.0, -1.2);
+    controls.maxDistance = 14.0;
+    controls.target.set(0.3, 1.10, -0.6);
 
     // Post-Processing Composer (Gentle Bloom for Edison Filaments)
     let composer, bloomPass;
@@ -1187,10 +1376,16 @@
         color: 0x4b583e,
         roughness: 0.90
       }),
-      // Glowing Edison Double-Spiral Filaments (emissive: 0xffa033, emissiveIntensity: 4.5)
+      // Smooth Off-White / Warm Chalk-White Lime-Wash Plaster (color: 0xf4f1eb, roughness: 0.82, metalness: 0.02)
+      limeWashPlaster: new THREE.MeshStandardMaterial({
+        color: 0xf4f1eb,
+        roughness: 0.82,
+        metalness: 0.02
+      }),
+      // Glowing Edison Double-Spiral Filaments (emissive: 0xffaa33, emissiveIntensity: 4.5)
       glowingFilamentWire: new THREE.MeshStandardMaterial({
-        color: 0xffa033,
-        emissive: 0xffa033,
+        color: 0xffaa33,
+        emissive: 0xffaa33,
         emissiveIntensity: 4.5
       })
     };
@@ -1208,11 +1403,88 @@
     floor.receiveShadow = true;
     envelope.add(floor);
 
-    // Rear Masonry Brick Wall at Z = -3.5m
-    const rearWall = new THREE.Mesh(new THREE.BoxGeometry(10.5, 3.6, 0.25), materials.flemishBrick);
-    rearWall.position.set(0, 1.8, -3.625);
-    rearWall.receiveShadow = true;
-    envelope.add(rearWall);
+    // --- WALL FINISHES (Crisp White Lime-Wash Palette with Brick Feature Accent) ---
+    // Feature Wall Accent Behind Bar: Reclaimed Flemish brick framing the chalkboard (X = -2.7m to +2.7m)
+    const brickFeatureWall = new THREE.Mesh(new THREE.BoxGeometry(5.4, 3.6, 0.25), materials.flemishBrick);
+    brickFeatureWall.position.set(0, 1.8, -3.625);
+    brickFeatureWall.receiveShadow = true;
+    envelope.add(brickFeatureWall);
+
+    // Adjacent Rear Wall Left Section (Crisp Lime-Wash Plaster: X = -5.25m to -2.7m)
+    const rearWallLeft = new THREE.Mesh(new THREE.BoxGeometry(2.55, 3.6, 0.25), materials.limeWashPlaster);
+    rearWallLeft.position.set(-3.975, 1.8, -3.625);
+    rearWallLeft.receiveShadow = true;
+    envelope.add(rearWallLeft);
+
+    // Adjacent Rear Wall Right Section (Crisp Lime-Wash Plaster: X = +2.7m to +5.25m)
+    const rearWallRight = new THREE.Mesh(new THREE.BoxGeometry(2.55, 3.6, 0.25), materials.limeWashPlaster);
+    rearWallRight.position.set(3.975, 1.8, -3.625);
+    rearWallRight.receiveShadow = true;
+    envelope.add(rearWallRight);
+
+    // Right-Hand Perimeter Wall (Crisp Lime-Wash Plaster at X = +5.25m)
+    const rightWall = new THREE.Mesh(new THREE.BoxGeometry(0.25, 3.6, 7.2), materials.limeWashPlaster);
+    rightWall.position.set(5.375, 1.8, 0);
+    rightWall.receiveShadow = true;
+    envelope.add(rightWall);
+
+    // Front Perimeter Wall & Entrance Portal (Z = +3.6m to +3.725m)
+    // Front Left Wall (X = -5.25m to 0.0m)
+    const frontWallLeft = new THREE.Mesh(new THREE.BoxGeometry(5.25, 3.6, 0.25), materials.limeWashPlaster);
+    frontWallLeft.position.set(-2.625, 1.8, 3.725);
+    frontWallLeft.receiveShadow = true;
+    envelope.add(frontWallLeft);
+
+    // Front Right Wall (X = +2.4m to +5.25m)
+    const frontWallRight = new THREE.Mesh(new THREE.BoxGeometry(2.85, 3.6, 0.25), materials.limeWashPlaster);
+    frontWallRight.position.set(3.825, 1.8, 3.725);
+    frontWallRight.receiveShadow = true;
+    envelope.add(frontWallRight);
+
+    // Header above Entrance Doorway
+    const frontHeader = new THREE.Mesh(new THREE.BoxGeometry(2.4, 0.8, 0.25), materials.limeWashPlaster);
+    frontHeader.position.set(1.2, 3.2, 3.725);
+    envelope.add(frontHeader);
+
+    // Glass Entrance Doorway (X = 0.0m to 2.4m, Y = 0 to 2.8m, Z = 3.6m)
+    const entrancePortal = new THREE.Group();
+    entrancePortal.position.set(1.2, 0, 3.6);
+
+    const doorSteelMat = materials.blackenedStructuralSteel;
+    const doorFrameTop = new THREE.Mesh(new THREE.BoxGeometry(2.4, 0.06, 0.08), doorSteelMat);
+    doorFrameTop.position.set(0, 2.77, 0);
+    const doorFrameL = new THREE.Mesh(new THREE.BoxGeometry(0.06, 2.8, 0.08), doorSteelMat);
+    doorFrameL.position.set(-1.17, 1.4, 0);
+    const doorFrameR = new THREE.Mesh(new THREE.BoxGeometry(0.06, 2.8, 0.08), doorSteelMat);
+    doorFrameR.position.set(1.17, 1.4, 0);
+    const doorMullion = new THREE.Mesh(new THREE.BoxGeometry(0.05, 2.8, 0.08), doorSteelMat);
+    doorMullion.position.set(0, 1.4, 0);
+
+    // Clear Glazing Door Leaves
+    const doorGlassL = new THREE.Mesh(new THREE.BoxGeometry(1.12, 2.74, 0.03), materials.lowIronArchitecturalGlass);
+    doorGlassL.position.set(-0.58, 1.4, 0);
+    const doorGlassR = new THREE.Mesh(new THREE.BoxGeometry(1.12, 2.74, 0.03), materials.lowIronArchitecturalGlass);
+    doorGlassR.position.set(0.58, 1.4, 0);
+
+    // Sleek Solid Brass Pull Handles
+    const handleL = new THREE.Mesh(new THREE.CylinderGeometry(0.012, 0.012, 0.62, 12), materials.solidBrass);
+    handleL.position.set(-0.06, 1.15, 0.04);
+    const handleR = new THREE.Mesh(new THREE.CylinderGeometry(0.012, 0.012, 0.62, 12), materials.solidBrass);
+    handleR.position.set(0.06, 1.15, 0.04);
+
+    entrancePortal.add(doorFrameTop, doorFrameL, doorFrameR, doorMullion, doorGlassL, doorGlassR, handleL, handleR);
+    envelope.add(entrancePortal);
+
+    // Exterior Sunset Sky Panorama Backdrop (Curved Hemisphere outside Storefront Window at X = -7.5m)
+    const sunsetSkyGeo = new THREE.CylinderGeometry(15, 15, 12, 36, 1, true, Math.PI * 0.78, Math.PI * 0.62);
+    const sunsetSkyMat = new THREE.MeshBasicMaterial({
+      map: generateSunsetPanoramaTexture(),
+      side: THREE.BackSide,
+      depthWrite: false
+    });
+    const sunsetSkyDome = new THREE.Mesh(sunsetSkyGeo, sunsetSkyMat);
+    sunsetSkyDome.position.set(-1.0, 3.6, 0);
+    envelope.add(sunsetSkyDome);
 
     // Ceiling Concrete Slab at Y = 3.6m
     const ceiling = new THREE.Mesh(new THREE.BoxGeometry(10.5, 0.2, 7.2), materials.graphiteConcrete);
@@ -1226,15 +1498,6 @@
       beam.castShadow = true;
       envelope.add(beam);
     });
-
-    // Right-Hand Masonry / Plaster Wall at X = +5.25m
-    const rightWall = new THREE.Mesh(new THREE.BoxGeometry(0.25, 3.6, 7.2), new THREE.MeshStandardMaterial({
-      color: 0x30261f,
-      roughness: 0.9
-    }));
-    rightWall.position.set(5.375, 1.8, 0);
-    rightWall.receiveShadow = true;
-    envelope.add(rightWall);
 
     // Framed Black Slate Chalkboard (4.2m wide × 1.4m tall mounted at Y = 1.6m)
     const chalkboard = new THREE.Mesh(new THREE.BoxGeometry(4.2, 1.4, 0.04), materials.chalkboardSlate);
@@ -2506,10 +2769,10 @@
 
     seatingZone.add(benchGroup);
 
-    // Two Minimalist Round Bistro Tables (650mm diameter walnut tops on cast-iron trumpet bases)
-    function buildBistroTable(zPos) {
+    // Flexible Round Bistro Tables (650mm diameter solid walnut tops on cast-iron trumpet bases)
+    function buildBistroTable(zPos, xPos = 3.6) {
       const table = new THREE.Group();
-      table.position.set(3.6, 0, zPos);
+      table.position.set(xPos, 0, zPos);
 
       // Cast-Iron Trumpet Base
       const trumpetBase = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.24, 0.06, 24), materials.blackenedStructuralSteel);
@@ -2532,9 +2795,6 @@
       seatingZone.add(table);
       return table;
     }
-
-    buildBistroTable(-0.8);
-    buildBistroTable(1.4);
 
     // Tubular Blackened-Steel Dining Chairs with Bent Walnut Veneer Backrests
     function buildDiningChair(xPos, zPos, rotY) {
@@ -2569,8 +2829,574 @@
       return chair;
     }
 
-    buildDiningChair(2.9, -0.8, Math.PI / 2);
-    buildDiningChair(2.9, 1.4, Math.PI / 2);
+    // Lounge Bistro Tables
+    const table1 = buildBistroTable(-0.8, 3.6);
+    const table2 = buildBistroTable(1.4, 3.6);
+    const windowTable = buildBistroTable(0.8, -3.85);
+
+    // Dining Chairs
+    const chair1 = buildDiningChair(2.9, -0.8, Math.PI / 2);
+    const chair2 = buildDiningChair(2.9, 1.4, Math.PI / 2);
+    const windowChair = buildDiningChair(-3.85, 1.25, -Math.PI / 2);
+
+    // =========================================================================
+    // 5. Specialty Table Drinks & Handcrafted Glassware
+    // =========================================================================
+
+    // Handcrafted Artisan Mint Mojito Glass
+    function buildArtisanMojitoGlass() {
+      const mojito = new THREE.Group();
+
+      // Heavy-Base Crystal Collins Glass (64mm diameter, 140mm height)
+      const glassMat = new THREE.MeshPhysicalMaterial({
+        color: 0xf6fcfc,
+        transparent: true,
+        opacity: 0.14,
+        roughness: 0.06,
+        transmission: 0.95,
+        ior: 1.50
+      });
+
+      const glassWall = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.032, 0.029, 0.140, 24),
+        glassMat
+      );
+      glassWall.position.y = 0.070;
+      glassWall.castShadow = true;
+      mojito.add(glassWall);
+
+      // Solid Weighted Glass Base (18mm elevation)
+      const solidBase = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.029, 0.029, 0.018, 20),
+        glassMat
+      );
+      solidBase.position.y = 0.009;
+      mojito.add(solidBase);
+
+      // Lime-Mint Tinted Sparkling Soda Fluid
+      const fluidMat = new THREE.MeshPhysicalMaterial({
+        color: 0xd8f3dc,
+        transparent: true,
+        opacity: 0.75,
+        roughness: 0.08,
+        transmission: 0.92,
+        ior: 1.333
+      });
+      const fluid = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.030, 0.027, 0.108, 20),
+        fluidMat
+      );
+      fluid.position.y = 0.018 + 0.054;
+      mojito.add(fluid);
+
+      // Crystalline Crushed Ice Cubes
+      const iceMat = new THREE.MeshPhysicalMaterial({
+        color: 0xffffff,
+        transparent: true,
+        opacity: 0.45,
+        transmission: 0.95,
+        roughness: 0.08,
+        ior: 1.31
+      });
+      [
+        { x: -0.010, y: 0.045, z: 0.008, s: 0.018, rx: 0.4, ry: 0.6 },
+        { x: 0.012,  y: 0.065, z: -0.009, s: 0.019, rx: -0.5, ry: 0.3 },
+        { x: -0.008, y: 0.090, z: 0.010, s: 0.017, rx: 0.8, ry: -0.4 },
+        { x: 0.009,  y: 0.105, z: -0.006, s: 0.018, rx: 0.2, ry: 0.9 }
+      ].forEach(ic => {
+        const ice = new THREE.Mesh(new THREE.BoxGeometry(ic.s, ic.s, ic.s), iceMat);
+        ice.position.set(ic.x, ic.y, ic.z);
+        ice.rotation.set(ic.rx, ic.ry, 0);
+        mojito.add(ice);
+      });
+
+      // Fresh Submerged Spearmint Leaves
+      const mintMat = new THREE.MeshStandardMaterial({
+        color: 0x2d6a4f,
+        roughness: 0.45,
+        side: THREE.DoubleSide
+      });
+      [
+        { x: -0.012, y: 0.06, z: 0.014, ry: 0.5, rz: 0.4 },
+        { x: 0.014,  y: 0.08, z: -0.012, ry: -0.8, rz: -0.3 },
+        { x: 0.000,  y: 0.11, z: 0.016, ry: 1.2, rz: 0.6 }
+      ].forEach(m => {
+        const mintLeaf = new THREE.Mesh(new THREE.SphereGeometry(0.014, 8, 6), mintMat);
+        mintLeaf.scale.set(1.4, 0.25, 0.8);
+        mintLeaf.position.set(m.x, m.y, m.z);
+        mintLeaf.rotation.set(0.3, m.ry, m.rz);
+        mojito.add(mintLeaf);
+      });
+
+      // Segmented Fresh Key Lime Wheel Slice on Rim
+      const limeGroup = new THREE.Group();
+      limeGroup.position.set(0.026, 0.138, 0.016);
+      limeGroup.rotation.z = -0.35;
+      limeGroup.rotation.y = 0.4;
+
+      const rind = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.022, 0.022, 0.0035, 20),
+        new THREE.MeshStandardMaterial({ color: 0x40916c, roughness: 0.6 })
+      );
+      rind.rotation.x = Math.PI / 2;
+      limeGroup.add(rind);
+
+      const pulp = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.019, 0.019, 0.004, 16),
+        new THREE.MeshStandardMaterial({ color: 0x99d98c, roughness: 0.4 })
+      );
+      pulp.rotation.x = Math.PI / 2;
+      limeGroup.add(pulp);
+      mojito.add(limeGroup);
+
+      // Kraft Paper Straw
+      const straw = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.003, 0.003, 0.170, 10),
+        new THREE.MeshStandardMaterial({ color: 0xd4a373, roughness: 0.7 })
+      );
+      straw.position.set(-0.010, 0.115, -0.010);
+      straw.rotation.z = -0.22;
+      straw.rotation.x = -0.18;
+      mojito.add(straw);
+
+      return mojito;
+    }
+
+    // Table Espresso Demitasse Cup & Saucer
+    function buildTableDemitasse() {
+      const cupGroup = new THREE.Group();
+
+      const cup = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.026, 0.018, 0.045, 20),
+        new THREE.MeshStandardMaterial({ color: 0xfaf8f5, roughness: 0.18 })
+      );
+      cup.position.y = 0.0225;
+      cup.castShadow = true;
+      cupGroup.add(cup);
+
+      const handle = new THREE.Mesh(
+        new THREE.TorusGeometry(0.012, 0.003, 6, 12),
+        new THREE.MeshStandardMaterial({ color: 0xfaf8f5, roughness: 0.18 })
+      );
+      handle.position.set(0.026, 0.024, 0);
+      cupGroup.add(handle);
+
+      const saucer = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.048, 0.035, 0.008, 20),
+        new THREE.MeshStandardMaterial({ color: 0xfaf8f5, roughness: 0.18 })
+      );
+      saucer.position.y = 0.004;
+      saucer.castShadow = true;
+      cupGroup.add(saucer);
+
+      const crema = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.024, 0.024, 0.003, 16),
+        new THREE.MeshStandardMaterial({ color: 0x995c28, roughness: 0.65 })
+      );
+      crema.position.y = 0.038;
+      cupGroup.add(crema);
+
+      return cupGroup;
+    }
+
+    // Drinks on Table 1
+    const table1Mojito = buildArtisanMojitoGlass();
+    table1Mojito.position.set(3.55, 0.70, -0.75);
+    seatingZone.add(table1Mojito);
+
+    const table1Demitasse = buildTableDemitasse();
+    table1Demitasse.position.set(3.68, 0.70, -0.88);
+    seatingZone.add(table1Demitasse);
+
+    // Drinks on Table 2
+    const table2Mojito = buildArtisanMojitoGlass();
+    table2Mojito.position.set(3.62, 0.70, 1.35);
+    seatingZone.add(table2Mojito);
+
+    // Drinks on Window Table
+    const windowCoffee = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.028, 0.022, 0.065, 18),
+      materials.borosilicateGlass
+    );
+    windowCoffee.position.set(-3.85, 0.732, 0.8);
+    const windowCoffeeFluid = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.026, 0.020, 0.050, 16),
+      materials.amberBrewedCoffee
+    );
+    windowCoffeeFluid.position.set(-3.85, 0.725, 0.8);
+    seatingZone.add(windowCoffee, windowCoffeeFluid);
+
+    // =========================================================================
+    // 6. Stylized Architectural Figures & Customer Group
+    // =========================================================================
+
+    function createStylizedFigure(config) {
+      const group = new THREE.Group();
+      group.position.set(config.x, config.y, config.z);
+      group.rotation.y = config.rotY || 0;
+
+      const skinMat = new THREE.MeshStandardMaterial({
+        color: config.skinTone || 0xd6a378,
+        roughness: 0.68,
+        metalness: 0.02
+      });
+      const hairMat = new THREE.MeshStandardMaterial({
+        color: config.hairColor || 0x261c14,
+        roughness: 0.90
+      });
+      const shirtMat = new THREE.MeshStandardMaterial({
+        color: config.shirtColor || 0xf4f1eb,
+        roughness: 0.85
+      });
+      const pantsMat = new THREE.MeshStandardMaterial({
+        color: config.pantsColor || 0x242426,
+        roughness: 0.85
+      });
+      const shoeMat = new THREE.MeshStandardMaterial({
+        color: 0x1a1512,
+        roughness: 0.65
+      });
+
+      if (config.isSitting) {
+        // --- SEATED HUMAN FIGURE ---
+        // Lower legs & shoes
+        [-0.08, 0.08].forEach(lx => {
+          const lowerLeg = new THREE.Mesh(new THREE.CylinderGeometry(0.042, 0.038, 0.44, 12), pantsMat);
+          lowerLeg.position.set(lx, 0.22, 0.24);
+          lowerLeg.castShadow = true;
+          const shoe = new THREE.Mesh(new THREE.BoxGeometry(0.085, 0.06, 0.16), shoeMat);
+          shoe.position.set(lx, 0.03, 0.28);
+          shoe.castShadow = true;
+          group.add(lowerLeg, shoe);
+        });
+
+        // Upper thighs
+        [-0.08, 0.08].forEach(lx => {
+          const thigh = new THREE.Mesh(new THREE.CylinderGeometry(0.052, 0.045, 0.38, 12), pantsMat);
+          thigh.rotation.x = Math.PI / 2;
+          thigh.position.set(lx, 0.44, 0.08);
+          thigh.castShadow = true;
+          group.add(thigh);
+        });
+
+        // Pelvis / Hips
+        const hips = new THREE.Mesh(new THREE.BoxGeometry(0.28, 0.14, 0.24), pantsMat);
+        hips.position.set(0, 0.50, -0.10);
+        hips.castShadow = true;
+        group.add(hips);
+
+        // Torso / Sweater
+        const torso = new THREE.Mesh(new THREE.BoxGeometry(0.32, 0.44, 0.20), shirtMat);
+        torso.position.set(0, 0.77, -0.10);
+        torso.castShadow = true;
+        group.add(torso);
+
+        // Neck
+        const neck = new THREE.Mesh(new THREE.CylinderGeometry(0.045, 0.048, 0.09, 12), skinMat);
+        neck.position.set(0, 1.02, -0.09);
+        group.add(neck);
+
+        // Head
+        const head = new THREE.Mesh(new THREE.SphereGeometry(0.10, 16, 14), skinMat);
+        head.scale.set(0.9, 1.15, 0.95);
+        head.position.set(0, 1.14, -0.08);
+        head.castShadow = true;
+        group.add(head);
+
+        // Hair
+        const hair = new THREE.Mesh(new THREE.SphereGeometry(0.108, 14, 12), hairMat);
+        hair.scale.set(0.94, 1.12, 1.0);
+        hair.position.set(0, 1.17, -0.09);
+        group.add(hair);
+
+        // Arms
+        if (config.holdingCup) {
+          const armR = new THREE.Mesh(new THREE.CylinderGeometry(0.038, 0.034, 0.30, 8), shirtMat);
+          armR.rotation.x = Math.PI / 3;
+          armR.rotation.z = -0.2;
+          armR.position.set(0.20, 0.72, 0.05);
+          const handR = new THREE.Mesh(new THREE.SphereGeometry(0.032, 8, 8), skinMat);
+          handR.position.set(0.24, 0.70, 0.20);
+          group.add(armR, handR);
+
+          const armL = new THREE.Mesh(new THREE.CylinderGeometry(0.038, 0.034, 0.32, 8), shirtMat);
+          armL.rotation.x = 0.2;
+          armL.position.set(-0.19, 0.65, -0.06);
+          const handL = new THREE.Mesh(new THREE.SphereGeometry(0.032, 8, 8), skinMat);
+          handL.position.set(-0.19, 0.48, 0.02);
+          group.add(armL, handL);
+        } else {
+          const armL = new THREE.Mesh(new THREE.CylinderGeometry(0.038, 0.034, 0.28, 8), shirtMat);
+          armL.rotation.x = Math.PI / 3.2;
+          armL.rotation.z = 0.25;
+          armL.position.set(-0.19, 0.72, 0.05);
+          const handL = new THREE.Mesh(new THREE.SphereGeometry(0.032, 8, 8), skinMat);
+          handL.position.set(-0.22, 0.70, 0.18);
+          group.add(armL, handL);
+
+          const armR = new THREE.Mesh(new THREE.CylinderGeometry(0.038, 0.034, 0.28, 8), shirtMat);
+          armR.rotation.x = Math.PI / 3.8;
+          armR.rotation.z = -0.15;
+          armR.position.set(0.19, 0.72, 0.04);
+          const handR = new THREE.Mesh(new THREE.SphereGeometry(0.032, 8, 8), skinMat);
+          handR.position.set(0.21, 0.70, 0.16);
+          group.add(armR, handR);
+        }
+      } else {
+        // --- STANDING FIGURE (Barista) ---
+        [-0.09, 0.09].forEach(lx => {
+          const leg = new THREE.Mesh(new THREE.CylinderGeometry(0.048, 0.042, 0.88, 12), pantsMat);
+          leg.position.set(lx, 0.44, 0);
+          leg.castShadow = true;
+          const shoe = new THREE.Mesh(new THREE.BoxGeometry(0.09, 0.06, 0.18), shoeMat);
+          shoe.position.set(lx, 0.03, 0.04);
+          shoe.castShadow = true;
+          group.add(leg, shoe);
+        });
+
+        const hips = new THREE.Mesh(new THREE.BoxGeometry(0.30, 0.15, 0.20), pantsMat);
+        hips.position.set(0, 0.90, 0);
+        hips.castShadow = true;
+        group.add(hips);
+
+        const torso = new THREE.Mesh(new THREE.BoxGeometry(0.34, 0.48, 0.22), shirtMat);
+        torso.position.set(0, 1.20, 0);
+        torso.castShadow = true;
+        group.add(torso);
+
+        if (config.hasApron) {
+          const apronMat = new THREE.MeshStandardMaterial({
+            color: 0x1a1715,
+            roughness: 0.88
+          });
+          const bib = new THREE.Mesh(new THREE.BoxGeometry(0.28, 0.36, 0.015), apronMat);
+          bib.position.set(0, 1.20, 0.115);
+          const skirt = new THREE.Mesh(new THREE.BoxGeometry(0.32, 0.48, 0.015), apronMat);
+          skirt.position.set(0, 0.76, 0.11);
+          const pocket = new THREE.Mesh(new THREE.BoxGeometry(0.18, 0.12, 0.015), new THREE.MeshStandardMaterial({ color: 0x33261a, roughness: 0.85 }));
+          pocket.position.set(0, 0.82, 0.12);
+          const neckStrap = new THREE.Mesh(new THREE.TorusGeometry(0.08, 0.008, 6, 12, Math.PI), materials.americanWalnutFrame);
+          neckStrap.position.set(0, 1.38, 0.05);
+          neckStrap.rotation.x = Math.PI / 4;
+          group.add(bib, skirt, pocket, neckStrap);
+        }
+
+        const neck = new THREE.Mesh(new THREE.CylinderGeometry(0.045, 0.048, 0.10, 12), skinMat);
+        neck.position.set(0, 1.48, 0);
+        group.add(neck);
+
+        const head = new THREE.Mesh(new THREE.SphereGeometry(0.105, 16, 14), skinMat);
+        head.scale.set(0.9, 1.15, 0.95);
+        head.position.set(0, 1.60, 0.02);
+        head.rotation.x = 0.12;
+        head.castShadow = true;
+        group.add(head);
+
+        const hair = new THREE.Mesh(new THREE.SphereGeometry(0.112, 14, 12), hairMat);
+        hair.scale.set(0.94, 1.10, 1.0);
+        hair.position.set(0, 1.63, 0.01);
+        group.add(hair);
+
+        // Arms holding milk steaming pitcher forward
+        const armL = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.034, 0.32, 8), shirtMat);
+        armL.rotation.x = Math.PI / 2.6;
+        armL.rotation.y = 0.2;
+        armL.position.set(-0.20, 1.15, 0.14);
+        const handL = new THREE.Mesh(new THREE.SphereGeometry(0.034, 8, 8), skinMat);
+        handL.position.set(-0.16, 1.08, 0.30);
+        group.add(armL, handL);
+
+        const armR = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.034, 0.32, 8), shirtMat);
+        armR.rotation.x = Math.PI / 2.8;
+        armR.rotation.y = -0.2;
+        armR.position.set(0.20, 1.15, 0.14);
+        const handR = new THREE.Mesh(new THREE.SphereGeometry(0.034, 8, 8), skinMat);
+        handR.position.set(0.14, 1.08, 0.30);
+        group.add(armR, handR);
+
+        if (config.holdingPitcher) {
+          const pitcher = new THREE.Group();
+          pitcher.position.set(0.0, 1.06, 0.34);
+          const pBody = new THREE.Mesh(new THREE.CylinderGeometry(0.042, 0.048, 0.09, 16), materials.polishedChrome);
+          pBody.castShadow = true;
+          const pHandle = new THREE.Mesh(new THREE.TorusGeometry(0.03, 0.005, 6, 12, Math.PI), materials.polishedChrome);
+          pHandle.position.set(-0.045, 0, 0);
+          pHandle.rotation.y = Math.PI / 2;
+          pitcher.add(pBody, pHandle);
+          group.add(pitcher);
+        }
+      }
+
+      return group;
+    }
+
+    // Customer Group:
+    // 1. Barista behind Sonifer Espresso Station
+    const barista = createStylizedFigure({
+      x: 0.82, y: 0.0, z: -1.95,
+      rotY: 0,
+      skinTone: 0x8a5a36,
+      hairColor: 0x161616,
+      shirtColor: 0xf4f1eb,
+      pantsColor: 0x1f2022,
+      hasApron: true,
+      isSitting: false,
+      holdingPitcher: true
+    });
+    scene.add(barista);
+
+    // 2. Solo Customer at Window admiring Sunset
+    const windowCustomer = createStylizedFigure({
+      x: -3.85, y: 0.0, z: 1.25,
+      rotY: -Math.PI / 2,
+      skinTone: 0xd6a378,
+      hairColor: 0x3d2719,
+      shirtColor: 0xb87d2b, // warm mustard sweater
+      pantsColor: 0x222629,
+      isSitting: true,
+      holdingCup: true
+    });
+    scene.add(windowCustomer);
+
+    // 3. Friend A on Dining Chair at Table 1
+    const friendA = createStylizedFigure({
+      x: 2.9, y: 0.0, z: -0.8,
+      rotY: Math.PI / 2,
+      skinTone: 0x8a5a36,
+      hairColor: 0x1a1a1a,
+      shirtColor: 0x5a6d56, // sage green sweater
+      pantsColor: 0x1f2421,
+      isSitting: true,
+      holdingCup: false
+    });
+    scene.add(friendA);
+
+    // 4. Friend B on Banquette at Table 1
+    const friendB = createStylizedFigure({
+      x: 4.3, y: 0.0, z: -0.8,
+      rotY: -Math.PI / 2,
+      skinTone: 0xd6a378,
+      hairColor: 0x4a2a1b,
+      shirtColor: 0x8a3832, // terracotta cardigan
+      pantsColor: 0xf0ece1,
+      isSitting: true,
+      holdingCup: true
+    });
+    scene.add(friendB);
+
+    // 5. Friend C on Banquette at Table 2
+    const friendC = createStylizedFigure({
+      x: 4.3, y: 0.0, z: 1.4,
+      rotY: -Math.PI / 2,
+      skinTone: 0xb58055,
+      hairColor: 0x221a15,
+      shirtColor: 0x24334a, // navy cashmere
+      pantsColor: 0x25282a,
+      isSitting: true,
+      holdingCup: false
+    });
+    scene.add(friendC);
+
+    // Freestanding Solid Oak A-Frame Sidewalk Chalkboard Sign at Entrance Threshold (Z = +3.1m, X = 1.2m)
+    function buildEntranceAFrame() {
+      const aFrame = new THREE.Group();
+      aFrame.name = 'entranceAFrame';
+      aFrame.position.set(1.2, 0, 3.1);
+      aFrame.rotation.y = -0.18;
+
+      const frameMat = materials.americanWalnutFrame;
+      const slateMat = new THREE.MeshStandardMaterial({
+        map: generateEntranceChalkboardTexture(),
+        roughness: 0.94,
+        metalness: 0.03
+      });
+
+      const angle = 0.16;
+
+      // Front Board Panel (angled forward)
+      const frontBoard = new THREE.Group();
+      frontBoard.rotation.x = angle;
+      frontBoard.position.set(0, 0.475, 0.08);
+
+      const fLegL = new THREE.Mesh(new THREE.BoxGeometry(0.04, 0.95, 0.035), frameMat);
+      fLegL.position.set(-0.28, 0, 0);
+      const fLegR = new THREE.Mesh(new THREE.BoxGeometry(0.04, 0.95, 0.035), frameMat);
+      fLegR.position.set(0.28, 0, 0);
+      const fRailTop = new THREE.Mesh(new THREE.BoxGeometry(0.52, 0.05, 0.035), frameMat);
+      fRailTop.position.set(0, 0.45, 0);
+      const fRailBot = new THREE.Mesh(new THREE.BoxGeometry(0.52, 0.06, 0.035), frameMat);
+      fRailBot.position.set(0, -0.38, 0);
+
+      const fSlate = new THREE.Mesh(new THREE.BoxGeometry(0.52, 0.77, 0.015), slateMat);
+      fSlate.position.set(0, 0.035, 0.012);
+      fSlate.castShadow = true;
+      fSlate.receiveShadow = true;
+
+      frontBoard.add(fLegL, fLegR, fRailTop, fRailBot, fSlate);
+      aFrame.add(frontBoard);
+
+      // Back Support Panel (angled backward)
+      const backBoard = new THREE.Group();
+      backBoard.rotation.x = -angle;
+      backBoard.position.set(0, 0.475, -0.08);
+
+      const bLegL = new THREE.Mesh(new THREE.BoxGeometry(0.04, 0.95, 0.035), frameMat);
+      bLegL.position.set(-0.28, 0, 0);
+      const bLegR = new THREE.Mesh(new THREE.BoxGeometry(0.04, 0.95, 0.035), frameMat);
+      bLegR.position.set(0.28, 0, 0);
+      const bRailTop = new THREE.Mesh(new THREE.BoxGeometry(0.52, 0.05, 0.035), frameMat);
+      bRailTop.position.set(0, 0.45, 0);
+      const bRailMid = new THREE.Mesh(new THREE.BoxGeometry(0.52, 0.04, 0.035), frameMat);
+      bRailMid.position.set(0, 0.05, 0);
+      const bRailBot = new THREE.Mesh(new THREE.BoxGeometry(0.52, 0.06, 0.035), frameMat);
+      bRailBot.position.set(0, -0.38, 0);
+
+      backBoard.add(bLegL, bLegR, bRailTop, bRailMid, bRailBot);
+      aFrame.add(backBoard);
+
+      // Top Brass Hinges
+      [-0.22, 0.22].forEach(hx => {
+        const hinge = new THREE.Mesh(new THREE.CylinderGeometry(0.012, 0.012, 0.06, 12), materials.solidBrass);
+        hinge.rotation.z = Math.PI / 2;
+        hinge.position.set(hx, 0.94, 0);
+        aFrame.add(hinge);
+      });
+
+      // Spreader Brass Stay Bars
+      [-0.24, 0.24].forEach(sx => {
+        const stay = new THREE.Mesh(new THREE.CylinderGeometry(0.002, 0.002, 0.22, 6), materials.solidBrass);
+        stay.rotation.x = Math.PI / 2;
+        stay.position.set(sx, 0.28, 0);
+        aFrame.add(stay);
+      });
+
+      scene.add(aFrame);
+      return aFrame;
+    }
+
+    const entranceAFrame = buildEntranceAFrame();
+
+    registerInteractive(entranceAFrame, {
+      title: "Cafe Addis Entrance A-Frame Chalkboard",
+      tag: "Threshold Welcome",
+      desc: "Handcrafted solid oak A-frame sidewalk chalkboard welcoming guests at the threshold. Highlights today's artisan specials: Key lime spearmint Mojitos, single-origin vacuum siphon brews, and house espresso extractions.",
+      specs: [
+        ["Construction", "Solid American Oak Frame with Dual Hinges & Brass Spreader Stays"],
+        ["Slate Surface", "Matte Charcoal Black Slate (roughness: 0.94) with Custom Chalk Calligraphy"],
+        ["Specials", "Fresh Mint Mojitos, Siphon Slow-Bar, Sonifer SF3531 Double-Shot, Cold-Pressed Juices"]
+      ]
+    });
+
+    registerInteractive(table1Mojito, {
+      title: "Handcrafted Artisan Spearmint Mojito",
+      tag: "Social Hour Beverage",
+      desc: "Tall Collins glass with crystalline crushed ice, fresh muddled organic spearmint, cane syrup, freshly squeezed Key lime juice, and sparkling soda topped with a cut lime wheel and kraft straw.",
+      specs: [
+        ["Glassware", "Heavy-Base Crystal Collins (transmission: 0.95, ior: 1.50)"],
+        ["Mixology", "Key Lime, Organic Spearmint, Crystalline Crushed Ice, Sparkling Soda"],
+        ["Garnish", "Segmented Fresh Lime Wheel & Kraft Paper Straw"]
+      ]
+    });
 
     // =========================================================================
     // 7. Precision Photometric Lighting Design & Suspended Ladder Rig
@@ -2579,10 +3405,10 @@
     const lightingSystem = new THREE.Group();
     scene.add(lightingSystem);
 
-    // Suspended Overhead Feature: Vintage Five-Rung Wooden Utility Ladder (3.4m × 0.50m) at Y = 2.60m
+    // Suspended Overhead Feature: Vintage Five-Rung Wooden Utility Ladder (3.4m × 0.50m) at Y = 2.65m
     // Strict requirement: No cups attached to the ladder or pendant cords.
     const ladderGroup = new THREE.Group();
-    ladderGroup.position.set(0, 2.60, barCenterZ);
+    ladderGroup.position.set(0, 2.65, barCenterZ);
 
     // Ladder Rails
     const railMat = materials.reclaimedTimberBeam;
@@ -2607,8 +3433,8 @@
     // 4 Matte-Black Braided Steel Cables (2mm diameter) Anchored to Ceiling Beams
     const cableMat = materials.blackenedStructuralSteel;
     [[-1.5, -0.225], [1.5, -0.225], [-1.5, 0.225], [1.5, 0.225]].forEach(([cx, cz]) => {
-      const cable = new THREE.Mesh(new THREE.CylinderGeometry(0.001, 0.001, 1.0, 8), cableMat);
-      cable.position.set(cx, 0.50, cz);
+      const cable = new THREE.Mesh(new THREE.CylinderGeometry(0.001, 0.001, 0.95, 8), cableMat);
+      cable.position.set(cx, 0.475, cz);
       ladderGroup.add(cable);
     });
     lightingSystem.add(ladderGroup);
@@ -2617,19 +3443,19 @@
     // Staggered deliberate elevations: dropping from Y = 2.35m down to Y = 2.05m
     const edisonFixtures = [];
     const bulbDropConfig = [
-      { x: -1.36, y: 2.30, intensity: 1.6 },
-      { x: -0.68, y: 2.12, intensity: 1.6 },
-      { x: 0.00,  y: 2.35, intensity: 1.6 },
-      { x: 0.68,  y: 2.05, intensity: 1.6 },
-      { x: 1.36,  y: 2.22, intensity: 1.6 }
+      { x: -1.36, y: 2.30, intensity: 1.5 },
+      { x: -0.68, y: 2.12, intensity: 1.5 },
+      { x: 0.00,  y: 2.35, intensity: 1.5 },
+      { x: 0.68,  y: 2.05, intensity: 1.5 },
+      { x: 1.36,  y: 2.22, intensity: 1.5 }
     ];
 
     bulbDropConfig.forEach((cfg, idx) => {
       const fixture = new THREE.Group();
       fixture.position.set(cfg.x, cfg.y, barCenterZ);
 
-      // Cord extending up to ladder (ladder at Y = 2.60m)
-      const cordLen = 2.60 - cfg.y;
+      // Cord extending up to ladder (ladder at Y = 2.65m)
+      const cordLen = 2.65 - cfg.y;
       const cord = new THREE.Mesh(new THREE.CylinderGeometry(0.002, 0.002, cordLen, 6), materials.blackenedStructuralSteel);
       cord.position.y = cordLen / 2;
       fixture.add(cord);
@@ -2645,14 +3471,14 @@
       st64.position.y = -0.045;
       fixture.add(st64);
 
-      // Glowing Double-Spiral Coiled Filament Wire (emissive: 0xffa033, emissiveIntensity: 4.5)
+      // Glowing Double-Spiral Coiled Filament Wire (emissive: 0xffaa33, emissiveIntensity: 4.5)
       const filament = new THREE.Mesh(new THREE.CylinderGeometry(0.011, 0.011, 0.042, 10), materials.glowingFilamentWire);
       filament.position.y = -0.042;
       fixture.add(filament);
 
-      // Photometric PointLight: 2200K vintage ultra-warm amber (#ff9c38)
-      // Radius: 5.0m, decay: 2.0, shadow map: 1024x1024, bias: -0.002
-      const pointLight = new THREE.PointLight(0xff9c38, cfg.intensity, 5.0, 2.0);
+      // Photometric PointLight: 2200K vintage ultra-warm amber (#ff9838)
+      // Radius: 4.5m, decay: 2.0, shadow map: 1024x1024, bias: -0.002
+      const pointLight = new THREE.PointLight(0xff9838, cfg.intensity, 4.5, 2.0);
       pointLight.position.y = -0.045;
       pointLight.castShadow = true;
       pointLight.shadow.mapSize.width = 1024;
@@ -2664,17 +3490,21 @@
       edisonFixtures.push({ fixture, pointLight, filament, baseIntensity: cfg.intensity });
     });
 
-    // Natural Sunlight (Primary Scene Key):
-    // Position: X = -7.5m, Y = 5.5m, Z = 2.5m, Color: 5000K (#fff1e0), Intensity: 2.4
-    const sunlight = new THREE.DirectionalLight(0xfff1e0, 2.4);
-    sunlight.position.set(-7.5, 5.5, 2.5);
-    sunlight.target.position.set(0, 0.9, -1.0);
+    // Intense Sunset Key Light (Window Ingress at X = -9.0m, Y = 2.8m, Z = 1.0m):
+    // Vivid warm golden-amber (0xff8b26), intensity: 3.2, casting sharp dramatic horizontal shadows
+    const sunlight = new THREE.DirectionalLight(0xff8b26, 3.2);
+    sunlight.position.set(-9.0, 2.8, 1.0);
+    sunlight.target.position.set(0.5, 0.8, -0.5);
     sunlight.castShadow = true;
     sunlight.shadow.mapSize.width = 2048;
     sunlight.shadow.mapSize.height = 2048;
-    sunlight.shadow.bias = -0.001;
+    sunlight.shadow.bias = -0.0008;
     lightingSystem.add(sunlight);
     lightingSystem.add(sunlight.target);
+
+    // Secondary Sunset Fill & Bounce: THREE.HemisphereLight (sky: 0xffba88, ground: 0x3d261a, intensity: 0.75)
+    const hemiLight = new THREE.HemisphereLight(0xffba88, 0x3d261a, 0.75);
+    lightingSystem.add(hemiLight);
 
     // Architectural Counter Kick-Plate Underglow (Concealed Warm LED Linear Wash: 2700K #ffaa44, intensity: 0.6)
     [-1.6, 0.0, 1.6].forEach(kx => {
@@ -2692,8 +3522,8 @@
       lightingSystem.add(spot.target);
     });
 
-    // Ambient Fill: Rich Warm Sepia Tone (#2c1d14, intensity: 0.6)
-    const ambientLight = new THREE.AmbientLight(0x2c1d14, 0.6);
+    // Ambient Fill: Warm sunset sepia tone (#381f14, intensity: 0.40)
+    const ambientLight = new THREE.AmbientLight(0x381f14, 0.40);
     lightingSystem.add(ambientLight);
 
     // =========================================================================
@@ -2770,8 +3600,16 @@
 
     const views = {
       default: {
-        pos: new THREE.Vector3(-2.8, 1.55, 3.2),
-        target: new THREE.Vector3(0, 1.0, -1.2)
+        pos: new THREE.Vector3(-2.5, 1.55, 3.5),
+        target: new THREE.Vector3(0.3, 1.10, -0.6)
+      },
+      sunset: {
+        pos: new THREE.Vector3(-3.4, 1.45, 1.8),
+        target: new THREE.Vector3(-5.25, 1.8, 0.5)
+      },
+      mojito: {
+        pos: new THREE.Vector3(3.1, 1.20, -0.25),
+        target: new THREE.Vector3(3.6, 0.75, -0.8)
       },
       espresso: {
         pos: new THREE.Vector3(0.80, 1.38, -0.40),
@@ -2781,13 +3619,9 @@
         pos: new THREE.Vector3(-0.80, 1.38, -0.45),
         target: new THREE.Vector3(-0.80, 1.15, barCenterZ)
       },
-      juice: {
-        pos: new THREE.Vector3(2.07, 1.42, -0.40),
-        target: new THREE.Vector3(2.07, 1.15, barCenterZ)
-      },
-      lounge: {
-        pos: new THREE.Vector3(2.4, 1.50, 1.8),
-        target: new THREE.Vector3(4.6, 0.85, 0.2)
+      entrance: {
+        pos: new THREE.Vector3(1.1, 1.35, 2.0),
+        target: new THREE.Vector3(1.2, 0.65, 3.1)
       }
     };
 
@@ -2805,29 +3639,39 @@
 
     // Photometric Atmosphere Modes
     function setLightingMode(mode) {
-      if (mode === 'daylight') {
+      if (mode === 'golden') {
+        sunlight.color.setHex(0xff8b26);
+        sunlight.intensity = 3.2;
+        sunlight.position.set(-9.0, 2.8, 1.0);
+        hemiLight.color.setHex(0xffba88);
+        hemiLight.groundColor.setHex(0x3d261a);
+        hemiLight.intensity = 0.75;
+        ambientLight.color.setHex(0x381f14);
+        ambientLight.intensity = 0.40;
+        edisonFixtures.forEach(f => f.pointLight.intensity = f.baseIntensity);
+        if (bloomPass) bloomPass.strength = 0.38;
+      } else if (mode === 'daylight') {
         sunlight.color.setHex(0xfff1e0);
         sunlight.intensity = 2.4;
         sunlight.position.set(-7.5, 5.5, 2.5);
+        hemiLight.color.setHex(0xffffff);
+        hemiLight.groundColor.setHex(0x443322);
+        hemiLight.intensity = 0.60;
         ambientLight.color.setHex(0x2c1d14);
-        ambientLight.intensity = 0.60;
-        edisonFixtures.forEach(f => f.pointLight.intensity = f.baseIntensity);
-        if (bloomPass) bloomPass.strength = 0.28;
-      } else if (mode === 'golden') {
-        sunlight.color.setHex(0xffaa44);
-        sunlight.intensity = 1.6;
-        sunlight.position.set(-7.5, 3.2, 2.0);
-        ambientLight.color.setHex(0x381f12);
-        ambientLight.intensity = 0.48;
-        edisonFixtures.forEach(f => f.pointLight.intensity = f.baseIntensity * 1.35);
-        if (bloomPass) bloomPass.strength = 0.42;
+        ambientLight.intensity = 0.55;
+        edisonFixtures.forEach(f => f.pointLight.intensity = f.baseIntensity * 0.9);
+        if (bloomPass) bloomPass.strength = 0.25;
       } else if (mode === 'evening') {
         sunlight.color.setHex(0x1a2638);
         sunlight.intensity = 0.35;
+        sunlight.position.set(-9.0, 2.0, 1.0);
+        hemiLight.color.setHex(0x2a2035);
+        hemiLight.groundColor.setHex(0x110c08);
+        hemiLight.intensity = 0.35;
         ambientLight.color.setHex(0x18100a);
-        ambientLight.intensity = 0.28;
-        edisonFixtures.forEach(f => f.pointLight.intensity = f.baseIntensity * 1.8);
-        if (bloomPass) bloomPass.strength = 0.65;
+        ambientLight.intensity = 0.25;
+        edisonFixtures.forEach(f => f.pointLight.intensity = f.baseIntensity * 1.6);
+        if (bloomPass) bloomPass.strength = 0.60;
       }
     }
 
