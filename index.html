@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <title>Boutique Specialty Coffee Shop | 3D Interior Experience</title>
+  <title>Boutique Artisan Coffee Bar | 3D Architectural Experience</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -19,9 +19,9 @@
       width: 100%;
       height: 100%;
       overflow: hidden;
-      background-color: #0d0a07;
+      background-color: #0b0907;
       font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-      color: #f5ede2;
+      color: #f7eedf;
     }
     #webgl-canvas {
       position: absolute;
@@ -33,63 +33,62 @@
       outline: none;
     }
 
-    /* Glassmorphic UI HUD */
-    .glass-panel {
-      background: rgba(18, 14, 11, 0.72);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-      border: 1px solid rgba(220, 180, 140, 0.18);
-      border-radius: 14px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+    /* Architectural UI Overlay */
+    .glass-hud {
+      background: rgba(18, 14, 11, 0.76);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(212, 160, 100, 0.16);
+      border-radius: 12px;
+      box-shadow: 0 12px 36px rgba(0, 0, 0, 0.55);
     }
 
-    /* Top Brand Header */
     header {
       position: absolute;
-      top: 20px;
+      top: 22px;
       left: 24px;
       display: flex;
       align-items: center;
       gap: 14px;
-      padding: 10px 20px;
+      padding: 10px 18px;
       z-index: 10;
       pointer-events: auto;
     }
-    .logo-badge {
+    .logo-mark {
       width: 38px;
       height: 38px;
-      border-radius: 10px;
-      background: linear-gradient(135deg, #d49b28, #9c412b);
+      border-radius: 9px;
+      background: linear-gradient(135deg, #d4902a, #632819);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 20px;
-      box-shadow: 0 4px 12px rgba(212, 155, 40, 0.35);
+      font-size: 19px;
+      box-shadow: 0 4px 14px rgba(212, 144, 42, 0.32);
     }
-    .header-text h1 {
+    .header-info h1 {
       font-family: 'Cinzel', serif;
-      font-size: 17px;
+      font-size: 16px;
       font-weight: 700;
-      letter-spacing: 1.5px;
-      color: #f7eedf;
+      letter-spacing: 1.4px;
+      color: #faf5ed;
       text-transform: uppercase;
     }
-    .header-text p {
+    .header-info p {
       font-size: 11px;
       color: #bfa993;
-      letter-spacing: 0.5px;
+      letter-spacing: 0.6px;
     }
 
-    /* Controls Bar at Bottom */
-    .controls-bar {
+    /* Bottom HUD Toolbar */
+    .toolbar {
       position: absolute;
       bottom: 24px;
       left: 50%;
       transform: translateX(-50%);
       display: flex;
       align-items: center;
-      gap: 12px;
-      padding: 8px 14px;
+      gap: 10px;
+      padding: 7px 14px;
       z-index: 10;
       pointer-events: auto;
       max-width: 95vw;
@@ -97,177 +96,148 @@
       justify-content: center;
     }
 
-    .btn-group {
+    .group-pill {
       display: flex;
-      background: rgba(0, 0, 0, 0.35);
-      padding: 4px;
-      border-radius: 10px;
-      gap: 4px;
+      background: rgba(0, 0, 0, 0.4);
+      padding: 3px;
+      border-radius: 9px;
+      gap: 3px;
     }
 
-    .nav-btn {
+    .tool-btn {
       background: transparent;
       border: none;
-      color: #cfbda9;
-      padding: 7px 13px;
+      color: #d1c1af;
+      padding: 7px 12px;
       border-radius: 7px;
-      font-size: 12px;
+      font-size: 11.5px;
       font-weight: 500;
       font-family: inherit;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      transition: all 0.22s cubic-bezier(0.2, 0.8, 0.2, 1);
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
     }
-    .nav-btn:hover {
+    .tool-btn:hover {
       color: #ffffff;
       background: rgba(255, 255, 255, 0.08);
     }
-    .nav-btn.active {
+    .tool-btn.active {
       color: #ffffff;
-      background: linear-gradient(135deg, rgba(212, 155, 40, 0.85), rgba(156, 65, 43, 0.85));
-      box-shadow: 0 4px 12px rgba(212, 155, 40, 0.28);
+      background: linear-gradient(135deg, rgba(212, 144, 42, 0.9), rgba(99, 40, 25, 0.9));
+      box-shadow: 0 4px 12px rgba(212, 144, 42, 0.25);
     }
 
-    .divider {
+    .sep {
       width: 1px;
-      height: 22px;
-      background: rgba(255, 255, 255, 0.15);
+      height: 20px;
+      background: rgba(255, 255, 255, 0.12);
       margin: 0 2px;
     }
 
-    .icon-btn {
-      background: rgba(255, 255, 255, 0.06);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      color: #e3d5c5;
-      width: 36px;
-      height: 36px;
-      border-radius: 9px;
+    .icon-action {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: #dfd3c5;
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 15px;
+      font-size: 14px;
       transition: all 0.2s ease;
     }
-    .icon-btn:hover {
-      background: rgba(255, 255, 255, 0.14);
+    .icon-action:hover {
+      background: rgba(255, 255, 255, 0.12);
       color: #ffffff;
-      transform: translateY(-1px);
     }
-    .icon-btn.active {
-      background: #d49b28;
+    .icon-action.active {
+      background: #d4902a;
       color: #120e0b;
-      border-color: #d49b28;
     }
 
-    /* Floating Info Card on Prop Click */
-    .info-modal {
+    /* Interactive Spec Modal */
+    .spec-modal {
       position: absolute;
-      top: 24px;
+      top: 22px;
       right: 24px;
-      width: 310px;
+      width: 320px;
       padding: 18px 20px;
       z-index: 10;
       opacity: 0;
       transform: translateY(-8px) scale(0.97);
       pointer-events: none;
-      transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: all 0.26s cubic-bezier(0.16, 1, 0.3, 1);
     }
-    .info-modal.visible {
+    .spec-modal.visible {
       opacity: 1;
       transform: translateY(0) scale(1);
       pointer-events: auto;
     }
-    .info-modal-header {
+    .modal-head {
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
       margin-bottom: 8px;
     }
-    .info-tag {
+    .tag-badge {
       font-size: 9px;
       text-transform: uppercase;
       letter-spacing: 1px;
-      color: #d49b28;
+      color: #d4902a;
       font-weight: 700;
-      background: rgba(212, 155, 40, 0.15);
+      background: rgba(212, 144, 42, 0.15);
       padding: 3px 8px;
       border-radius: 20px;
     }
-    .close-btn {
+    .btn-close {
       background: transparent;
       border: none;
-      color: #8f7f70;
+      color: #928373;
       cursor: pointer;
-      font-size: 16px;
+      font-size: 17px;
       padding: 2px 6px;
       border-radius: 6px;
     }
-    .close-btn:hover {
+    .btn-close:hover {
       color: #ffffff;
-      background: rgba(255, 255, 255, 0.1);
     }
-    .info-modal h3 {
-      font-size: 16px;
+    .spec-modal h3 {
+      font-size: 15px;
       font-weight: 700;
-      color: #fdfaf6;
+      color: #fbf7f0;
       margin-bottom: 6px;
       font-family: 'Cinzel', serif;
     }
-    .info-modal p {
-      font-size: 12px;
-      line-height: 1.55;
-      color: #cbbbae;
+    .spec-modal p {
+      font-size: 11.5px;
+      line-height: 1.5;
+      color: #c9b9a8;
       margin-bottom: 12px;
     }
-    .prop-specs {
+    .spec-grid {
       display: flex;
       flex-direction: column;
       gap: 5px;
       border-top: 1px solid rgba(255, 255, 255, 0.08);
       padding-top: 10px;
     }
-    .spec-row {
+    .spec-item {
       display: flex;
       justify-content: space-between;
-      font-size: 11px;
+      font-size: 10.5px;
     }
-    .spec-label {
-      color: #9c8a79;
-    }
-    .spec-val {
-      color: #e8ded2;
-      font-weight: 600;
-    }
+    .spec-label { color: #8e7d6c; }
+    .spec-val { color: #eae0d4; font-weight: 600; }
 
-    /* Helper Tooltip Badge */
-    .interaction-hint {
-      position: absolute;
-      top: 80px;
-      left: 50%;
-      transform: translateX(-50%);
-      padding: 6px 14px;
-      font-size: 11px;
-      letter-spacing: 0.5px;
-      color: rgba(245, 237, 226, 0.7);
-      background: rgba(0, 0, 0, 0.4);
-      border-radius: 20px;
-      pointer-events: none;
-      z-index: 5;
-      animation: pulseFade 4s ease-in-out infinite;
-    }
-    @keyframes pulseFade {
-      0%, 100% { opacity: 0.4; }
-      50% { opacity: 0.9; }
-    }
-
-    /* Loading Screen */
-    #loader {
+    /* Scene Loader */
+    #preloader {
       position: absolute;
       inset: 0;
-      background: #0e0b08;
+      background: #0b0907;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -275,31 +245,30 @@
       z-index: 100;
       transition: opacity 0.75s ease;
     }
-    .loader-cup {
-      font-size: 46px;
-      margin-bottom: 16px;
-      animation: steamFloat 2s ease-in-out infinite;
+    .loader-icon {
+      font-size: 42px;
+      margin-bottom: 14px;
+      animation: gentleFloat 2.2s ease-in-out infinite;
     }
-    @keyframes steamFloat {
-      0%, 100% { transform: translateY(0) rotate(0); }
-      50% { transform: translateY(-6px) rotate(1deg); }
+    @keyframes gentleFloat {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-7px); }
     }
-    .loader-title {
+    .loader-head {
       font-family: 'Cinzel', serif;
-      font-size: 20px;
+      font-size: 18px;
       letter-spacing: 3px;
-      color: #f7eedf;
+      color: #faf5ed;
       text-transform: uppercase;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
     }
-    .loader-sub {
-      font-size: 12px;
-      color: #bfa993;
-      letter-spacing: 1px;
+    .loader-desc {
+      font-size: 11.5px;
+      color: #a89481;
+      letter-spacing: 0.8px;
     }
   </style>
 
-  <!-- Modern Import Map for Three.js & Official Addons -->
   <script type="importmap">
   {
     "imports": {
@@ -311,72 +280,61 @@
 </head>
 <body>
 
-  <!-- Loading Overlay -->
-  <div id="loader">
-    <div class="loader-cup">☕</div>
-    <div class="loader-title">Boutique Specialty Coffee</div>
-    <div class="loader-sub">Preparing 3D Interior & Atmospheric Lighting...</div>
+  <!-- Preloader Screen -->
+  <div id="preloader">
+    <div class="loader-icon">☕</div>
+    <div class="loader-head">Artisan Coffee Bar</div>
+    <div class="loader-desc">Initializing Photometric Architecture &amp; PBR Shaders...</div>
   </div>
 
-  <!-- WebGL Render Canvas -->
+  <!-- WebGL Viewport -->
   <canvas id="webgl-canvas"></canvas>
 
-  <!-- Header Branding -->
-  <header class="glass-panel">
-    <div class="logo-badge">☕</div>
-    <div class="header-text">
+  <!-- Top Brand Navigation Header -->
+  <header class="glass-hud">
+    <div class="logo-mark">☕</div>
+    <div class="header-info">
       <h1>Bunna &amp; Bloom</h1>
-      <p>Specialty Coffee &amp; Siphon Roastery</p>
+      <p>Artisan Slow-Bar &bull; Architectural Hospitality</p>
     </div>
   </header>
 
-  <!-- Interactive Hint -->
-  <div class="interaction-hint">
-    ✨ Click items on the bar counter to inspect equipment details &bull; Drag to explore
-  </div>
-
-  <!-- Bottom Navigation HUD -->
-  <div class="controls-bar glass-panel">
-    <!-- Camera View Presets -->
-    <div class="btn-group">
-      <button class="nav-btn active" data-cam="overview">🎥 Overview</button>
-      <button class="nav-btn" data-cam="barista">☕ Barista Bar</button>
-      <button class="nav-btn" data-cam="siphon">🧪 Siphon Lab</button>
-      <button class="nav-btn" data-cam="lounge">🛋️ Lounge</button>
-      <button class="nav-btn" data-cam="window">🪟 Window</button>
+  <!-- Bottom Interactive HUD -->
+  <div class="toolbar glass-hud">
+    <div class="group-pill">
+      <button class="tool-btn active" data-view="default">🎥 3/4 Perspective</button>
+      <button class="tool-btn" data-view="espresso">☕ Espresso Hub</button>
+      <button class="tool-btn" data-view="siphon">🧪 Siphon Bar</button>
+      <button class="tool-btn" data-view="juice">🍹 Hydration Bar</button>
+      <button class="tool-btn" data-view="lounge">🛋️ Oak Lounge</button>
     </div>
 
-    <div class="divider"></div>
+    <div class="sep"></div>
 
-    <!-- Time of Day / Mood -->
-    <div class="btn-group">
-      <button class="nav-btn active" data-mood="cozy">🌅 Golden Hour</button>
-      <button class="nav-btn" data-mood="night">🌙 Candlelit Night</button>
-      <button class="nav-btn" data-mood="day">☀️ Morning Daylight</button>
+    <div class="group-pill">
+      <button class="tool-btn active" data-light="daylight">☀️ 5000K Morning</button>
+      <button class="tool-btn" data-light="golden">🌅 2200K Sunset</button>
+      <button class="tool-btn" data-light="evening">🌙 Midnight Ambiance</button>
     </div>
 
-    <div class="divider"></div>
+    <div class="sep"></div>
 
-    <!-- Audio Ambiance Synthesizer -->
-    <button class="icon-btn" id="audio-toggle" title="Toggle Cozy Coffee Shop Soundscape">
+    <button class="icon-action" id="audio-btn" title="Toggle Gentle Cafe Rain & Vinyl Resonance">
       🔊
     </button>
   </div>
 
-  <!-- Click Inspection Card -->
-  <div class="info-modal glass-panel" id="info-card">
-    <div class="info-modal-header">
-      <span class="info-tag" id="card-tag">Specialty Gear</span>
-      <button class="close-btn" id="close-card">&times;</button>
+  <!-- Interactive Equipment Inspection Modal -->
+  <div class="spec-modal glass-hud" id="spec-modal">
+    <div class="modal-head">
+      <span class="tag-badge" id="modal-tag">Hospitality Spec</span>
+      <button class="btn-close" id="btn-close">&times;</button>
     </div>
-    <h3 id="card-title">Espresso Machine</h3>
-    <p id="card-desc">Handcrafted dual-boiler commercial unit with PID temperature control and manual pre-infusion.</p>
-    <div class="prop-specs" id="card-specs">
-      <!-- Injected dynamically -->
-    </div>
+    <h3 id="modal-title">Equipment</h3>
+    <p id="modal-desc">Detailed architectural description.</p>
+    <div class="spec-grid" id="modal-grid"></div>
   </div>
 
-  <!-- Main Three.js Application Logic -->
   <script type="module">
     import * as THREE from 'three';
     import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
@@ -384,12 +342,12 @@
     import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
     import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
 
-    // ==========================================
-    // 1. Procedural Texture Generators
-    // ==========================================
+    // =========================================================================
+    // 1. Procedural High-Accuracy Texture Generators
+    // =========================================================================
 
-    // Exposed distressed red-brown brick texture
-    function createBrickTextures() {
+    // Flemish-Bond Reclaimed Heritage Red-Clay Brick Texture
+    function generateFlemishBrickTextures() {
       const canvas = document.createElement('canvas');
       canvas.width = 1024;
       canvas.height = 1024;
@@ -400,354 +358,328 @@
       bumpCanvas.height = 1024;
       const bCtx = bumpCanvas.getContext('2d');
 
-      // Base wall color
-      ctx.fillStyle = '#4a2c1f';
+      // Mortar Ground Base
+      ctx.fillStyle = '#6e6357';
       ctx.fillRect(0, 0, 1024, 1024);
-      bCtx.fillStyle = '#222222';
+      bCtx.fillStyle = '#2b2b2b';
       bCtx.fillRect(0, 0, 1024, 1024);
 
-      const rows = 32;
+      const rows = 36;
       const rowHeight = 1024 / rows;
-      const brickWidth = 1024 / 8;
+      const stretcherWidth = 110;
+      const headerWidth = 52;
+      const mortarGap = 3.5;
 
-      const brickColors = [
-        '#7b3321', '#8f3b23', '#6a2b1b', '#9c482c',
-        '#5e2617', '#873822', '#742f1d', '#552115'
+      const flemishPalette = [
+        '#632819', '#562115', '#481c12', '#6b2d1c', 
+        '#733220', '#3b170e', '#2e1a12', '#522316'
       ];
 
       for (let r = 0; r < rows; r++) {
-        const y = r * rowHeight;
-        const offset = (r % 2 === 0) ? 0 : -brickWidth / 2;
-        for (let x = offset; x < 1024 + brickWidth; x += brickWidth) {
-          const color = brickColors[Math.floor(Math.random() * brickColors.length)];
+        const y = r * rowHeight + mortarGap / 2;
+        const h = rowHeight - mortarGap;
+        let x = (r % 2 === 0) ? -stretcherWidth / 2 : 0;
+        let isStretcher = (r % 2 === 0);
+
+        while (x < 1024 + stretcherWidth) {
+          const w = (isStretcher ? stretcherWidth : headerWidth) - mortarGap;
+          const color = flemishPalette[Math.floor(Math.random() * flemishPalette.length)];
+          
           ctx.fillStyle = color;
-          ctx.fillRect(x + 3, y + 3, brickWidth - 6, rowHeight - 6);
+          ctx.fillRect(x + mortarGap / 2, y, w, h);
 
-          bCtx.fillStyle = '#dddddd';
-          bCtx.fillRect(x + 3, y + 3, brickWidth - 6, rowHeight - 6);
+          // Procedural micro-chipping and weathered variations
+          bCtx.fillStyle = '#dcdcdc';
+          bCtx.fillRect(x + mortarGap / 2, y, w, h);
 
-          // Subtle weathered brick specks
-          for (let s = 0; s < 12; s++) {
-            const sx = x + 4 + Math.random() * (brickWidth - 8);
-            const sy = y + 4 + Math.random() * (rowHeight - 8);
-            const sr = Math.random() * 3 + 1;
-            ctx.fillStyle = Math.random() > 0.5 ? 'rgba(0,0,0,0.22)' : 'rgba(230,200,170,0.18)';
-            ctx.fillRect(sx, sy, sr, sr);
+          for (let p = 0; p < 8; p++) {
+            const px = x + 4 + Math.random() * (w - 8);
+            const py = y + 2 + Math.random() * (h - 4);
+            const sz = Math.random() * 2.5 + 0.8;
+            ctx.fillStyle = Math.random() > 0.4 ? 'rgba(25, 12, 8, 0.28)' : 'rgba(215, 185, 160, 0.16)';
+            ctx.fillRect(px, py, sz, sz);
           }
+
+          x += (isStretcher ? stretcherWidth : headerWidth);
+          isStretcher = !isStretcher;
         }
       }
-
-      // Mortar Lines
-      ctx.strokeStyle = '#d0c4b6';
-      ctx.lineWidth = 4;
-      ctx.globalAlpha = 0.35;
-      for (let r = 0; r <= rows; r++) {
-        ctx.beginPath();
-        ctx.moveTo(0, r * rowHeight);
-        ctx.lineTo(1024, r * rowHeight);
-        ctx.stroke();
-      }
-      ctx.globalAlpha = 1.0;
 
       const diffTex = new THREE.CanvasTexture(canvas);
       diffTex.wrapS = THREE.RepeatWrapping;
       diffTex.wrapT = THREE.RepeatWrapping;
-      diffTex.repeat.set(3, 2);
+      diffTex.repeat.set(2.5, 1.8);
 
       const bumpTex = new THREE.CanvasTexture(bumpCanvas);
       bumpTex.wrapS = THREE.RepeatWrapping;
       bumpTex.wrapT = THREE.RepeatWrapping;
-      bumpTex.repeat.set(3, 2);
+      bumpTex.repeat.set(2.5, 1.8);
 
       return { diffTex, bumpTex };
     }
 
-    // Wide-plank dark oak / walnut hardwood floor texture
-    function createWoodFloorTextures() {
+    // 220mm Smoked French Oak Hardwood Flooring (running front-to-back in Z-direction)
+    function generateSmokedOakTextures() {
       const canvas = document.createElement('canvas');
       canvas.width = 1024;
       canvas.height = 1024;
       const ctx = canvas.getContext('2d');
 
-      ctx.fillStyle = '#22160d';
+      // Base Smoked Oak Color (#231710)
+      ctx.fillStyle = '#231710';
       ctx.fillRect(0, 0, 1024, 1024);
 
-      const planks = 16;
-      const plankH = 1024 / planks;
-      const oakShades = ['#2e1f13', '#382618', '#271a10', '#342316', '#22150d'];
+      const planksCount = 14;
+      const plankW = 1024 / planksCount;
+      const tones = ['#231710', '#2a1c13', '#1e140d', '#281a12', '#1b120c'];
 
-      for (let i = 0; i < planks; i++) {
-        const y = i * plankH;
-        ctx.fillStyle = oakShades[Math.floor(Math.random() * oakShades.length)];
-        ctx.fillRect(0, y + 1.5, 1024, plankH - 3);
+      for (let i = 0; i < planksCount; i++) {
+        const x = i * plankW;
+        ctx.fillStyle = tones[i % tones.length];
+        ctx.fillRect(x + 1.2, 0, plankW - 2.4, 1024);
 
-        // Wood grain lines
-        ctx.strokeStyle = 'rgba(0, 0, 0, 0.28)';
+        // Subtle longitudinal grain running along Z
+        ctx.strokeStyle = 'rgba(10, 6, 4, 0.32)';
         ctx.lineWidth = 1;
-        for (let g = 0; g < 14; g++) {
-          const gy = y + Math.random() * plankH;
+        for (let g = 0; g < 18; g++) {
+          const gx = x + Math.random() * plankW;
           ctx.beginPath();
-          ctx.moveTo(0, gy);
-          ctx.bezierCurveTo(340, gy + (Math.random() - 0.5) * 4, 680, gy + (Math.random() - 0.5) * 4, 1024, gy);
+          ctx.moveTo(gx, 0);
+          ctx.bezierCurveTo(gx + (Math.random() - 0.5) * 3, 340, gx + (Math.random() - 0.5) * 3, 680, gx, 1024);
           ctx.stroke();
         }
       }
 
-      const texture = new THREE.CanvasTexture(canvas);
-      texture.wrapS = THREE.RepeatWrapping;
-      texture.wrapT = THREE.RepeatWrapping;
-      texture.repeat.set(4, 4);
-      return texture;
-    }
-
-    // Polished Solid Timber Countertop Texture
-    function createCountertopTexture() {
-      const canvas = document.createElement('canvas');
-      canvas.width = 512;
-      canvas.height = 512;
-      const ctx = canvas.getContext('2d');
-
-      ctx.fillStyle = '#5c381c';
-      ctx.fillRect(0, 0, 512, 512);
-
-      ctx.strokeStyle = 'rgba(240, 190, 140, 0.12)';
-      ctx.lineWidth = 2;
-      for (let i = 0; i < 40; i++) {
+      // V-groove fine bevel seams
+      ctx.strokeStyle = 'rgba(0, 0, 0, 0.65)';
+      ctx.lineWidth = 2.4;
+      for (let i = 0; i <= planksCount; i++) {
         ctx.beginPath();
-        const y = Math.random() * 512;
-        ctx.moveTo(0, y);
-        ctx.bezierCurveTo(150, y + 5, 350, y - 5, 512, y);
+        ctx.moveTo(i * plankW, 0);
+        ctx.lineTo(i * plankW, 1024);
         ctx.stroke();
       }
 
       const tex = new THREE.CanvasTexture(canvas);
       tex.wrapS = THREE.RepeatWrapping;
       tex.wrapT = THREE.RepeatWrapping;
-      tex.repeat.set(3, 1);
+      tex.repeat.set(3, 4);
       return tex;
     }
 
-    // Chalkboard Menu Artwork with Hand-Drawn Coffee Diagrams
-    function createChalkboardTexture() {
-      const canvas = document.createElement('canvas');
-      canvas.width = 1024;
-      canvas.height = 512;
-      const ctx = canvas.getContext('2d');
-
-      // Slate dark background
-      ctx.fillStyle = '#1c201d';
-      ctx.fillRect(0, 0, 1024, 512);
-
-      // Chalk dust smudges
-      for (let i = 0; i < 40; i++) {
-        ctx.fillStyle = 'rgba(255, 255, 255, 0.015)';
-        ctx.beginPath();
-        ctx.arc(Math.random() * 1024, Math.random() * 512, Math.random() * 120 + 30, 0, Math.PI * 2);
-        ctx.fill();
-      }
-
-      // Border frame
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.35)';
-      ctx.lineWidth = 3;
-      ctx.strokeRect(18, 18, 1024 - 36, 512 - 36);
-      ctx.strokeRect(26, 26, 1024 - 52, 512 - 52);
-
-      // Title Header
-      ctx.fillStyle = '#f8f4eb';
-      ctx.textAlign = 'center';
-      ctx.font = 'bold 30px "Cinzel", serif, sans-serif';
-      ctx.fillText('SPECIALTY ROASTS & ARTISANAL BREWS', 512, 68);
-
-      // Decorative divider
-      ctx.beginPath();
-      ctx.moveTo(180, 84);
-      ctx.lineTo(844, 84);
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.45)';
-      ctx.lineWidth = 2;
-      ctx.stroke();
-
-      // Left Column: Drinks
-      ctx.textAlign = 'left';
-      ctx.font = 'bold 22px "Cinzel", serif, sans-serif';
-      ctx.fillStyle = '#e8ba5d';
-      ctx.fillText('DRINKS & BREWS', 60, 125);
-
-      const drinks = [
-        ['Single Origin Espresso', '$3.50'],
-        ['Velvet Oat Flat White', '$4.75'],
-        ['Yirgacheffe Siphon Reserve', '$5.50'],
-        ['Ethiopian Jebena Bunna', '$4.00'],
-        ['Kyoto Style Cold Drip', '$5.00'],
-        ['Spiced Masala Cascara', '$4.25'],
-        ['Matcha Ceremonial Latte', '$5.25']
-      ];
-
-      ctx.font = '16px "Plus Jakarta Sans", sans-serif';
-      drinks.forEach((item, idx) => {
-        ctx.fillStyle = '#e4dfd7';
-        ctx.fillText(item[0], 60, 160 + idx * 30);
-        ctx.fillStyle = '#c7b299';
-        ctx.textAlign = 'right';
-        ctx.fillText(item[1], 370, 160 + idx * 30);
-        ctx.textAlign = 'left';
-
-        // Chalk dot leaders
-        ctx.fillStyle = 'rgba(255, 255, 255, 0.25)';
-        for (let d = 260; d < 340; d += 8) {
-          ctx.fillRect(d, 158 + idx * 30, 2, 2);
-        }
-      });
-
-      // Right Column: Pastries & Light Bites
-      ctx.textAlign = 'left';
-      ctx.font = 'bold 22px "Cinzel", serif, sans-serif';
-      ctx.fillStyle = '#e8ba5d';
-      ctx.fillText('PASTRIES & BITES', 650, 125);
-
-      const bites = [
-        ['Butter Flaky Croissant', '$3.75'],
-        ['Pain au Chocolat Truffle', '$4.50'],
-        ['Avocado & Sourdough', '$7.00'],
-        ['Blueberry Cardamom Scone', '$4.25'],
-        ['Medjool Date Sampler', '$3.50'],
-        ['Warm Spiced Brioche', '$4.00'],
-        ['Artisanal Granola Bowl', '$5.50']
-      ];
-
-      ctx.font = '16px "Plus Jakarta Sans", sans-serif';
-      bites.forEach((item, idx) => {
-        ctx.fillStyle = '#e4dfd7';
-        ctx.fillText(item[0], 650, 160 + idx * 30);
-        ctx.fillStyle = '#c7b299';
-        ctx.textAlign = 'right';
-        ctx.fillText(item[1], 960, 160 + idx * 30);
-        ctx.textAlign = 'left';
-
-        // Dot leaders
-        ctx.fillStyle = 'rgba(255, 255, 255, 0.25)';
-        for (let d = 840; d < 930; d += 8) {
-          ctx.fillRect(d, 158 + idx * 30, 2, 2);
-        }
-      });
-
-      // Center: Hand-Drawn Siphon & Cup Diagram
-      ctx.strokeStyle = '#f8f4eb';
-      ctx.lineWidth = 2.5;
-
-      // Lower glass bulb
-      ctx.beginPath();
-      ctx.arc(512, 250, 36, 0, Math.PI * 2);
-      ctx.stroke();
-
-      // Lower liquid
-      ctx.fillStyle = 'rgba(212, 155, 40, 0.35)';
-      ctx.beginPath();
-      ctx.arc(512, 250, 34, 0.2, Math.PI - 0.2);
-      ctx.fill();
-
-      // Upper cylinder
-      ctx.strokeRect(494, 140, 36, 68);
-
-      // Connecting tube
-      ctx.beginPath();
-      ctx.moveTo(512, 208);
-      ctx.lineTo(512, 225);
-      ctx.stroke();
-
-      // Stand
-      ctx.beginPath();
-      ctx.moveTo(470, 305);
-      ctx.lineTo(554, 305);
-      ctx.moveTo(475, 305);
-      ctx.lineTo(475, 210);
-      ctx.lineTo(495, 210);
-      ctx.stroke();
-
-      // Steam curls
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.55)';
-      ctx.lineWidth = 1.8;
-      ctx.beginPath();
-      ctx.arc(505, 120, 12, 0.5, Math.PI * 1.5);
-      ctx.stroke();
-      ctx.beginPath();
-      ctx.arc(520, 110, 14, 0.8, Math.PI * 1.8);
-      ctx.stroke();
-
-      // Diagram Labels
-      ctx.fillStyle = '#bfa993';
-      ctx.font = 'italic 12px "Cinzel", serif';
-      ctx.textAlign = 'center';
-      ctx.fillText('Twin Siphon Extraction Method', 512, 335);
-      ctx.fillText('100% Single-Origin Yirgacheffe', 512, 355);
-
-      // Quote at Bottom
-      ctx.font = 'italic 14px "Cinzel", serif';
-      ctx.fillStyle = '#dfd6c8';
-      ctx.fillText('"From Earth to Ember, Slow-Crafted with Soul"', 512, 455);
-
-      return new THREE.CanvasTexture(canvas);
-    }
-
-    // Patterned Kilm / Ethnic Area Rug Texture
-    function createRugTexture() {
+    // End-Grain Walnut Butcher-Block Countertop Texture
+    function generateWalnutCountertopTexture() {
       const canvas = document.createElement('canvas');
       canvas.width = 512;
       canvas.height = 512;
       const ctx = canvas.getContext('2d');
 
-      ctx.fillStyle = '#a6442e';
+      // Deep walnut tone #341e13
+      ctx.fillStyle = '#341e13';
       ctx.fillRect(0, 0, 512, 512);
 
-      // Outer border
-      ctx.fillStyle = '#d49b28';
-      ctx.fillRect(16, 16, 480, 480);
-      ctx.fillStyle = '#2b2118';
-      ctx.fillRect(32, 32, 448, 448);
-      ctx.fillStyle = '#c7593c';
-      ctx.fillRect(48, 48, 416, 416);
+      // End-grain parquet bricklets
+      const bw = 64;
+      const bh = 32;
+      const walnutShades = ['#341e13', '#3a2216', '#2d1a10', '#3f2518', '#29170e'];
 
-      // Geometric diamond motifs
-      ctx.fillStyle = '#e8dcbe';
-      for (let y = 80; y < 440; y += 70) {
-        for (let x = 80; x < 440; x += 70) {
-          ctx.beginPath();
-          ctx.moveTo(x, y - 24);
-          ctx.lineTo(x + 24, y);
-          ctx.lineTo(x, y + 24);
-          ctx.lineTo(x - 24, y);
-          ctx.closePath();
-          ctx.fill();
+      for (let y = 0; y < 512; y += bh) {
+        const offset = ((y / bh) % 2 === 0) ? 0 : bw / 2;
+        for (let x = -offset; x < 512 + bw; x += bw) {
+          ctx.fillStyle = walnutShades[Math.floor(Math.random() * walnutShades.length)];
+          ctx.fillRect(x + 1, y + 1, bw - 2, bh - 2);
 
-          ctx.fillStyle = '#2b2118';
+          // Subtle wood ring arcs
+          ctx.strokeStyle = 'rgba(255, 210, 160, 0.08)';
+          ctx.lineWidth = 1;
           ctx.beginPath();
-          ctx.moveTo(x, y - 12);
-          ctx.lineTo(x + 12, y);
-          ctx.lineTo(x, y + 12);
-          ctx.lineTo(x - 12, y);
-          ctx.closePath();
-          ctx.fill();
-          ctx.fillStyle = '#e8dcbe';
+          ctx.arc(x + bw / 2, y + bh / 2, Math.random() * 16 + 4, 0, Math.PI);
+          ctx.stroke();
         }
       }
 
       const tex = new THREE.CanvasTexture(canvas);
       tex.wrapS = THREE.RepeatWrapping;
       tex.wrapT = THREE.RepeatWrapping;
-      tex.repeat.set(2, 2);
+      tex.repeat.set(4, 1);
       return tex;
     }
 
-    // ==========================================
-    // 2. Setup Three.js Core Scene & Renderer
-    // ==========================================
+    // Recessed Chalkboard Typography & Technical Siphon Anatomy
+    function generateChalkboardTexture() {
+      const canvas = document.createElement('canvas');
+      canvas.width = 1024;
+      canvas.height = 512;
+      const ctx = canvas.getContext('2d');
+
+      // Matte charcoal slate
+      ctx.fillStyle = '#171918';
+      ctx.fillRect(0, 0, 1024, 512);
+
+      // Fine chalk dust patina
+      for (let i = 0; i < 35; i++) {
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.012)';
+        ctx.beginPath();
+        ctx.arc(Math.random() * 1024, Math.random() * 512, Math.random() * 100 + 40, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      // Framing double-line border
+      ctx.strokeStyle = 'rgba(240, 235, 225, 0.35)';
+      ctx.lineWidth = 2.5;
+      ctx.strokeRect(18, 18, 1024 - 36, 512 - 36);
+      ctx.strokeRect(26, 26, 1024 - 52, 512 - 52);
+
+      // Centered Top Header
+      ctx.fillStyle = '#f8f4ec';
+      ctx.textAlign = 'center';
+      ctx.font = 'bold 26px "Cinzel", serif, sans-serif';
+      ctx.fillText('SPECIALTY COFFEE & ARTISANAL SLOW-BAR', 512, 65);
+
+      ctx.beginPath();
+      ctx.moveTo(220, 78);
+      ctx.lineTo(804, 78);
+      ctx.strokeStyle = 'rgba(240, 235, 225, 0.4)';
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+
+      // Left Column: Single-Origin Menu & Extraction Parameters
+      ctx.textAlign = 'left';
+      ctx.font = 'bold 18px "Cinzel", serif, sans-serif';
+      ctx.fillStyle = '#e5a33c';
+      ctx.fillText('ORIGIN RESERVE ROASTS', 56, 118);
+
+      const origins = [
+        ['Yirgacheffe G1 Washed', 'Bergamot, Jasmine, White Peach', '$5.50'],
+        ['Guji Hambela Natural', 'Wild Strawberry, Dark Cocoa', '$5.75'],
+        ['Sidama Bensa Anaerobic', 'Papaya Nectar, Meyer Lemon', '$6.00'],
+        ['Jebena Ancestral Roast', 'Spiced Honey, Roasted Walnut', '$4.25'],
+        ['Cascara Botanical Tonic', 'Sun-Dried Coffee Cherries', '$4.50']
+      ];
+
+      origins.forEach((item, idx) => {
+        const py = 150 + idx * 44;
+        ctx.font = 'bold 14px "Plus Jakarta Sans", sans-serif';
+        ctx.fillStyle = '#f2ece4';
+        ctx.fillText(item[0], 56, py);
+
+        ctx.font = 'italic 11px "Plus Jakarta Sans", sans-serif';
+        ctx.fillStyle = '#b3a291';
+        ctx.fillText(item[1], 56, py + 16);
+
+        ctx.font = 'bold 13px "Plus Jakarta Sans", sans-serif';
+        ctx.fillStyle = '#e5a33c';
+        ctx.textAlign = 'right';
+        ctx.fillText(item[2], 375, py);
+        ctx.textAlign = 'left';
+      });
+
+      // Extraction Parameters Callout
+      ctx.fillStyle = 'rgba(229, 163, 60, 0.12)';
+      ctx.fillRect(56, 385, 320, 68);
+      ctx.strokeStyle = 'rgba(229, 163, 60, 0.35)';
+      ctx.strokeRect(56, 385, 320, 68);
+      ctx.fillStyle = '#e5a33c';
+      ctx.font = 'bold 11px "Cinzel", serif';
+      ctx.fillText('EXTRACTION BENCHMARK:', 68, 404);
+      ctx.font = '11px "Plus Jakarta Sans", monospace';
+      ctx.fillStyle = '#e8dfd2';
+      ctx.fillText('Dose: 19.5g | Yield: 42g | Temp: 93.4°C', 68, 424);
+      ctx.fillText('Pressure: 9.2 Bar | Pre-infuse: 5.5s', 68, 440);
+
+      // Center: Delicate Technical Line Drawing of Vacuum Siphon Anatomy
+      ctx.strokeStyle = '#f8f4ec';
+      ctx.lineWidth = 2.2;
+
+      // Lower Glass Flask
+      ctx.beginPath();
+      ctx.arc(512, 245, 42, 0, Math.PI * 2);
+      ctx.stroke();
+
+      // Lower Amber Liquid Line
+      ctx.fillStyle = 'rgba(212, 130, 42, 0.32)';
+      ctx.beginPath();
+      ctx.arc(512, 245, 39, 0.2, Math.PI - 0.2);
+      ctx.fill();
+
+      // Upper Funnel Chamber
+      ctx.strokeRect(492, 122, 40, 72);
+
+      // Connecting Filter Tube
+      ctx.beginPath();
+      ctx.moveTo(512, 194);
+      ctx.lineTo(512, 220);
+      ctx.stroke();
+
+      // Stand & Burner Pad
+      ctx.beginPath();
+      ctx.moveTo(465, 305);
+      ctx.lineTo(559, 305);
+      ctx.moveTo(470, 305);
+      ctx.lineTo(470, 205);
+      ctx.lineTo(492, 205);
+      ctx.stroke();
+
+      // Center Diagram Labels
+      ctx.font = 'italic 10px "Cinzel", serif';
+      ctx.fillStyle = '#d4c2af';
+      ctx.textAlign = 'center';
+      ctx.fillText('Vacuum Siphon Reserve', 512, 332);
+      ctx.font = '9px "Plus Jakarta Sans", monospace';
+      ctx.fillText('Slow Extraction 92.8°C', 512, 348);
+
+      // Right Column: Boulangerie & Fruit Bar
+      ctx.textAlign = 'left';
+      ctx.font = 'bold 18px "Cinzel", serif, sans-serif';
+      ctx.fillStyle = '#e5a33c';
+      ctx.fillText('BOULANGERIE & CRAFT JUICE', 700, 118);
+
+      const goods = [
+        ['Normandy Butter Croissant', '84% Cultured French Butter', '$3.75'],
+        ['Valrhona Pain au Chocolat', '70% Guanaja Dark Ganache', '$4.50'],
+        ['Cardamom Blueberry Brioche', 'Wild Nordic Berries, Brown Sugar', '$4.25'],
+        ['Raw Alphonso Mango Nectar', 'Cold-Pressed Valencia & Passionfruit', '$5.25'],
+        ['Ruby Beetroot & Pomegranate', 'Organic Ginger Root, Fresh Lime', '$5.50']
+      ];
+
+      goods.forEach((item, idx) => {
+        const py = 150 + idx * 44;
+        ctx.font = 'bold 14px "Plus Jakarta Sans", sans-serif';
+        ctx.fillStyle = '#f2ece4';
+        ctx.fillText(item[0], 700, py);
+
+        ctx.font = 'italic 11px "Plus Jakarta Sans", sans-serif';
+        ctx.fillStyle = '#b3a291';
+        ctx.fillText(item[1], 700, py + 16);
+
+        ctx.font = 'bold 13px "Plus Jakarta Sans", sans-serif';
+        ctx.fillStyle = '#e5a33c';
+        ctx.textAlign = 'right';
+        ctx.fillText(item[2], 965, py);
+        ctx.textAlign = 'left';
+      });
+
+      // Bottom Inscription
+      ctx.font = 'italic 12px "Cinzel", serif';
+      ctx.fillStyle = '#a89481';
+      ctx.textAlign = 'center';
+      ctx.fillText('"Every Harvest Tells a Story, Brewed with Uncompromising Precision"', 512, 475);
+
+      return new THREE.CanvasTexture(canvas);
+    }
+
+    // =========================================================================
+    // 2. Scene, Photometric Pipeline & Renderer Setup
+    // =========================================================================
 
     const canvas = document.getElementById('webgl-canvas');
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x0e0b08);
-    scene.fog = new THREE.FogExp2(0x18120c, 0.024);
+    scene.background = new THREE.Color(0x0b0907);
+    scene.fog = new THREE.FogExp2(0x130e09, 0.026);
 
-    const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 40);
-    camera.position.set(0.3, 2.1, 5.8);
+    // Default Architectural Perspective: Eye-level (X = -2.8m, Y = 1.55m, Z = 3.2m), FOV 42°
+    const camera = new THREE.PerspectiveCamera(42, window.innerWidth / window.innerHeight, 0.1, 35);
+    camera.position.set(-2.8, 1.55, 3.2);
 
     const renderer = new THREE.WebGLRenderer({
       canvas,
@@ -756,1458 +688,1304 @@
     });
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.outputColorSpace = THREE.SRGBColorSpace;
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.10;
+
+    // High-Resolution Shadow Map Configuration
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-    renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 0.95;
 
     // OrbitControls
     const controls = new OrbitControls(camera, canvas);
     controls.enableDamping = true;
     controls.dampingFactor = 0.05;
-    controls.maxPolarAngle = Math.PI / 2 - 0.04; // Don't clip through floor
-    controls.minDistance = 1.2;
-    controls.maxDistance = 15.0;
-    controls.target.set(0.6, 1.25, -0.8);
+    controls.maxPolarAngle = Math.PI / 2 - 0.03; // Restrict clipping below floor
+    controls.minDistance = 0.8;
+    controls.maxDistance = 12.0;
+    controls.target.set(0, 1.0, -1.2);
 
-    // Post-Processing EffectComposer for Edison Filament Glow
+    // Post-Processing Composer (Gentle Bloom for Edison Filaments)
     let composer, bloomPass;
     try {
       composer = new EffectComposer(renderer);
-      const renderPass = new RenderPass(scene, camera);
-      composer.addPass(renderPass);
-
+      composer.addPass(new RenderPass(scene, camera));
       bloomPass = new UnrealBloomPass(
         new THREE.Vector2(window.innerWidth, window.innerHeight),
-        0.32, // Refined gentle strength
-        0.35, // Radius
-        0.88  // High threshold so only filaments and direct highlights glow
+        0.30, // Subtle bloom strength
+        0.32, // Radius
+        0.86  // High threshold to protect architectural geometry
       );
       composer.addPass(bloomPass);
     } catch (e) {
-      console.warn("Postprocessing bloom fallback to standard renderer", e);
+      console.warn("Post-processing fallback:", e);
       composer = null;
     }
 
-    // ==========================================
-    // 3. Shared PBR Materials
-    // ==========================================
+    // =========================================================================
+    // 3. High-Accuracy PBR Materials Library
+    // =========================================================================
 
-    const { diffTex: brickDiff, bumpTex: brickBump } = createBrickTextures();
-    const woodFloorTex = createWoodFloorTextures();
-    const countertopTex = createCountertopTexture();
-    const chalkboardTex = createChalkboardTexture();
-    const rugTex = createRugTexture();
+    const { diffTex: brickDiff, bumpTex: brickBump } = generateFlemishBrickTextures();
+    const woodFloorTex = generateSmokedOakTextures();
+    const walnutCounterTex = generateWalnutCountertopTexture();
+    const chalkboardTex = generateChalkboardTexture();
 
     const materials = {
-      brickWall: new THREE.MeshStandardMaterial({
+      // Rear Flemish Masonry Wall
+      flemishBrick: new THREE.MeshStandardMaterial({
         map: brickDiff,
         bumpMap: brickBump,
-        bumpScale: 0.05,
-        roughness: 0.85,
-        metalness: 0.05
+        bumpScale: 0.06,
+        roughness: 0.86,
+        metalness: 0.02
       }),
-      plasterWall: new THREE.MeshStandardMaterial({
-        color: 0xd4c8b4,
-        roughness: 0.96,
-        metalness: 0.01
-      }),
-      woodFloor: new THREE.MeshStandardMaterial({
+      // Smoked French Oak Ground Plane
+      smokedFrenchOak: new THREE.MeshStandardMaterial({
         map: woodFloorTex,
-        roughness: 0.35, // Sheen
-        metalness: 0.08
-      }),
-      ceilingBeam: new THREE.MeshStandardMaterial({
-        color: 0x22170f,
-        roughness: 0.82
-      }),
-      countertopWood: new THREE.MeshStandardMaterial({
-        map: countertopTex,
         roughness: 0.38,
         metalness: 0.04
       }),
-      counterSlats: new THREE.MeshStandardMaterial({
-        color: 0x261910,
-        roughness: 0.78
+      // Solid End-Grain Walnut Countertop
+      endGrainWalnut: new THREE.MeshStandardMaterial({
+        map: walnutCounterTex,
+        roughness: 0.30,
+        metalness: 0.03
       }),
-      chalkboard: new THREE.MeshStandardMaterial({
-        map: chalkboardTex,
-        roughness: 0.7,
-        metalness: 0.1
+      // Vertical Timber Slats Apron
+      counterFlutedSlat: new THREE.MeshStandardMaterial({
+        color: 0x24150d,
+        roughness: 0.72,
+        metalness: 0.02
       }),
-      chalkFrame: new THREE.MeshStandardMaterial({
-        color: 0x362112,
-        roughness: 0.65
-      }),
-      brushedSteel: new THREE.MeshStandardMaterial({
-        color: 0xd8d8d8,
-        metalness: 0.85,
-        roughness: 0.28
-      }),
-      matteBlackMetal: new THREE.MeshStandardMaterial({
-        color: 0x181818,
-        metalness: 0.65,
-        roughness: 0.45
-      }),
-      brassGold: new THREE.MeshStandardMaterial({
-        color: 0xd4af37,
-        metalness: 0.88,
-        roughness: 0.25
-      }),
-      clearGlass: new THREE.MeshPhysicalMaterial({
-        color: 0xffffff,
-        transparent: true,
-        opacity: 0.28,
-        roughness: 0.06,
-        metalness: 0.1,
-        transmission: 0.92,
-        ior: 1.5
-      }),
-      windowGlass: new THREE.MeshPhysicalMaterial({
-        color: 0xedf7fa,
-        transparent: true,
-        opacity: 0.32,
-        roughness: 0.08,
-        transmission: 0.9,
-        ior: 1.52
-      }),
-      amberLiquid: new THREE.MeshStandardMaterial({
-        color: 0x823b0a,
-        transparent: true,
-        opacity: 0.88,
-        roughness: 0.12,
-        metalness: 0.15
-      }),
-      orangeJuice: new THREE.MeshStandardMaterial({
-        color: 0xff8c1a,
-        roughness: 0.25,
-        metalness: 0.1
-      }),
-      beetJuice: new THREE.MeshStandardMaterial({
-        color: 0x7c102a,
-        roughness: 0.25,
-        metalness: 0.1
-      }),
-      edisonFilament: new THREE.MeshBasicMaterial({
-        color: 0xffb84d
-      }),
-      candleFlame: new THREE.MeshBasicMaterial({
-        color: 0xffaa22
-      }),
-      leatherCognac: new THREE.MeshStandardMaterial({
-        color: 0x6e3c1b,
-        roughness: 0.52,
-        metalness: 0.1
-      }),
-      terracottaPillow: new THREE.MeshStandardMaterial({
-        color: 0xc05a3e,
-        roughness: 0.9
-      }),
-      mustardPillow: new THREE.MeshStandardMaterial({
-        color: 0xd49b28,
-        roughness: 0.88
-      }),
-      creamPillow: new THREE.MeshStandardMaterial({
-        color: 0xe8dfd1,
+      // Recessed Matte Black Shadow Gap Toe-Kick
+      matteBlackToeKick: new THREE.MeshStandardMaterial({
+        color: 0x0c0c0c,
         roughness: 0.95
       }),
-      olivePillow: new THREE.MeshStandardMaterial({
-        color: 0x606b4c,
-        roughness: 0.9
+      // Matte Graphite Concrete Ceiling Slab
+      graphiteConcrete: new THREE.MeshStandardMaterial({
+        color: 0x2b2b2b,
+        roughness: 0.92,
+        metalness: 0.05
       }),
-      terracottaPot: new THREE.MeshStandardMaterial({
-        color: 0xbf5b3b,
-        roughness: 0.85
+      // Heavy Reclaimed Ceiling Timber Beams
+      reclaimedTimberBeam: new THREE.MeshStandardMaterial({
+        color: 0x23170e,
+        roughness: 0.84
       }),
-      plantGreen: new THREE.MeshStandardMaterial({
-        color: 0x2e5c32,
-        roughness: 0.6
+      // Solid American Walnut Frame
+      americanWalnutFrame: new THREE.MeshStandardMaterial({
+        color: 0x361f14,
+        roughness: 0.55
       }),
-      jebenaBlackClay: new THREE.MeshStandardMaterial({
-        color: 0x1f1d1c,
-        roughness: 0.72,
-        metalness: 0.12
+      // Matte Charcoal Slate Chalkboard
+      chalkboardSlate: new THREE.MeshStandardMaterial({
+        map: chalkboardTex,
+        roughness: 0.94,
+        metalness: 0.05
+      }),
+      // Industrial Steel Window Mullions
+      blackenedStructuralSteel: new THREE.MeshStandardMaterial({
+        color: 0x1c1c1c,
+        roughness: 0.28,
+        metalness: 0.88
+      }),
+      // Architectural Low-Iron Window Glazing
+      lowIronArchitecturalGlass: new THREE.MeshPhysicalMaterial({
+        color: 0xf4f9fb,
+        transparent: true,
+        opacity: 0.15,
+        roughness: 0.04,
+        transmission: 0.92,
+        ior: 1.52
+      }),
+      // High-Borosilicate Showcase & Siphon Glass
+      borosilicateGlass: new THREE.MeshPhysicalMaterial({
+        color: 0xffffff,
+        transparent: true,
+        opacity: 0.24,
+        roughness: 0.05,
+        transmission: 0.94,
+        ior: 1.50
+      }),
+      // Translucent Amber Brewed Coffee Liquid
+      amberBrewedCoffee: new THREE.MeshPhysicalMaterial({
+        color: 0x4a2109,
+        transparent: true,
+        opacity: 0.88,
+        roughness: 0.08,
+        transmission: 0.82,
+        ior: 1.34
+      }),
+      // Hand-Brushed Stainless Steel (Espresso Chassis)
+      brushedStainlessSteel: new THREE.MeshStandardMaterial({
+        color: 0xd8d8d8,
+        metalness: 0.86,
+        roughness: 0.22
+      }),
+      // Polished Chrome Hardware
+      polishedChrome: new THREE.MeshStandardMaterial({
+        color: 0xeeeeee,
+        metalness: 0.94,
+        roughness: 0.10
+      }),
+      // Solid Brass (Group Heads & Burners)
+      solidBrass: new THREE.MeshStandardMaterial({
+        color: 0xd4af37,
+        metalness: 0.90,
+        roughness: 0.24
+      }),
+      // Dense Tropical Mango/Passionfruit Nectar
+      mangoPulpNectar: new THREE.MeshStandardMaterial({
+        color: 0xea9418,
+        roughness: 0.35,
+        metalness: 0.05
+      }),
+      // Deep Ruby-Crimson Cold-Pressed Beetroot Juice
+      rubyBeetrootJuice: new THREE.MeshStandardMaterial({
+        color: 0x7a0c1e,
+        roughness: 0.32,
+        metalness: 0.05
+      }),
+      // Tailored Chocolate-Brown Saddle Leather Bench
+      saddleLeather: new THREE.MeshStandardMaterial({
+        color: 0x422616,
+        roughness: 0.62,
+        metalness: 0.08
+      }),
+      // Restrained Pillow Textiles
+      heavyweightCreamLinen: new THREE.MeshStandardMaterial({
+        color: 0xe8dfd2,
+        roughness: 0.92
+      }),
+      terracottaBoucle: new THREE.MeshStandardMaterial({
+        color: 0xba5437,
+        roughness: 0.88
+      }),
+      mutedMossGreen: new THREE.MeshStandardMaterial({
+        color: 0x4b583e,
+        roughness: 0.90
+      }),
+      // Glowing Edison Double-Spiral Filaments
+      glowingFilamentWire: new THREE.MeshStandardMaterial({
+        color: 0xffa033,
+        emissive: 0xffa033,
+        emissiveIntensity: 4.2
       })
     };
 
-    // ==========================================
-    // 4. Room Architectural Shell
-    // ==========================================
+    // =========================================================================
+    // 4. Architectural Shell & Spatial Envelope
+    // =========================================================================
 
-    const room = new THREE.Group();
-    scene.add(room);
+    const envelope = new THREE.Group();
+    scene.add(envelope);
 
-    // Floor (12m x 8m)
-    const floorGeo = new THREE.PlaneGeometry(12, 8);
-    const floorMesh = new THREE.Mesh(floorGeo, materials.woodFloor);
-    floorMesh.rotation.x = -Math.PI / 2;
-    floorMesh.receiveShadow = true;
-    room.add(floorMesh);
+    // Flooring Ground Plane (10.5m X × 7.2m Z at Y = 0.0)
+    const floor = new THREE.Mesh(new THREE.PlaneGeometry(10.5, 7.2), materials.smokedFrenchOak);
+    floor.rotation.x = -Math.PI / 2;
+    floor.receiveShadow = true;
+    envelope.add(floor);
 
-    // Back Wall (Distressed Brick) at z = -4
-    const backWall = new THREE.Mesh(new THREE.BoxGeometry(12, 3.8, 0.2), materials.brickWall);
-    backWall.position.set(0, 1.9, -4.1);
-    backWall.receiveShadow = true;
-    room.add(backWall);
+    // Rear Masonry Brick Wall at Z = -3.6m
+    const rearWall = new THREE.Mesh(new THREE.BoxGeometry(10.5, 3.6, 0.25), materials.flemishBrick);
+    rearWall.position.set(0, 1.8, -3.725);
+    rearWall.receiveShadow = true;
+    envelope.add(rearWall);
 
-    // Ceiling (3.8m height)
-    const ceilingMesh = new THREE.Mesh(new THREE.BoxGeometry(12, 0.2, 8), materials.plasterWall);
-    ceilingMesh.position.set(0, 3.9, 0);
-    room.add(ceilingMesh);
+    // Ceiling Concrete Slab at Y = 3.6m
+    const ceiling = new THREE.Mesh(new THREE.BoxGeometry(10.5, 0.2, 7.2), materials.graphiteConcrete);
+    ceiling.position.set(0, 3.7, 0);
+    envelope.add(ceiling);
 
-    // Exposed Wooden Ceiling Beams
-    for (let x = -5; x <= 5; x += 2.5) {
-      const beam = new THREE.Mesh(new THREE.BoxGeometry(0.24, 0.28, 8), materials.ceilingBeam);
-      beam.position.set(x, 3.72, 0);
+    // Three Heavy Reclaimed Solid Timber Beams (0.22m × 0.26m) across X-axis
+    [-2.2, 0.0, 2.2].forEach(bz => {
+      const beam = new THREE.Mesh(new THREE.BoxGeometry(10.5, 0.26, 0.22), materials.reclaimedTimberBeam);
+      beam.position.set(0, 3.47, bz);
       beam.castShadow = true;
-      room.add(beam);
-    }
-    const crossBeam = new THREE.Mesh(new THREE.BoxGeometry(12, 0.26, 0.28), materials.ceilingBeam);
-    crossBeam.position.set(0, 3.65, -1.8);
-    room.add(crossBeam);
-
-    // Right Wall (Plaster with Framed Art)
-    const rightWall = new THREE.Mesh(new THREE.BoxGeometry(0.2, 3.8, 8), materials.plasterWall);
-    rightWall.position.set(6.1, 1.9, 0);
-    rightWall.receiveShadow = true;
-    room.add(rightWall);
-
-    // Framed Coffee Prints on Right Wall
-    const artPositions = [-1.5, 0.5, 2.5];
-    artPositions.forEach((zPos, idx) => {
-      const frame = new THREE.Mesh(new THREE.BoxGeometry(0.04, 0.9, 0.65), materials.chalkFrame);
-      frame.position.set(5.98, 2.1, zPos);
-      const canvasArt = new THREE.Mesh(new THREE.BoxGeometry(0.02, 0.8, 0.55), new THREE.MeshStandardMaterial({
-        color: idx === 0 ? 0xd9cbb6 : idx === 1 ? 0xc7b59e : 0xe4dacb,
-        roughness: 0.9
-      }));
-      canvasArt.position.set(5.96, 2.1, zPos);
-      room.add(frame);
-      room.add(canvasArt);
+      envelope.add(beam);
     });
 
-    // Left Wall with Large Industrial Window
-    const leftWallUpper = new THREE.Mesh(new THREE.BoxGeometry(0.2, 0.6, 8), materials.plasterWall);
-    leftWallUpper.position.set(-6.1, 3.5, 0);
-    room.add(leftWallUpper);
+    // Right-Hand Masonry / Plaster Wall at X = +5.25m
+    const rightWall = new THREE.Mesh(new THREE.BoxGeometry(0.25, 3.6, 7.2), new THREE.MeshStandardMaterial({
+      color: 0x30261f,
+      roughness: 0.9
+    }));
+    rightWall.position.set(5.375, 1.8, 0);
+    rightWall.receiveShadow = true;
+    envelope.add(rightWall);
 
-    const leftWallLower = new THREE.Mesh(new THREE.BoxGeometry(0.2, 0.6, 8), materials.plasterWall);
-    leftWallLower.position.set(-6.1, 0.3, 0);
-    room.add(leftWallLower);
-
-    const leftWallBack = new THREE.Mesh(new THREE.BoxGeometry(0.2, 2.6, 1.5), materials.plasterWall);
-    leftWallBack.position.set(-6.1, 1.9, -3.25);
-    room.add(leftWallBack);
-
-    const leftWallFront = new THREE.Mesh(new THREE.BoxGeometry(0.2, 2.6, 1.5), materials.plasterWall);
-    leftWallFront.position.set(-6.1, 1.9, 3.25);
-    room.add(leftWallFront);
-
-    // Large Industrial Glass Window (5m width, 2.6m height)
-    const windowGlass = new THREE.Mesh(new THREE.BoxGeometry(0.04, 2.6, 5.0), materials.windowGlass);
-    windowGlass.position.set(-6.0, 1.9, 0);
-    room.add(windowGlass);
-
-    // Black Steel Window Grids
-    const windowFrameMat = materials.matteBlackMetal;
-    // Outer Frame
-    const wTop = new THREE.Mesh(new THREE.BoxGeometry(0.12, 0.08, 5.0), windowFrameMat);
-    wTop.position.set(-6.0, 3.2, 0);
-    const wBottom = new THREE.Mesh(new THREE.BoxGeometry(0.12, 0.08, 5.0), windowFrameMat);
-    wBottom.position.set(-6.0, 0.6, 0);
-    room.add(wTop, wBottom);
-
-    // Window Vertical Mullions
-    for (let z = -2.0; z <= 2.0; z += 1.0) {
-      const vMullion = new THREE.Mesh(new THREE.BoxGeometry(0.08, 2.6, 0.06), windowFrameMat);
-      vMullion.position.set(-6.0, 1.9, z);
-      room.add(vMullion);
-    }
-    // Window Horizontal Transoms
-    for (let y = 1.25; y <= 2.55; y += 0.65) {
-      const hTransom = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.05, 5.0), windowFrameMat);
-      hTransom.position.set(-6.0, y, 0);
-      room.add(hTransom);
-    }
-
-    // Exterior Street / Terrace View Backdrop
-    const exteriorBackdrop = new THREE.Group();
-    exteriorBackdrop.position.set(-8.5, 0, 0);
-    room.add(exteriorBackdrop);
-
-    // Exterior ground sidewalk
-    const sidewalk = new THREE.Mesh(
-      new THREE.PlaneGeometry(6, 14),
-      new THREE.MeshStandardMaterial({ color: 0x3a3835, roughness: 0.9 })
-    );
-    sidewalk.rotation.x = -Math.PI / 2;
-    exteriorBackdrop.add(sidewalk);
-
-    // Distant Street Lanterns
-    for (let z = -4; z <= 4; z += 3.5) {
-      const pole = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.05, 3.2), materials.matteBlackMetal);
-      pole.position.set(0, 1.6, z);
-      const lampHead = new THREE.Mesh(new THREE.SphereGeometry(0.16, 12, 12), materials.edisonFilament);
-      lampHead.position.set(0, 3.2, z);
-      exteriorBackdrop.add(pole, lampHead);
-    }
-
-    // ==========================================
-    // 5. Main Service Counter & Backdrop Wall
-    // ==========================================
-
-    const barArea = new THREE.Group();
-    scene.add(barArea);
-
-    // Main Linear Bar Counter (6.4m long, 0.95m high, 0.9m deep)
-    const barBase = new THREE.Mesh(new THREE.BoxGeometry(6.4, 0.92, 0.9), materials.counterSlats);
-    barBase.position.set(1.8, 0.46, -1.8);
-    barBase.castShadow = true;
-    barBase.receiveShadow = true;
-    barArea.add(barBase);
-
-    // Front Slatted Trim for Artisanal Texture
-    for (let x = -1.3; x <= 4.9; x += 0.22) {
-      const slat = new THREE.Mesh(new THREE.BoxGeometry(0.03, 0.9, 0.04), materials.countertopWood);
-      slat.position.set(x, 0.46, -1.33);
-      barArea.add(slat);
-    }
-
-    // Solid Timber Polished Countertop (with 5cm overhang)
-    const barTop = new THREE.Mesh(new THREE.BoxGeometry(6.6, 0.07, 1.05), materials.countertopWood);
-    barTop.position.set(1.8, 0.955, -1.8);
-    barTop.castShadow = true;
-    barTop.receiveShadow = true;
-    barArea.add(barTop);
-
-    // Bar Return / Barista Corner (at x = 5.0, coming forward to z = -0.5)
-    const barReturn = new THREE.Mesh(new THREE.BoxGeometry(0.85, 0.92, 1.6), materials.counterSlats);
-    barReturn.position.set(4.6, 0.46, -0.65);
-    barReturn.castShadow = true;
-    const barReturnTop = new THREE.Mesh(new THREE.BoxGeometry(0.95, 0.07, 1.7), materials.countertopWood);
-    barReturnTop.position.set(4.6, 0.955, -0.65);
-    barReturnTop.castShadow = true;
-    barArea.add(barReturn, barReturnTop);
-
-    // Chalkboard Menu Mounted on Brick Wall
-    const chalkboard = new THREE.Mesh(new THREE.BoxGeometry(4.6, 2.1, 0.06), materials.chalkboard);
-    chalkboard.position.set(1.8, 2.55, -3.95);
+    // Recessed Chalkboard Panel (4.4m wide × 1.5m tall at Z = -3.58m)
+    const chalkboard = new THREE.Mesh(new THREE.BoxGeometry(4.4, 1.5, 0.04), materials.chalkboardSlate);
+    chalkboard.position.set(0, 2.05, -3.58);
     chalkboard.receiveShadow = true;
-    barArea.add(chalkboard);
+    envelope.add(chalkboard);
 
-    const chalkFrameMesh = new THREE.Mesh(new THREE.BoxGeometry(4.76, 2.26, 0.04), materials.chalkFrame);
-    chalkFrameMesh.position.set(1.8, 2.55, -3.97);
-    barArea.add(chalkFrameMesh);
+    // 60mm Beveled Solid American Walnut Frame
+    const walnutFrame = new THREE.Mesh(new THREE.BoxGeometry(4.52, 1.62, 0.06), materials.americanWalnutFrame);
+    walnutFrame.position.set(0, 2.05, -3.61);
+    envelope.add(walnutFrame);
 
-    // Floating Wooden Shelves for Coffee Bags & Jars
-    const shelfGeo = new THREE.BoxGeometry(5.2, 0.05, 0.32);
-    const shelf1 = new THREE.Mesh(shelfGeo, materials.countertopWood);
-    shelf1.position.set(1.8, 1.35, -3.8);
-    shelf1.castShadow = true;
+    // Storefront Fenestration at X = -5.25m (Industrial Steel-Framed Window Partition)
+    const windowGroup = new THREE.Group();
+    windowGroup.position.set(-5.25, 0, 0);
+    envelope.add(windowGroup);
 
-    const shelf2 = new THREE.Mesh(shelfGeo, materials.countertopWood);
-    shelf2.position.set(1.8, 3.7, -3.8);
-    shelf2.castShadow = true;
-    barArea.add(shelf1, shelf2);
+    // Architectural Glazing Pane
+    const windowGlass = new THREE.Mesh(new THREE.BoxGeometry(0.04, 3.6, 7.0), materials.lowIronArchitecturalGlass);
+    windowGlass.position.set(0, 1.8, 0);
+    windowGroup.add(windowGlass);
 
-    // Shelf Props: Coffee Bags, Glass Storage Jars, Ceramic Cups
-    for (let x = -0.4; x <= 4.0; x += 0.45) {
-      // Craft Coffee Bean Bags
-      const bagGeo = new THREE.BoxGeometry(0.14, 0.22, 0.1);
-      const bagMat = new THREE.MeshStandardMaterial({
-        color: (Math.random() > 0.5) ? 0xc7a379 : (Math.random() > 0.5 ? 0x222222 : 0x8a3826),
-        roughness: 0.85
-      });
-      const bag = new THREE.Mesh(bagGeo, bagMat);
-      bag.position.set(x, 1.48, -3.8);
-      bag.rotation.y = (Math.random() - 0.5) * 0.2;
-      bag.castShadow = true;
-      barArea.add(bag);
+    // Steel Structural Mullions with Rivet Details
+    const frameMat = materials.blackenedStructuralSteel;
+    // Outer Border
+    const borderTop = new THREE.Mesh(new THREE.BoxGeometry(0.12, 0.08, 7.0), frameMat);
+    borderTop.position.set(0, 3.56, 0);
+    const borderBottom = new THREE.Mesh(new THREE.BoxGeometry(0.12, 0.08, 7.0), frameMat);
+    borderBottom.position.set(0, 0.04, 0);
+    windowGroup.add(borderTop, borderBottom);
 
-      // Glass jars filled with coffee beans
-      if (Math.random() > 0.4) {
-        const jar = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.06, 0.16, 12), materials.clearGlass);
-        jar.position.set(x + 0.2, 1.45, -3.8);
-        const beans = new THREE.Mesh(new THREE.CylinderGeometry(0.055, 0.055, 0.12, 12), materials.amberLiquid);
-        beans.position.set(x + 0.2, 1.43, -3.8);
-        barArea.add(jar, beans);
+    // Vertical Mullions
+    for (let z = -3.0; z <= 3.0; z += 1.2) {
+      const vMullion = new THREE.Mesh(new THREE.BoxGeometry(0.08, 3.6, 0.06), frameMat);
+      vMullion.position.set(0, 1.8, z);
+      vMullion.castShadow = true;
+      windowGroup.add(vMullion);
+
+      // Fastener rivets
+      for (let y = 0.4; y < 3.5; y += 0.8) {
+        const rivet = new THREE.Mesh(new THREE.CylinderGeometry(0.008, 0.008, 0.09, 8), materials.polishedChrome);
+        rivet.rotation.z = Math.PI / 2;
+        rivet.position.set(0, y, z);
+        windowGroup.add(rivet);
       }
     }
 
-    // ==========================================
-    // 6. Detailed Equipment & Props
-    // ==========================================
+    // Horizontal Transoms
+    for (let y = 1.0; y <= 2.8; y += 0.9) {
+      const hTransom = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.05, 7.0), frameMat);
+      hTransom.position.set(0, y, 0);
+      hTransom.castShadow = true;
+      windowGroup.add(hTransom);
+    }
 
-    const interactiveProps = [];
+    // Exterior Street Sidewalk & Terrace Beyond Windows
+    const exterior = new THREE.Group();
+    exterior.position.set(-7.5, 0, 0);
+    envelope.add(exterior);
 
-    // Helper: Register interactive raycast prop
-    function registerInteractive(meshOrGroup, data) {
-      meshOrGroup.userData = data;
-      meshOrGroup.traverse(child => {
+    const sidewalk = new THREE.Mesh(
+      new THREE.PlaneGeometry(6.0, 12.0),
+      new THREE.MeshStandardMaterial({ color: 0x222120, roughness: 0.92 })
+    );
+    sidewalk.rotation.x = -Math.PI / 2;
+    exterior.add(sidewalk);
+
+    // Exterior Iron Balustrade
+    for (let z = -5.0; z <= 5.0; z += 1.6) {
+      const post = new THREE.Mesh(new THREE.CylinderGeometry(0.02, 0.02, 1.1, 8), materials.blackenedStructuralSteel);
+      post.position.set(0, 0.55, z);
+      exterior.add(post);
+    }
+
+    // =========================================================================
+    // 5. Service Counter Architecture & Barista Equipment Workflow
+    // =========================================================================
+
+    const serviceBar = new THREE.Group();
+    scene.add(serviceBar);
+
+    // Service Bar Placement: 5.2m total length, 0.88m depth, 0.96m height
+    // Centered along X: -2.6 to +2.6, centered at Z = -1.5m
+    const barCenterZ = -1.5;
+
+    // Solid End-Grain Walnut Butcher-Block Countertop (50mm thick, 3mm bullnose)
+    const countertop = new THREE.Mesh(new THREE.BoxGeometry(5.2, 0.05, 0.88), materials.endGrainWalnut);
+    countertop.position.set(0, 0.935, barCenterZ);
+    countertop.castShadow = true;
+    countertop.receiveShadow = true;
+    serviceBar.add(countertop);
+
+    // Recessed 70mm Shadow-Gap Toe Kick in Matte Black
+    const toeKick = new THREE.Mesh(new THREE.BoxGeometry(5.0, 0.07, 0.72), materials.matteBlackToeKick);
+    toeKick.position.set(0, 0.035, barCenterZ);
+    toeKick.receiveShadow = true;
+    serviceBar.add(toeKick);
+
+    // Front Apron Cladding: Vertical Fluted Timber Slats (35mm × 18mm, 10mm gap = 45mm pitch)
+    const slatW = 0.035;
+    const slatD = 0.018;
+    const slatH = 0.84;
+    const slatPitch = 0.045;
+    const slatZ = barCenterZ + 0.44 + slatD / 2;
+
+    for (let x = -2.55; x <= 2.55; x += slatPitch) {
+      const slat = new THREE.Mesh(new THREE.BoxGeometry(slatW, slatH, slatD), materials.counterFlutedSlat);
+      slat.position.set(x, 0.49, slatZ);
+      slat.castShadow = true;
+      slat.receiveShadow = true;
+      serviceBar.add(slat);
+    }
+
+    // Counter Core Box
+    const counterCore = new THREE.Mesh(new THREE.BoxGeometry(5.16, 0.84, 0.84), materials.matteBlackToeKick);
+    counterCore.position.set(0, 0.49, barCenterZ);
+    serviceBar.add(counterCore);
+
+    // Interactive Props Array
+    const interactiveObjects = [];
+    function registerInteractive(obj, specData) {
+      obj.userData = specData;
+      obj.traverse(child => {
         if (child.isMesh) {
-          child.userData = data;
-          interactiveProps.push(child);
+          child.userData = specData;
+          interactiveObjects.push(child);
         }
       });
     }
 
-    // --- A. Espresso Machine (Sonifer / Boutique Dual Unit) ---
-    function buildEspressoMachine(xPos, zPos) {
-      const machine = new THREE.Group();
-      machine.position.set(xPos, 0.99, zPos);
+    // --- ZONE 1: Pastry & Merchandising (X = -2.1m to -1.4m) ---
+    const pastryZone = new THREE.Group();
+    pastryZone.position.set(-1.75, 0.96, barCenterZ);
 
-      // Main Chassis
-      const body = new THREE.Mesh(new THREE.BoxGeometry(0.55, 0.48, 0.46), materials.brushedSteel);
-      body.position.y = 0.24;
-      body.castShadow = true;
-      machine.add(body);
+    // Frameless 8mm UV-Bonded Tempered Glass Pastry Vitrine
+    const caseWidth = 0.85;
+    const caseHeight = 0.42;
+    const caseDepth = 0.52;
+    const glassCase = new THREE.Mesh(new THREE.BoxGeometry(caseWidth, caseHeight, caseDepth), materials.borosilicateGlass);
+    glassCase.position.y = caseHeight / 2;
+    glassCase.castShadow = true;
+    pastryZone.add(glassCase);
 
-      // Matte Black Side Panels
-      const panelL = new THREE.Mesh(new THREE.BoxGeometry(0.03, 0.46, 0.44), materials.matteBlackMetal);
-      panelL.position.set(-0.28, 0.24, 0);
-      const panelR = new THREE.Mesh(new THREE.BoxGeometry(0.03, 0.46, 0.44), materials.matteBlackMetal);
-      panelR.position.set(0.28, 0.24, 0);
-      machine.add(panelL, panelR);
+    // Three-Tiered Walnut Riser Steps
+    for (let s = 0; s < 3; s++) {
+      const riser = new THREE.Mesh(
+        new THREE.BoxGeometry(caseWidth - 0.06, 0.04, 0.14),
+        materials.endGrainWalnut
+      );
+      riser.position.set(0, 0.04 + s * 0.08, -0.14 + s * 0.14);
+      riser.castShadow = true;
+      pastryZone.add(riser);
 
-      // Top Cup Warming Tray & Mini Cups
-      const topRail = new THREE.Mesh(new THREE.BoxGeometry(0.52, 0.04, 0.42), materials.matteBlackMetal);
-      topRail.position.y = 0.49;
-      machine.add(topRail);
-
-      for (let cx = -0.18; cx <= 0.18; cx += 0.12) {
-        const demitasse = new THREE.Mesh(new THREE.CylinderGeometry(0.035, 0.025, 0.05, 12), materials.plasterWall);
-        demitasse.position.set(cx, 0.53, (Math.random() - 0.5) * 0.15);
-        machine.add(demitasse);
-      }
-
-      // Group Heads & Portafilters (2 groups per machine)
-      [-0.12, 0.12].forEach(gx => {
-        const groupHead = new THREE.Mesh(new THREE.CylinderGeometry(0.045, 0.045, 0.05, 16), materials.brassGold);
-        groupHead.position.set(gx, 0.26, 0.24);
-        machine.add(groupHead);
-
-        // Portafilter Handle
-        const handle = new THREE.Mesh(new THREE.CylinderGeometry(0.014, 0.014, 0.16, 12), materials.matteBlackMetal);
-        handle.rotation.x = Math.PI / 2 + 0.15;
-        handle.position.set(gx, 0.24, 0.33);
-        machine.add(handle);
+      // Fresh Croissants & Morning Breads on Each Tier
+      [-0.24, 0.0, 0.24].forEach(px => {
+        const pastry = new THREE.Mesh(
+          new THREE.TorusGeometry(0.038, 0.022, 10, 18, Math.PI * 0.92),
+          new THREE.MeshStandardMaterial({ color: 0xd98c36, roughness: 0.58 })
+        );
+        pastry.rotation.x = Math.PI / 2;
+        pastry.position.set(px, 0.07 + s * 0.08, -0.14 + s * 0.14);
+        pastry.castShadow = true;
+        pastryZone.add(pastry);
       });
-
-      // Pressure Gauges & Steam Wands
-      const gauge1 = new THREE.Mesh(new THREE.CylinderGeometry(0.03, 0.03, 0.02, 16), materials.brassGold);
-      gauge1.rotation.x = Math.PI / 2;
-      gauge1.position.set(-0.16, 0.38, 0.235);
-
-      const gauge2 = new THREE.Mesh(new THREE.CylinderGeometry(0.03, 0.03, 0.02, 16), materials.brassGold);
-      gauge2.rotation.x = Math.PI / 2;
-      gauge2.position.set(0.16, 0.38, 0.235);
-      machine.add(gauge1, gauge2);
-
-      // Steam wand
-      const steamWand = new THREE.Mesh(new THREE.CylinderGeometry(0.008, 0.008, 0.22, 12), materials.brushedSteel);
-      steamWand.rotation.z = -0.35;
-      steamWand.position.set(0.24, 0.2, 0.24);
-      machine.add(steamWand);
-
-      // Drip Tray
-      const dripTray = new THREE.Mesh(new THREE.BoxGeometry(0.52, 0.05, 0.2), materials.matteBlackMetal);
-      dripTray.position.set(0, 0.025, 0.22);
-      machine.add(dripTray);
-
-      barArea.add(machine);
-      return machine;
     }
+    serviceBar.add(pastryZone);
 
-    const espresso1 = buildEspressoMachine(3.6, -1.8);
-    const espresso2 = buildEspressoMachine(4.35, -1.8);
-
-    registerInteractive(espresso1, {
-      title: "Sonifer Pro Dual-Boiler Espresso",
-      tag: "Espresso Workhorse",
-      desc: "Rotary pump espresso machine featuring independent PID-regulated copper boilers for steam and group brewing, saturated group heads, and precision flow profiling.",
+    registerInteractive(pastryZone, {
+      title: "Frameless UV-Bonded Pastry Showcase",
+      tag: "Morning Boulangerie",
+      desc: "Architectural 8mm low-iron tempered vitrine showcasing daily slow-fermented French croissants, pain au chocolat, and cardamom pastries on tiered American walnut risers.",
       specs: [
-        ["Boiler System", "Dual Copper (3.2L / 1.8L)"],
-        ["Extraction Pressure", "9.2 Bar Saturated"],
-        ["Temperature Stability", "± 0.2°C Digital PID"]
-      ]
-    });
-    registerInteractive(espresso2, {
-      title: "Sonifer Secondary Reserve Machine",
-      tag: "Single-Origin Pulls",
-      desc: "Dedicated espresso station configured specifically for light roasted African single origins, running custom pre-infusion timings.",
-      specs: [
-        ["Profile", "Gentle 4-Bar Pre-infusion"],
-        ["Basket Size", "20g VST Precision"],
-        ["Portafilter", "Naked Bottomless Walnut"]
+        ["Glazing", "8mm Optiwhite UV-Bonded Glass"],
+        ["Riser Wood", "Solid FSC American Black Walnut"],
+        ["Daily Bake", "Fermented 24-hours, baked at 5:30 AM"]
       ]
     });
 
-    // --- B. Twin Vacuum Siphon Coffee Makers ---
-    function buildSiphonBrewer(xPos, zPos) {
+    // --- ZONE 2: Specialty Siphon Slow-Bar (X = -1.1m to -0.3m) ---
+    function buildSiphonBrewer(xPos) {
       const siphon = new THREE.Group();
-      siphon.position.set(xPos, 0.99, zPos);
+      siphon.position.set(xPos, 0.96, barCenterZ);
 
-      // Metallic Stand Base
-      const base = new THREE.Mesh(new THREE.CylinderGeometry(0.11, 0.12, 0.025, 24), materials.brassGold);
-      base.castShadow = true;
-      siphon.add(base);
+      // Dark Slate Burner Pad on Counter Surface
+      const pad = new THREE.Mesh(new THREE.BoxGeometry(0.26, 0.015, 0.26), materials.chalkboardSlate);
+      pad.position.y = 0.008;
+      siphon.add(pad);
 
-      // Support Spine
-      const spine = new THREE.Mesh(new THREE.CylinderGeometry(0.012, 0.012, 0.44, 12), materials.brassGold);
-      spine.position.set(0.07, 0.22, 0);
+      // Balanced Polished Chrome Arched Support Arm
+      const baseArm = new THREE.Mesh(new THREE.CylinderGeometry(0.09, 0.10, 0.022, 24), materials.polishedChrome);
+      baseArm.position.y = 0.025;
+      baseArm.castShadow = true;
+      siphon.add(baseArm);
+
+      const spine = new THREE.Mesh(new THREE.CylinderGeometry(0.011, 0.011, 0.46, 12), materials.polishedChrome);
+      spine.position.set(0.065, 0.24, 0);
       siphon.add(spine);
 
-      // Clamp Ring
-      const clamp = new THREE.Mesh(new THREE.TorusGeometry(0.07, 0.01, 8, 24), materials.matteBlackMetal);
-      clamp.position.set(0, 0.22, 0);
-      clamp.rotation.x = Math.PI / 2;
-      siphon.add(clamp);
+      // Knurled Tension Dial Clamp
+      const clampDial = new THREE.Mesh(new THREE.CylinderGeometry(0.02, 0.02, 0.025, 16), materials.polishedChrome);
+      clampDial.rotation.z = Math.PI / 2;
+      clampDial.position.set(0.07, 0.23, 0);
+      siphon.add(clampDial);
 
-      // Lower Glass Sphere Bulb
-      const lowerBulb = new THREE.Mesh(new THREE.SphereGeometry(0.078, 24, 24), materials.clearGlass);
-      lowerBulb.position.set(0, 0.2, 0);
-      siphon.add(lowerBulb);
+      // Lower Borosilicate Globe with Translucent Amber Liquid
+      const lowerGlobe = new THREE.Mesh(new THREE.SphereGeometry(0.076, 24, 24), materials.borosilicateGlass);
+      lowerGlobe.position.set(0, 0.21, 0);
+      siphon.add(lowerGlobe);
 
-      // Brewed Amber Liquid in Lower Chamber
-      const liquid = new THREE.Mesh(new THREE.SphereGeometry(0.073, 20, 20), materials.amberLiquid);
-      liquid.position.set(0, 0.19, 0);
-      siphon.add(liquid);
+      const amberFluid = new THREE.Mesh(new THREE.SphereGeometry(0.071, 20, 20), materials.amberBrewedCoffee);
+      amberFluid.position.set(0, 0.20, 0);
+      siphon.add(amberFluid);
 
-      // Upper Glass Funnel Cylinder
-      const upperFunnel = new THREE.Mesh(new THREE.CylinderGeometry(0.055, 0.045, 0.18, 20), materials.clearGlass);
-      upperFunnel.position.set(0, 0.38, 0);
+      // Upper Funnel Chamber with Silicone Gasket Seal & Mesh Rod
+      const upperFunnel = new THREE.Mesh(new THREE.CylinderGeometry(0.052, 0.042, 0.19, 20), materials.borosilicateGlass);
+      upperFunnel.position.set(0, 0.39, 0);
       siphon.add(upperFunnel);
 
-      // Ground coffee layer inside upper chamber
-      const grounds = new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.046, 0.04, 16), new THREE.MeshStandardMaterial({
-        color: 0x221308,
-        roughness: 0.95
-      }));
-      grounds.position.set(0, 0.34, 0);
-      siphon.add(grounds);
+      const siliconeGasket = new THREE.Mesh(new THREE.CylinderGeometry(0.043, 0.043, 0.018, 16), materials.matteBlackToeKick);
+      siliconeGasket.position.set(0, 0.295, 0);
+      siphon.add(siliconeGasket);
 
-      // Siphon Stem Tube connecting upper to lower
-      const tube = new THREE.Mesh(new THREE.CylinderGeometry(0.01, 0.01, 0.18, 12), materials.clearGlass);
-      tube.position.set(0, 0.24, 0);
-      siphon.add(tube);
+      const filterRod = new THREE.Mesh(new THREE.CylinderGeometry(0.008, 0.008, 0.19, 8), materials.polishedChrome);
+      filterRod.position.set(0, 0.25, 0);
+      siphon.add(filterRod);
 
-      // Mini Spirit Burner Lamp Underneath
-      const burnerBase = new THREE.Mesh(new THREE.CylinderGeometry(0.045, 0.05, 0.04, 16), materials.matteBlackMetal);
-      burnerBase.position.set(0, 0.03, 0);
-      const burnerFlame = new THREE.Mesh(new THREE.ConeGeometry(0.018, 0.04, 12), materials.candleFlame);
-      burnerFlame.position.set(0, 0.07, 0);
-      siphon.add(burnerBase, burnerFlame);
+      // Heavy Brass Spirit Burner
+      const brassBurner = new THREE.Mesh(new THREE.CylinderGeometry(0.042, 0.048, 0.045, 16), materials.solidBrass);
+      brassBurner.position.y = 0.04;
+      brassBurner.castShadow = true;
+      siphon.add(brassBurner);
 
-      // Warm burner light
-      const burnerLight = new THREE.PointLight(0xff9922, 1.0, 0.8);
-      burnerLight.position.set(0, 0.09, 0);
-      siphon.add(burnerLight);
+      // Subtle Halogen / Spirit Glow
+      const glowPoint = new THREE.PointLight(0xff9838, 0.20, 0.5, 2);
+      glowPoint.position.set(0, 0.08, 0);
+      siphon.add(glowPoint);
 
-      barArea.add(siphon);
+      serviceBar.add(siphon);
       return siphon;
     }
 
-    const siphon1 = buildSiphonBrewer(2.35, -1.8);
-    const siphon2 = buildSiphonBrewer(2.8, -1.8);
+    const siphonA = buildSiphonBrewer(-0.85);
+    const siphonB = buildSiphonBrewer(-0.45);
 
-    registerInteractive(siphon1, {
-      title: "Hario Technica Siphon Brewer",
-      tag: "Vacuum Extraction",
-      desc: "Twin-chamber vacuum siphon brewer delivering tea-like floral clarity, delicate acidity, and rich aromatic oils from high-altitude Ethiopian beans.",
+    registerInteractive(siphonA, {
+      title: "Twin Vacuum Siphon Reserve (Unit 1)",
+      tag: "Vapor-Pressure Slow-Bar",
+      desc: "Engineered vacuum extraction harnessing expansion and contraction of air and steam through pure borosilicate glass, delivering an aromatic cup of African coffee with tea-like clarity.",
       specs: [
-        ["Brew Capacity", "5-Cup (600ml)"],
         ["Glass Grade", "Heat-Resistant Borosilicate 3.3"],
-        ["Bean Match", "Yirgacheffe Washed G1"]
+        ["Filtration", "Woven Organic Cotton Disc"],
+        ["Target Reserve", "Yirgacheffe Lot #24 Micro-Lot"]
       ]
     });
-    registerInteractive(siphon2, {
-      title: "Reserve Siphon Station",
+    registerInteractive(siphonB, {
+      title: "Twin Vacuum Siphon Reserve (Unit 2)",
       tag: "Slow-Bar Laboratory",
-      desc: "Dedicated to natural and anaerobic fermented micro-lots. Vapor pressure forces water upward; cooling pulls brewed elixir back down through cloth filtration.",
+      desc: "Twin station tuned for experimental anaerobic natural lots, maintaining precise 92.8°C slurry saturation before vacuum drawdown.",
       specs: [
-        ["Filter Type", "Organic Cotton Cloth"],
-        ["Heat Source", "Precision Halogen Beam"],
-        ["Brew Temperature", "92.5°C Controlled"]
+        ["Armature", "Polished Marine-Grade Chrome"],
+        ["Burner", "Machined Solid Brass Spirit Lamp"],
+        ["Extraction Yield", "21.5% Total Dissolved Solids"]
       ]
     });
 
-    // --- C. Commercial Coffee Grinder ---
-    const grinder = new THREE.Group();
-    grinder.position.set(4.65, 0.99, -1.0);
+    // --- ZONE 3: Signature Espresso Hub (X = +0.2m to +1.3m) ---
+    function buildSoniferEspressoUnit(xPos) {
+      const unit = new THREE.Group();
+      unit.position.set(xPos, 0.96, barCenterZ);
 
-    // Heavy Cast Base
-    const gBase = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.14, 0.12, 20), materials.matteBlackMetal);
-    gBase.position.y = 0.06;
-    gBase.castShadow = true;
-    grinder.add(gBase);
+      // Hand-Brushed Stainless Steel Front Fascia with Textured Matte Black Sides
+      const chassis = new THREE.Mesh(new THREE.BoxGeometry(0.44, 0.44, 0.42), materials.brushedStainlessSteel);
+      chassis.position.y = 0.22;
+      chassis.castShadow = true;
+      unit.add(chassis);
 
-    // Motor Housing Column
-    const gBody = new THREE.Mesh(new THREE.CylinderGeometry(0.11, 0.11, 0.35, 20), materials.brushedSteel);
-    gBody.position.y = 0.28;
-    gBody.castShadow = true;
-    grinder.add(gBody);
-
-    // Transparent Tinted Bean Hopper
-    const hopper = new THREE.Mesh(new THREE.ConeGeometry(0.13, 0.28, 20), materials.clearGlass);
-    hopper.rotation.x = Math.PI;
-    hopper.position.y = 0.58;
-    grinder.add(hopper);
-
-    // Coffee beans inside hopper
-    const hopperBeans = new THREE.Mesh(new THREE.ConeGeometry(0.115, 0.22, 16), new THREE.MeshStandardMaterial({
-      color: 0x2e190e,
-      roughness: 0.95
-    }));
-    hopperBeans.rotation.x = Math.PI;
-    hopperBeans.position.y = 0.56;
-    grinder.add(hopperBeans);
-
-    // Hopper Lid
-    const hopperLid = new THREE.Mesh(new THREE.CylinderGeometry(0.14, 0.14, 0.03, 20), materials.matteBlackMetal);
-    hopperLid.position.y = 0.73;
-    grinder.add(hopperLid);
-
-    // Portafilter Fork & Chute
-    const gFork = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.02, 0.08), materials.brushedSteel);
-    gFork.position.set(0, 0.16, 0.14);
-    grinder.add(gFork);
-
-    barArea.add(grinder);
-
-    registerInteractive(grinder, {
-      title: "Mahlkönig Peak Industrial Grinder",
-      tag: "Particle Precision",
-      desc: "Featuring 80mm titanium burrs, active chamber cooling, and zero-retention dosing for consistent micron-level grind distribution.",
-      specs: [
-        ["Burrs", "80mm Titanium Coated Flat"],
-        ["Grind Speed", "4.5g / second"],
-        ["Retention", "< 0.1g Zero Waste"]
-      ]
-    });
-
-    // --- D. Dual Vintage Beverage Dispensers ---
-    function buildBeverageDispenser(xPos, zPos, juiceMaterial, isOrange) {
-      const dispenser = new THREE.Group();
-      dispenser.position.set(xPos, 0.99, zPos);
-
-      // Ornate Wrought Iron Tripod Stand
-      const standLegs = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.14, 0.15, 16), materials.matteBlackMetal);
-      standLegs.position.y = 0.075;
-      standLegs.castShadow = true;
-      dispenser.add(standLegs);
-
-      // Glass Urn Container
-      const glassUrn = new THREE.Mesh(new THREE.CylinderGeometry(0.11, 0.11, 0.32, 24), materials.clearGlass);
-      glassUrn.position.y = 0.31;
-      dispenser.add(glassUrn);
-
-      // Colorful Juice Fill
-      const juice = new THREE.Mesh(new THREE.CylinderGeometry(0.104, 0.104, 0.28, 20), juiceMaterial);
-      juice.position.y = 0.29;
-      dispenser.add(juice);
-
-      // Floating fruit slice accents
-      if (isOrange) {
-        for (let s = 0; s < 4; s++) {
-          const slice = new THREE.Mesh(new THREE.CylinderGeometry(0.035, 0.035, 0.008, 12), materials.orangeJuice);
-          slice.rotation.z = Math.random() * Math.PI;
-          slice.position.set((Math.random() - 0.5) * 0.08, 0.26 + s * 0.03, (Math.random() - 0.5) * 0.08);
-          dispenser.add(slice);
-        }
-      }
-
-      // Metal Spigot Tap
-      const spigot = new THREE.Mesh(new THREE.CylinderGeometry(0.012, 0.012, 0.07, 12), materials.brassGold);
-      spigot.rotation.x = Math.PI / 2;
-      spigot.position.set(0, 0.19, 0.14);
-      const tapHandle = new THREE.Mesh(new THREE.BoxGeometry(0.01, 0.04, 0.02), materials.brassGold);
-      tapHandle.position.set(0, 0.22, 0.16);
-      dispenser.add(spigot, tapHandle);
-
-      // Domed Glass Lid
-      const lid = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.12, 0.06, 20), materials.clearGlass);
-      lid.position.y = 0.5;
-      const lidHandle = new THREE.Mesh(new THREE.SphereGeometry(0.02, 12, 12), materials.brassGold);
-      lidHandle.position.y = 0.54;
-      dispenser.add(lid, lidHandle);
-
-      barArea.add(dispenser);
-      return dispenser;
-    }
-
-    const dispenser1 = buildBeverageDispenser(0.4, -1.8, materials.orangeJuice, true);
-    const dispenser2 = buildBeverageDispenser(0.85, -1.8, materials.beetJuice, false);
-
-    registerInteractive(dispenser1, {
-      title: "Artisanal Mango-Citrus Cold Press",
-      tag: "Fresh Beverage Tap",
-      desc: "Cold-pressed ripe mango, valencia orange, and passionfruit infusion kept chilled on tap with fresh floating citrus botanicals.",
-      specs: [
-        ["Ingredients", "100% Raw Alphonso & Valencia"],
-        ["Capacity", "6.5 Liters"],
-        ["Added Sugars", "0% Pure Fruit Nectar"]
-      ]
-    });
-    registerInteractive(dispenser2, {
-      title: "Ruby Beetroot & Pomegranate Tonic",
-      tag: "Superfood Elixir",
-      desc: "Rich ruby elixir crafted with roasted organic beetroot, tart pomegranate, ginger root, and fresh lime zest.",
-      specs: [
-        ["Notes", "Earthy Sweetness & Tart Crisp"],
-        ["Vitamins", "Rich in Iron, B9 & Polyphenols"],
-        ["Cold Brewed", "Slow steeped for 14 hours"]
-      ]
-    });
-
-    // --- E. Fresh Fruit Centerpiece Basket ---
-    const fruitBasket = new THREE.Group();
-    fruitBasket.position.set(1.3, 0.99, -1.8);
-
-    // Woven Wicker Basket
-    const basket = new THREE.Mesh(new THREE.CylinderGeometry(0.24, 0.16, 0.12, 20), new THREE.MeshStandardMaterial({
-      color: 0xa87948,
-      roughness: 0.9
-    }));
-    basket.position.y = 0.06;
-    basket.castShadow = true;
-    fruitBasket.add(basket);
-
-    // Pineapple
-    const pineapple = new THREE.Group();
-    pineapple.position.set(0.04, 0.16, -0.02);
-    const pineBody = new THREE.Mesh(new THREE.CylinderGeometry(0.07, 0.08, 0.22, 14), new THREE.MeshStandardMaterial({
-      color: 0x8b5a1f,
-      roughness: 0.8
-    }));
-    pineBody.castShadow = true;
-    pineapple.add(pineBody);
-
-    // Spiky pineapple leaves
-    for (let l = 0; l < 9; l++) {
-      const leaf = new THREE.Mesh(new THREE.ConeGeometry(0.02, 0.14, 4), materials.plantGreen);
-      leaf.position.set((Math.random() - 0.5) * 0.05, 0.15, (Math.random() - 0.5) * 0.05);
-      leaf.rotation.z = (Math.random() - 0.5) * 0.5;
-      leaf.rotation.x = (Math.random() - 0.5) * 0.5;
-      pineapple.add(leaf);
-    }
-    fruitBasket.add(pineapple);
-
-    // Lemons, Oranges, and Apples
-    const fruitColors = [0xf7c844, 0xf0781e, 0xb8261b, 0x5fa135];
-    for (let i = 0; i < 9; i++) {
-      const fColor = fruitColors[i % fruitColors.length];
-      const fruit = new THREE.Mesh(
-        new THREE.SphereGeometry(0.042, 14, 14),
-        new THREE.MeshStandardMaterial({ color: fColor, roughness: 0.45 })
-      );
-      const angle = (i / 9) * Math.PI * 2;
-      const radius = 0.12;
-      fruit.position.set(Math.cos(angle) * radius, 0.12 + (i % 2) * 0.03, Math.sin(angle) * radius);
-      fruit.castShadow = true;
-      fruitBasket.add(fruit);
-    }
-
-    barArea.add(fruitBasket);
-    registerInteractive(fruitBasket, {
-      title: "Fresh Harvest Centerpiece",
-      tag: "Seasonal Produce",
-      desc: "Locally sourced organic citrus, orchard apples, and tropical pineapple providing vibrant natural color and fragrance to the bar.",
-      specs: [
-        ["Origin", "Mediterranean & Highland Groves"],
-        ["Use", "House Tonics & Beverage Garnish"],
-        ["Basket Craft", "Hand-Woven Palm Wicker"]
-      ]
-    });
-
-    // --- F. Serving Details Presentation Tray ---
-    const servingTray = new THREE.Group();
-    servingTray.position.set(1.8, 0.99, -1.55);
-
-    // Walnut Wooden Board
-    const trayBoard = new THREE.Mesh(new THREE.BoxGeometry(0.36, 0.02, 0.22), materials.countertopWood);
-    trayBoard.position.y = 0.01;
-    trayBoard.castShadow = true;
-    servingTray.add(trayBoard);
-
-    // Espresso Glass Demitasse
-    const espressoCup = new THREE.Mesh(new THREE.CylinderGeometry(0.03, 0.022, 0.055, 16), materials.clearGlass);
-    espressoCup.position.set(-0.09, 0.045, 0);
-    const espressoShot = new THREE.Mesh(new THREE.CylinderGeometry(0.027, 0.02, 0.038, 14), materials.amberLiquid);
-    espressoShot.position.set(-0.09, 0.038, 0);
-    servingTray.add(espressoCup, espressoShot);
-
-    // Sparkling Water Tumbler
-    const waterGlass = new THREE.Mesh(new THREE.CylinderGeometry(0.028, 0.022, 0.065, 16), materials.clearGlass);
-    waterGlass.position.set(0.01, 0.05, 0);
-    servingTray.add(waterGlass);
-
-    // Ceramic Saucer with Fresh Medjool Dates
-    const saucer = new THREE.Mesh(new THREE.CylinderGeometry(0.048, 0.038, 0.012, 16), materials.plasterWall);
-    saucer.position.set(0.1, 0.02, 0);
-    servingTray.add(saucer);
-
-    // 3 Dates
-    [-0.015, 0.0, 0.015].forEach((dx, i) => {
-      const dateFruit = new THREE.Mesh(new THREE.SphereGeometry(0.015, 10, 10), new THREE.MeshStandardMaterial({
-        color: 0x3d2012,
-        roughness: 0.6
-      }));
-      dateFruit.scale.set(1.4, 0.8, 0.8);
-      dateFruit.position.set(0.1 + dx, 0.032, (i % 2 === 0 ? 0.01 : -0.01));
-      servingTray.add(dateFruit);
-    });
-
-    barArea.add(servingTray);
-    registerInteractive(servingTray, {
-      title: "The Signature Service Tray",
-      tag: "Barista Tradition",
-      desc: "Traditional presentation of single-origin espresso with a palate-cleansing glass of sparkling water and sun-dried Medjool dates on carved walnut.",
-      specs: [
-        ["Espresso", "Ethiopian Guji Natural (18g In / 38g Out)"],
-        ["Dates", "Organic Medjool with Honey Undertones"],
-        ["Water", "Chilled Sparkling Mineral Cleanser"]
-      ]
-    });
-
-    // --- G. Countertop Glass Pastry Display Case ---
-    const pastryCase = new THREE.Group();
-    pastryCase.position.set(-0.6, 0.99, -1.8);
-
-    // Base Timber Plinth
-    const caseBase = new THREE.Mesh(new THREE.BoxGeometry(0.95, 0.04, 0.55), materials.countertopWood);
-    caseBase.position.y = 0.02;
-    caseBase.castShadow = true;
-    pastryCase.add(caseBase);
-
-    // Slanted Glass Vitrine Enclosure
-    const caseGlass = new THREE.Mesh(new THREE.BoxGeometry(0.92, 0.35, 0.52), materials.clearGlass);
-    caseGlass.position.y = 0.21;
-    pastryCase.add(caseGlass);
-
-    // Interior Glass Shelf
-    const innerShelf = new THREE.Mesh(new THREE.BoxGeometry(0.88, 0.015, 0.46), materials.clearGlass);
-    innerShelf.position.y = 0.18;
-    pastryCase.add(innerShelf);
-
-    // Pastries (Croissants & Muffins)
-    for (let px = -0.32; px <= 0.32; px += 0.22) {
-      // Golden Croissant
-      const croissant = new THREE.Mesh(
-        new THREE.TorusGeometry(0.045, 0.024, 10, 18, Math.PI * 0.9),
-        new THREE.MeshStandardMaterial({ color: 0xd48f3b, roughness: 0.55 })
-      );
-      croissant.rotation.x = Math.PI / 2;
-      croissant.position.set(px, 0.06, 0.05);
-      croissant.castShadow = true;
-      pastryCase.add(croissant);
-
-      // Muffins on Upper Shelf
-      const muffin = new THREE.Mesh(
-        new THREE.CylinderGeometry(0.035, 0.025, 0.05, 14),
-        new THREE.MeshStandardMaterial({ color: 0x8a5525, roughness: 0.8 })
-      );
-      muffin.position.set(px, 0.23, -0.05);
-      pastryCase.add(muffin);
-    }
-
-    barArea.add(pastryCase);
-    registerInteractive(pastryCase, {
-      title: "Artisanal Boulangerie Vitrine",
-      tag: "Fresh Daily Pastries",
-      desc: "Daily baked flaky French butter croissants, rich pain au chocolat, and cardamom-infused wild blueberry muffins.",
-      specs: [
-        ["Flour", "Organic French T55 Stone-Ground"],
-        ["Butter", "Normandy AOP Cultured (84% Fat)"],
-        ["Baked", "Every morning at 5:30 AM"]
-      ]
-    });
-
-    // --- H. Traditional Ethiopian Jebena Coffee Ceremony Accent ---
-    const jebenaGroup = new THREE.Group();
-    jebenaGroup.position.set(1.95, 0.99, -2.15);
-
-    // Clay Pot Spherical Base
-    const jBase = new THREE.Mesh(new THREE.SphereGeometry(0.085, 20, 20), materials.jebenaBlackClay);
-    jBase.position.y = 0.09;
-    jBase.castShadow = true;
-    jebenaGroup.add(jBase);
-
-    // Slender Neck
-    const jNeck = new THREE.Mesh(new THREE.CylinderGeometry(0.024, 0.038, 0.16, 16), materials.jebenaBlackClay);
-    jNeck.position.y = 0.2;
-    jebenaGroup.add(jNeck);
-
-    // Flared Neck Lip & Straw Stopper
-    const jLip = new THREE.Mesh(new THREE.CylinderGeometry(0.036, 0.024, 0.04, 16), materials.jebenaBlackClay);
-    jLip.position.y = 0.29;
-    const jStopper = new THREE.Mesh(new THREE.SphereGeometry(0.02, 10, 10), new THREE.MeshStandardMaterial({ color: 0x8a6e43 }));
-    jStopper.position.y = 0.31;
-    jebenaGroup.add(jLip, jStopper);
-
-    // Curved Spout & Clay Handle
-    const jSpout = new THREE.Mesh(new THREE.CylinderGeometry(0.012, 0.018, 0.12, 12), materials.jebenaBlackClay);
-    jSpout.rotation.z = -0.65;
-    jSpout.position.set(-0.08, 0.14, 0);
-    jebenaGroup.add(jSpout);
-
-    const jHandle = new THREE.Mesh(new THREE.TorusGeometry(0.065, 0.014, 8, 16, Math.PI), materials.jebenaBlackClay);
-    jHandle.rotation.z = Math.PI / 2;
-    jHandle.position.set(0.08, 0.14, 0);
-    jebenaGroup.add(jHandle);
-
-    barArea.add(jebenaGroup);
-    registerInteractive(jebenaGroup, {
-      title: "Traditional Ethiopian Clay Jebena",
-      tag: "Ancestral Ceremony",
-      desc: "Handcrafted black terracotta vessel used for the legendary Ethiopian Bunna ceremony. Freshly roasted beans are ground and brewed over hot coals with fragrant frankincense.",
-      specs: [
-        ["Heritage", "Cradle of Arabica Coffee"],
-        ["Material", "Unglazed Black Highland Terracotta"],
-        ["Ceremony Cups", "Finjan (Cini) Ceramic Demitasses"]
-      ]
-    });
-
-    // ==========================================
-    // 7. Seating & Cozy Lounge Zone
-    // ==========================================
-
-    const lounge = new THREE.Group();
-    scene.add(lounge);
-
-    // Area Rug on Floor
-    const rugMesh = new THREE.Mesh(new THREE.PlaneGeometry(4.6, 3.2), new THREE.MeshStandardMaterial({
-      map: rugTex,
-      roughness: 0.95
-    }));
-    rugMesh.rotation.x = -Math.PI / 2;
-    rugMesh.position.set(-3.2, 0.005, 0.5);
-    rugMesh.receiveShadow = true;
-    lounge.add(rugMesh);
-
-    // Built-in Banquette Bench Along Window Wall
-    const banquettePlinth = new THREE.Mesh(new THREE.BoxGeometry(0.85, 0.42, 4.4), materials.counterSlats);
-    banquettePlinth.position.set(-5.4, 0.21, 0.5);
-    banquettePlinth.castShadow = true;
-    banquettePlinth.receiveShadow = true;
-    lounge.add(banquettePlinth);
-
-    // Leather Seat Cushion
-    const banquetteSeat = new THREE.Mesh(new THREE.BoxGeometry(0.88, 0.12, 4.4), materials.leatherCognac);
-    banquetteSeat.position.set(-5.38, 0.48, 0.5);
-    banquetteSeat.castShadow = true;
-    lounge.add(banquetteSeat);
-
-    // Leather Tufted Backrest Cushion
-    const banquetteBack = new THREE.Mesh(new THREE.BoxGeometry(0.12, 0.65, 4.4), materials.leatherCognac);
-    banquetteBack.position.set(-5.8, 0.85, 0.5);
-    lounge.add(banquetteBack);
-
-    // 4 Plush Accent Throw Pillows (Terracotta, Mustard, Cream, Muted Olive)
-    const pillowConfigs = [
-      { z: -1.0, mat: materials.terracottaPillow, rotY: 0.15, rotZ: 0.2 },
-      { z: -0.2, mat: materials.mustardPillow, rotY: -0.12, rotZ: 0.18 },
-      { z: 0.8, mat: materials.creamPillow, rotY: 0.22, rotZ: 0.16 },
-      { z: 1.8, mat: materials.olivePillow, rotY: -0.18, rotZ: 0.22 }
-    ];
-
-    pillowConfigs.forEach(cfg => {
-      const pillow = new THREE.Mesh(new THREE.BoxGeometry(0.16, 0.38, 0.38), cfg.mat);
-      pillow.position.set(-5.6, 0.68, cfg.z);
-      pillow.rotation.y = cfg.rotY;
-      pillow.rotation.z = cfg.rotZ;
-      pillow.castShadow = true;
-      lounge.add(pillow);
-    });
-
-    // Rustic Wood Tables with Hairpin Legs
-    function buildCafeTable(x, z, isRound) {
-      const tableGroup = new THREE.Group();
-      tableGroup.position.set(x, 0, z);
-
-      let top;
-      if (isRound) {
-        top = new THREE.Mesh(new THREE.CylinderGeometry(0.42, 0.42, 0.05, 24), materials.countertopWood);
-      } else {
-        top = new THREE.Mesh(new THREE.BoxGeometry(0.85, 0.05, 0.7), materials.countertopWood);
-      }
-      top.position.y = 0.55;
-      top.castShadow = true;
-      top.receiveShadow = true;
-      tableGroup.add(top);
-
-      // Matte Black Hairpin Legs
-      const legPositions = isRound
-        ? [[0.24, 0.24], [-0.24, 0.24], [0, -0.3]]
-        : [[0.32, 0.24], [-0.32, 0.24], [0.32, -0.24], [-0.32, -0.24]];
-
-      legPositions.forEach(([lx, lz]) => {
-        const leg = new THREE.Mesh(new THREE.CylinderGeometry(0.012, 0.008, 0.53, 10), materials.matteBlackMetal);
-        leg.position.set(lx, 0.265, lz);
-        leg.castShadow = true;
-        tableGroup.add(leg);
+      // Textured Matte Black Composite Side Panels
+      [-0.225, 0.225].forEach(sx => {
+        const sidePanel = new THREE.Mesh(new THREE.BoxGeometry(0.015, 0.42, 0.40), materials.blackenedStructuralSteel);
+        sidePanel.position.set(sx, 0.22, 0);
+        unit.add(sidePanel);
       });
 
-      // Tabletop Details: Glass Candle Jar & Plant
-      const candleJar = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.04, 0.08, 14), materials.clearGlass);
-      candleJar.position.set(0.08, 0.615, 0.05);
-      const flame = new THREE.Mesh(new THREE.ConeGeometry(0.012, 0.025, 8), materials.candleFlame);
-      flame.position.set(0.08, 0.62, 0.05);
-      const cLight = new THREE.PointLight(0xffaa33, 0.45, 1.2);
-      cLight.position.set(0.08, 0.63, 0.05);
-      tableGroup.add(candleJar, flame, cLight);
+      // Top Chrome Cup Warming Rack
+      const rack = new THREE.Mesh(new THREE.BoxGeometry(0.40, 0.02, 0.36), materials.polishedChrome);
+      rack.position.y = 0.45;
+      unit.add(rack);
 
-      lounge.add(tableGroup);
-      return tableGroup;
+      // Miniature White Porcelain Espresso Demitasses on Warming Rack
+      for (let cx = -0.13; cx <= 0.13; cx += 0.08) {
+        const cup = new THREE.Mesh(
+          new THREE.CylinderGeometry(0.03, 0.02, 0.045, 14),
+          new THREE.MeshStandardMaterial({ color: 0xf6f5f2, roughness: 0.2 })
+        );
+        cup.position.set(cx, 0.485, (Math.random() - 0.5) * 0.12);
+        unit.add(cup);
+      }
+
+      // 58mm Commercial Brass Group Heads & Portafilters
+      [-0.10, 0.10].forEach(gx => {
+        const groupHead = new THREE.Mesh(new THREE.CylinderGeometry(0.042, 0.042, 0.05, 16), materials.solidBrass);
+        groupHead.position.set(gx, 0.24, 0.22);
+        unit.add(groupHead);
+
+        const portafilter = new THREE.Mesh(new THREE.CylinderGeometry(0.013, 0.013, 0.15, 12), materials.blackenedStructuralSteel);
+        portafilter.rotation.x = Math.PI / 2 + 0.12;
+        portafilter.position.set(gx, 0.22, 0.31);
+        unit.add(portafilter);
+      });
+
+      // Circular Mechanical Boiler Pressure Gauges with Cream Faces
+      [-0.13, 0.13].forEach(qx => {
+        const bezel = new THREE.Mesh(new THREE.CylinderGeometry(0.028, 0.028, 0.018, 16), materials.polishedChrome);
+        bezel.rotation.x = Math.PI / 2;
+        bezel.position.set(qx, 0.36, 0.215);
+
+        const face = new THREE.Mesh(
+          new THREE.CylinderGeometry(0.024, 0.024, 0.005, 14),
+          new THREE.MeshStandardMaterial({ color: 0xfdf7eb, roughness: 0.4 })
+        );
+        face.rotation.x = Math.PI / 2;
+        face.position.set(qx, 0.36, 0.225);
+        unit.add(bezel, face);
+      });
+
+      // Rotary Steam Valves & Wand
+      const steamKnob = new THREE.Mesh(new THREE.CylinderGeometry(0.02, 0.02, 0.025, 12), materials.polishedChrome);
+      steamKnob.position.set(0.18, 0.38, 0.21);
+      const steamWand = new THREE.Mesh(new THREE.CylinderGeometry(0.007, 0.007, 0.21, 8), materials.brushedStainlessSteel);
+      steamWand.rotation.z = -0.32;
+      steamWand.position.set(0.19, 0.20, 0.22);
+      unit.add(steamKnob, steamWand);
+
+      serviceBar.add(unit);
+      return unit;
     }
 
-    buildCafeTable(-3.8, -0.6, false);
-    buildCafeTable(-3.8, 1.4, true);
+    const espressoA = buildSoniferEspressoUnit(0.35);
+    const espressoB = buildSoniferEspressoUnit(1.15);
 
-    // Mid-Century Wooden Cafe Chairs with Dark Iron Legs
-    function buildCafeChair(x, z, rotY) {
+    // Commercial Espresso Grinder Between Espresso Units (X = +0.75m)
+    const grinder = new THREE.Group();
+    grinder.position.set(0.75, 0.96, barCenterZ);
+
+    const gCastBase = new THREE.Mesh(new THREE.CylinderGeometry(0.10, 0.12, 0.10, 20), materials.blackenedStructuralSteel);
+    gCastBase.position.y = 0.05;
+    gCastBase.castShadow = true;
+    grinder.add(gCastBase);
+
+    const gCastAluminumBody = new THREE.Mesh(new THREE.CylinderGeometry(0.09, 0.09, 0.32, 20), materials.brushedStainlessSteel);
+    gCastAluminumBody.position.y = 0.26;
+    gCastAluminumBody.castShadow = true;
+    grinder.add(gCastAluminumBody);
+
+    // Tinted Cylindrical Acrylic Bean Hopper with Roasted Beans
+    const gHopper = new THREE.Mesh(new THREE.CylinderGeometry(0.105, 0.08, 0.24, 20), materials.borosilicateGlass);
+    gHopper.position.y = 0.54;
+    grinder.add(gHopper);
+
+    const gBeans = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.098, 0.075, 0.20, 16),
+      new THREE.MeshStandardMaterial({ color: 0x24140b, roughness: 0.9 })
+    );
+    gBeans.position.y = 0.52;
+    grinder.add(gBeans);
+
+    const gLid = new THREE.Mesh(new THREE.CylinderGeometry(0.11, 0.11, 0.025, 20), materials.blackenedStructuralSteel);
+    gLid.position.y = 0.67;
+    grinder.add(gLid);
+
+    serviceBar.add(grinder);
+
+    registerInteractive(espressoA, {
+      title: "Sonifer Commercial Espresso Unit 1",
+      tag: "Dual-Boiler Architecture",
+      desc: "Hand-brushed stainless steel commercial espresso machine with independent saturated copper boilers, manual flow paddle, and dual analog pressure telemetry.",
+      specs: [
+        ["Fascia", "304 Hand-Brushed Stainless Steel"],
+        ["Group Heads", "58mm Forged Solid Marine Brass"],
+        ["Boiler Pressure", "9.2 Bar Saturated Delivery"]
+      ]
+    });
+    registerInteractive(grinder, {
+      title: "Commercial Heavy Cast-Aluminum Grinder",
+      tag: "Micron Particle Distribution",
+      desc: "Stepless industrial grinder with 83mm titanium burrs and tinted acrylic bean hopper maintaining low temperature during peak continuous morning service.",
+      specs: [
+        ["Burrs", "83mm Titanium-Coated Flat Burrs"],
+        ["Body", "Heavy Cast Die-Cast Aluminum"],
+        ["Retention", "< 0.08g Zero-Dead-Space Delivery"]
+      ]
+    });
+
+    // --- ZONE 4: Cold Craft Hydration & Juice Bar (X = +1.6m to +2.4m) ---
+    function buildSquareVintageDispenser(xPos, liquidMat, isMango) {
+      const unit = new THREE.Group();
+      unit.position.set(xPos, 0.96, barCenterZ);
+
+      // 160mm Matte-Black Geometric Wrought-Iron Wire Stand
+      const wireStand = new THREE.Group();
+      // Stand ring/square
+      const topRing = new THREE.Mesh(new THREE.BoxGeometry(0.23, 0.015, 0.23), materials.blackenedStructuralSteel);
+      topRing.position.y = 0.16;
+      topRing.castShadow = true;
+      wireStand.add(topRing);
+
+      [[-0.10, -0.10], [0.10, -0.10], [-0.10, 0.10], [0.10, 0.10]].forEach(([lx, lz]) => {
+        const leg = new THREE.Mesh(new THREE.CylinderGeometry(0.008, 0.008, 0.16, 8), materials.blackenedStructuralSteel);
+        leg.position.set(lx, 0.08, lz);
+        leg.castShadow = true;
+        wireStand.add(leg);
+      });
+      unit.add(wireStand);
+
+      // Heavy Thick-Walled Square-Cut Glass Dispenser
+      const glassUrn = new THREE.Mesh(new THREE.BoxGeometry(0.21, 0.34, 0.21), materials.borosilicateGlass);
+      glassUrn.position.y = 0.34;
+      unit.add(glassUrn);
+
+      // Liquid Mesh (Dense Tropical Mango or Ruby Beetroot)
+      const liquidBlock = new THREE.Mesh(new THREE.BoxGeometry(0.196, 0.30, 0.196), liquidMat);
+      liquidBlock.position.y = 0.32;
+      unit.add(liquidBlock);
+
+      // Stainless Steel Locking Bail-Lid Clamp
+      const bailClamp = new THREE.Mesh(new THREE.CylinderGeometry(0.07, 0.07, 0.04, 16), materials.polishedChrome);
+      bailClamp.position.y = 0.53;
+      unit.add(bailClamp);
+
+      // Metal Lever-Action Spigot
+      const spigot = new THREE.Mesh(new THREE.CylinderGeometry(0.01, 0.01, 0.07, 10), materials.polishedChrome);
+      spigot.rotation.x = Math.PI / 2;
+      spigot.position.set(0, 0.22, 0.13);
+      const lever = new THREE.Mesh(new THREE.BoxGeometry(0.012, 0.045, 0.012), materials.polishedChrome);
+      lever.position.set(0, 0.25, 0.15);
+      unit.add(spigot, lever);
+
+      serviceBar.add(unit);
+      return unit;
+    }
+
+    const dispenserMango = buildSquareVintageDispenser(1.72, materials.mangoPulpNectar, true);
+    const dispenserBeet = buildSquareVintageDispenser(2.22, materials.rubyBeetrootJuice, false);
+
+    registerInteractive(dispenserMango, {
+      title: "Square Vintage Dispenser: Tropical Mango Nectar",
+      tag: "Cold-Pressed Hydration",
+      desc: "Dense, unpasteurized Alphonso mango pulp infused with Valencia orange nectar and passionfruit coulis, held in heavy square-cut glass on geometric wrought-iron wirework.",
+      specs: [
+        ["Vessel", "Heavy Square-Cut Pressed Architectural Glass"],
+        ["Base", "160mm Matte-Black Geometric Wire Stand"],
+        ["Ingredients", "100% Cold-Pressed Alphonso, Orange, Passionfruit"]
+      ]
+    });
+    registerInteractive(dispenserBeet, {
+      title: "Square Vintage Dispenser: Ruby Beetroot Tonic",
+      tag: "Superfood Cold-Press",
+      desc: "Deep ruby-crimson cold-pressed elixir of roasted organic beetroot, crisp gala apples, grated fresh ginger, and lime.",
+      specs: [
+        ["Spigot", "Precision Food-Grade 316 Stainless Lever"],
+        ["Color Profile", "Unfiltered Deep Ruby-Crimson (#7A0C1E)"],
+        ["Steeping", "Slow cold-press maceration"]
+      ]
+    });
+
+    // Artisan Fresh Fruit Basket (Wide, shallow woven Ethiopian raffia sweetgrass)
+    const fruitBasket = new THREE.Group();
+    fruitBasket.position.set(1.97, 0.96, barCenterZ + 0.28);
+
+    const basketDish = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.24, 0.18, 0.08, 20),
+      new THREE.MeshStandardMaterial({ color: 0x9b7b52, roughness: 0.9 })
+    );
+    basketDish.position.y = 0.04;
+    basketDish.castShadow = true;
+    fruitBasket.add(basketDish);
+
+    // Textured Pineapple
+    const pineBody = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.065, 0.075, 0.19, 14),
+      new THREE.MeshStandardMaterial({ color: 0x825a24, roughness: 0.82 })
+    );
+    pineBody.position.set(0.04, 0.14, -0.02);
+    pineBody.castShadow = true;
+    fruitBasket.add(pineBody);
+
+    // Crisp spiky leaves
+    for (let l = 0; l < 8; l++) {
+      const leaf = new THREE.Mesh(new THREE.ConeGeometry(0.018, 0.12, 4), new THREE.MeshStandardMaterial({ color: 0x365428 }));
+      leaf.position.set(0.04 + (Math.random() - 0.5) * 0.04, 0.25, -0.02 + (Math.random() - 0.5) * 0.04);
+      leaf.rotation.z = (Math.random() - 0.5) * 0.5;
+      leaf.rotation.x = (Math.random() - 0.5) * 0.5;
+      fruitBasket.add(leaf);
+    }
+
+    // Unwaxed Lemons, Navel Oranges, Dark Red Apples
+    const fruitList = [
+      { color: 0xebb734, r: 0.038, x: -0.09, z: 0.05 }, // Lemon
+      { color: 0xe87a20, r: 0.044, x: 0.02, z: 0.09 },  // Orange
+      { color: 0x961a1a, r: 0.042, x: -0.05, z: -0.08 },// Red Apple
+      { color: 0xe87a20, r: 0.042, x: 0.11, z: 0.06 },  // Orange
+      { color: 0xebb734, r: 0.036, x: -0.11, z: -0.02 } // Lemon
+    ];
+    fruitList.forEach(f => {
+      const fruit = new THREE.Mesh(new THREE.SphereGeometry(f.r, 14, 14), new THREE.MeshStandardMaterial({ color: f.color, roughness: 0.45 }));
+      fruit.position.set(f.x, 0.08 + f.r, f.z);
+      fruit.castShadow = true;
+      fruitBasket.add(fruit);
+    });
+    serviceBar.add(fruitBasket);
+
+    // --- ZONE 5: Traditional Ethiopian Hospitality Board (X = -0.1m, Counter Center Front) ---
+    const boardGroup = new THREE.Group();
+    boardGroup.position.set(-0.1, 0.96, barCenterZ + 0.36);
+
+    // Hand-Carved Acacia Wood Presentation Paddle
+    const paddle = new THREE.Mesh(
+      new THREE.BoxGeometry(0.36, 0.018, 0.20),
+      materials.endGrainWalnut
+    );
+    paddle.position.y = 0.009;
+    paddle.castShadow = true;
+    boardGroup.add(paddle);
+
+    // Handleless White Ceramic Espresso Cup with Earthy Ring Pattern
+    const cup = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.028, 0.022, 0.05, 16),
+      new THREE.MeshStandardMaterial({ color: 0xf6f3ed, roughness: 0.3 })
+    );
+    cup.position.set(-0.09, 0.042, 0);
+    cup.castShadow = true;
+    const cupFluid = new THREE.Mesh(new THREE.CylinderGeometry(0.025, 0.02, 0.035, 14), materials.amberBrewedCoffee);
+    cupFluid.position.set(-0.09, 0.038, 0);
+    boardGroup.add(cup, cupFluid);
+
+    // Slender Cylindrical Clear Glass Tumbler Filled with Water (transmission: 0.98, ior: 1.33)
+    const waterGlassMat = new THREE.MeshPhysicalMaterial({
+      color: 0xffffff,
+      transparent: true,
+      opacity: 0.18,
+      transmission: 0.98,
+      ior: 1.33,
+      roughness: 0.04
+    });
+    const waterGlass = new THREE.Mesh(new THREE.CylinderGeometry(0.026, 0.022, 0.065, 16), waterGlassMat);
+    waterGlass.position.set(0.01, 0.05, 0);
+    waterGlass.castShadow = true;
+    boardGroup.add(waterGlass);
+
+    // Small Shallow Unglazed Dark-Clay Saucer with Three Wrinkled Medjool Dates (#261208)
+    const dateSaucer = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.045, 0.036, 0.012, 16),
+      new THREE.MeshStandardMaterial({ color: 0x1f1d1c, roughness: 0.85 })
+    );
+    dateSaucer.position.set(0.10, 0.018, 0);
+    dateSaucer.castShadow = true;
+    boardGroup.add(dateSaucer);
+
+    [-0.014, 0.0, 0.014].forEach((dx, i) => {
+      const dateFruit = new THREE.Mesh(
+        new THREE.SphereGeometry(0.014, 10, 10),
+        new THREE.MeshStandardMaterial({ color: 0x261208, roughness: 0.55 })
+      );
+      dateFruit.scale.set(1.4, 0.8, 0.8);
+      dateFruit.position.set(0.10 + dx, 0.03, (i % 2 === 0 ? 0.008 : -0.008));
+      dateFruit.castShadow = true;
+      boardGroup.add(dateFruit);
+    });
+
+    serviceBar.add(boardGroup);
+
+    registerInteractive(boardGroup, {
+      title: "Traditional Ethiopian Hospitality Board",
+      tag: "Ancestral Presentation",
+      desc: "Hand-carved acacia wood presentation paddle bearing a handleless finjan ceramic cup of single-origin Bunna, crystal sparkling water, and wrinkled organic Medjool dates on unglazed dark clay.",
+      specs: [
+        ["Ceramic", "Handleless White Porcelain with Earthy Band"],
+        ["Tumbler Glass", "Ultra-Clear Borosilicate (1.33 IOR Water)"],
+        ["Dates", "Glossy Sun-Cured Medjool (#261208)"]
+      ]
+    });
+
+    // =========================================================================
+    // 6. Customer Seating & Restrained Textiles
+    // =========================================================================
+
+    const seatingZone = new THREE.Group();
+    scene.add(seatingZone);
+
+    // Fixed Low-Profile Bench Seating along Right-Hand Wall (X = +4.8m)
+    const benchGroup = new THREE.Group();
+    benchGroup.position.set(4.8, 0, 0);
+
+    // Slatted Oak Base
+    const benchBase = new THREE.Mesh(new THREE.BoxGeometry(0.72, 0.38, 4.8), materials.counterFlutedSlat);
+    benchBase.position.y = 0.19;
+    benchBase.castShadow = true;
+    benchBase.receiveShadow = true;
+    benchGroup.add(benchBase);
+
+    // Continuous Tailored Chocolate-Brown Saddle Leather Seat Pad
+    const seatPad = new THREE.Mesh(new THREE.BoxGeometry(0.75, 0.11, 4.8), materials.saddleLeather);
+    seatPad.position.y = 0.435;
+    seatPad.castShadow = true;
+    benchGroup.add(seatPad);
+
+    // Tailored Square Cushions (450mm × 450mm) - Strict Restraint: 4 Cushions at Corners
+    const pillowGeo = new THREE.BoxGeometry(0.18, 0.45, 0.45);
+    const cushionList = [
+      { z: -2.0, mat: materials.heavyweightCreamLinen, rotZ: 0.15, rotY: 0.12 },
+      { z: -1.4, mat: materials.terracottaBoucle, rotZ: 0.18, rotY: -0.14 },
+      { z: 1.4, mat: materials.mutedMossGreen, rotZ: 0.16, rotY: 0.10 },
+      { z: 2.0, mat: materials.heavyweightCreamLinen, rotZ: 0.14, rotY: -0.16 }
+    ];
+
+    cushionList.forEach(c => {
+      const cushion = new THREE.Mesh(pillowGeo, c.mat);
+      cushion.position.set(-0.16, 0.65, c.z);
+      cushion.rotation.z = c.rotZ;
+      cushion.rotation.y = c.rotY;
+      cushion.castShadow = true;
+      benchGroup.add(cushion);
+    });
+
+    seatingZone.add(benchGroup);
+
+    // Two Minimalist Round Bistro Tables (650mm diameter walnut tops on cast-iron trumpet bases)
+    function buildBistroTable(zPos) {
+      const table = new THREE.Group();
+      table.position.set(3.6, 0, zPos);
+
+      // Cast-Iron Trumpet Base
+      const trumpetBase = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.24, 0.06, 24), materials.blackenedStructuralSteel);
+      trumpetBase.position.y = 0.03;
+      trumpetBase.castShadow = true;
+      table.add(trumpetBase);
+
+      const centralColumn = new THREE.Mesh(new THREE.CylinderGeometry(0.03, 0.03, 0.64, 16), materials.blackenedStructuralSteel);
+      centralColumn.position.y = 0.36;
+      centralColumn.castShadow = true;
+      table.add(centralColumn);
+
+      // 650mm Solid Walnut Top
+      const tableTop = new THREE.Mesh(new THREE.CylinderGeometry(0.325, 0.325, 0.038, 32), materials.endGrainWalnut);
+      tableTop.position.y = 0.70;
+      tableTop.castShadow = true;
+      tableTop.receiveShadow = true;
+      table.add(tableTop);
+
+      seatingZone.add(table);
+      return table;
+    }
+
+    buildBistroTable(-0.8);
+    buildBistroTable(1.4);
+
+    // Tubular Blackened-Steel Dining Chairs with Bent Walnut Veneer Backrests
+    function buildDiningChair(xPos, zPos, rotY) {
       const chair = new THREE.Group();
-      chair.position.set(x, 0, z);
+      chair.position.set(xPos, 0, zPos);
       chair.rotation.y = rotY;
 
-      // Curved Wood Seat
-      const seat = new THREE.Mesh(new THREE.BoxGeometry(0.42, 0.03, 0.42), materials.countertopWood);
-      seat.position.y = 0.45;
-      seat.castShadow = true;
-      chair.add(seat);
+      // Charcoal Textile Seat
+      const cSeat = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.20, 0.20, 0.04, 20),
+        new THREE.MeshStandardMaterial({ color: 0x222222, roughness: 0.88 })
+      );
+      cSeat.position.y = 0.44;
+      cSeat.castShadow = true;
+      chair.add(cSeat);
 
-      // Curved Bent Plywood Backrest
-      const back = new THREE.Mesh(new THREE.BoxGeometry(0.4, 0.2, 0.025), materials.countertopWood);
-      back.position.set(0, 0.72, -0.2);
-      chair.add(back);
+      // Steam-Bent Walnut Veneer Backrest
+      const cBack = new THREE.Mesh(new THREE.BoxGeometry(0.34, 0.16, 0.022), materials.endGrainWalnut);
+      cBack.position.set(0, 0.72, -0.16);
+      cBack.castShadow = true;
+      chair.add(cBack);
 
-      // Black Steel Uprights & Legs
-      const legPositions = [[0.17, 0.17], [-0.17, 0.17], [0.17, -0.17], [-0.17, -0.17]];
-      legPositions.forEach(([lx, lz]) => {
-        const leg = new THREE.Mesh(new THREE.CylinderGeometry(0.012, 0.008, 0.44, 10), materials.matteBlackMetal);
-        leg.position.set(lx, 0.22, lz);
+      // Tubular Blackened Steel Legs
+      [[-0.14, -0.14], [0.14, -0.14], [-0.14, 0.14], [0.14, 0.14]].forEach(([lx, lz]) => {
+        const leg = new THREE.Mesh(new THREE.CylinderGeometry(0.011, 0.008, 0.43, 8), materials.blackenedStructuralSteel);
+        leg.position.set(lx, 0.215, lz);
         leg.castShadow = true;
         chair.add(leg);
       });
 
-      // Backrest Support Posts
-      const postL = new THREE.Mesh(new THREE.CylinderGeometry(0.008, 0.008, 0.32, 8), materials.matteBlackMetal);
-      postL.position.set(-0.16, 0.6, -0.19);
-      const postR = new THREE.Mesh(new THREE.CylinderGeometry(0.008, 0.008, 0.32, 8), materials.matteBlackMetal);
-      postR.position.set(0.16, 0.6, -0.19);
-      chair.add(postL, postR);
-
-      lounge.add(chair);
+      seatingZone.add(chair);
       return chair;
     }
 
-    buildCafeChair(-2.8, -0.6, -Math.PI / 2);
-    buildCafeChair(-2.8, 1.4, -Math.PI / 2 + 0.3);
+    buildDiningChair(2.9, -0.8, Math.PI / 2);
+    buildDiningChair(2.9, 1.4, Math.PI / 2);
 
-    // Large Potted Snake Plant in Terracotta Planter near Window
-    const plantGroup = new THREE.Group();
-    plantGroup.position.set(-5.4, 0, -2.6);
+    // =========================================================================
+    // 7. Precision Photometric Lighting Design & Suspended Ladder Rig
+    // =========================================================================
 
-    const planter = new THREE.Mesh(new THREE.CylinderGeometry(0.24, 0.18, 0.45, 18), materials.terracottaPot);
-    planter.position.y = 0.225;
-    planter.castShadow = true;
-    plantGroup.add(planter);
+    const lightingSystem = new THREE.Group();
+    scene.add(lightingSystem);
 
-    // Upright Variegated Sword Leaves
-    for (let l = 0; l < 11; l++) {
-      const leafH = 0.7 + Math.random() * 0.45;
-      const leaf = new THREE.Mesh(new THREE.BoxGeometry(0.06, leafH, 0.012), materials.plantGreen);
-      const angle = (l / 11) * Math.PI * 2;
-      leaf.position.set(Math.cos(angle) * 0.1, 0.45 + leafH / 2, Math.sin(angle) * 0.1);
-      leaf.rotation.y = angle;
-      leaf.rotation.z = (Math.random() - 0.5) * 0.18;
-      plantGroup.add(leaf);
-    }
-    lounge.add(plantGroup);
+    // Suspended Overhead Feature: Vintage Five-Rung Wooden Utility Ladder (3.4m × 0.50m) at Y = 2.65m
+    const ladderGroup = new THREE.Group();
+    ladderGroup.position.set(0, 2.65, barCenterZ);
 
-    // ==========================================
-    // 8. Suspended Ladder Fixture & Edison Lighting
-    // ==========================================
+    // Ladder Rails
+    const railMat = materials.reclaimedTimberBeam;
+    const lRailA = new THREE.Mesh(new THREE.BoxGeometry(3.4, 0.06, 0.05), railMat);
+    lRailA.position.z = -0.225;
+    lRailA.castShadow = true;
 
-    const lightingRig = new THREE.Group();
-    scene.add(lightingRig);
+    const lRailB = new THREE.Mesh(new THREE.BoxGeometry(3.4, 0.06, 0.05), railMat);
+    lRailB.position.z = 0.225;
+    lRailB.castShadow = true;
+    ladderGroup.add(lRailA, lRailB);
 
-    // Reclaimed Wood Ladder Rails (suspended at y = 3.25m above counter)
-    const ladderY = 3.25;
-    const railL = new THREE.Mesh(new THREE.BoxGeometry(5.2, 0.05, 0.05), materials.ceilingBeam);
-    railL.position.set(1.8, ladderY, -2.0);
-    railL.castShadow = true;
-
-    const railR = new THREE.Mesh(new THREE.BoxGeometry(5.2, 0.05, 0.05), materials.ceilingBeam);
-    railR.position.set(1.8, ladderY, -1.4);
-    railR.castShadow = true;
-    lightingRig.add(railL, railR);
-
-    // Ladder Rungs
-    for (let lx = -0.6; lx <= 4.2; lx += 0.6) {
-      const rung = new THREE.Mesh(new THREE.BoxGeometry(0.04, 0.03, 0.62), materials.ceilingBeam);
-      rung.position.set(lx, ladderY, -1.7);
-      lightingRig.add(rung);
-    }
-
-    // Suspension Chains to Ceiling
-    const chainPoints = [-0.6, 4.2];
-    chainPoints.forEach(cx => {
-      [-2.1, -1.5].forEach(cz => {
-        const chain = new THREE.Mesh(new THREE.CylinderGeometry(0.005, 0.005, 0.8, 8), materials.matteBlackMetal);
-        chain.position.set(cx, ladderY + 0.4, cz);
-        lightingRig.add(chain);
-      });
+    // Exactly 5 Ladder Rungs
+    const rungPositions = [-1.36, -0.68, 0.0, 0.68, 1.36];
+    rungPositions.forEach(rx => {
+      const rung = new THREE.Mesh(new THREE.BoxGeometry(0.04, 0.035, 0.45), railMat);
+      rung.position.set(rx, 0, 0);
+      rung.castShadow = true;
+      ladderGroup.add(rung);
     });
 
-    // 6 Vintage Exposed Edison Bulbs with Glowing Filaments & Soft PointLights
-    const edisonBulbs = [];
-    const bulbPositions = [-0.3, 0.6, 1.5, 2.4, 3.3, 4.2];
+    // 4 Matte-Black Braided Steel Cables Anchored to Ceiling Beams
+    const cableMat = materials.blackenedStructuralSteel;
+    [[-1.5, -0.225], [1.5, -0.225], [-1.5, 0.225], [1.5, 0.225]].forEach(([cx, cz]) => {
+      const cable = new THREE.Mesh(new THREE.CylinderGeometry(0.004, 0.004, 0.82, 8), cableMat);
+      cable.position.set(cx, 0.41, cz);
+      ladderGroup.add(cable);
+    });
+    lightingSystem.add(ladderGroup);
 
-    bulbPositions.forEach((bx, idx) => {
-      const cordLength = 0.55 + (idx % 3) * 0.12;
-      const bulbGroup = new THREE.Group();
-      bulbGroup.position.set(bx, ladderY, -1.8 + (idx % 2 === 0 ? 0.08 : -0.08));
+    // Exactly 5 Twisted Black Cloth Cord Pendants Dropping Through Ladder Rungs
+    // Staggered deliberate elevations: Y = 2.45m down to Y = 2.05m
+    const edisonFixtures = [];
+    const bulbDropConfig = [
+      { x: -1.36, y: 2.38, intensity: 1.5 },
+      { x: -0.68, y: 2.15, intensity: 1.6 },
+      { x: 0.00,  y: 2.45, intensity: 1.4 },
+      { x: 0.68,  y: 2.08, intensity: 1.7 },
+      { x: 1.36,  y: 2.25, intensity: 1.5 }
+    ];
 
-      // Twisted Cord
-      const cord = new THREE.Mesh(new THREE.CylinderGeometry(0.004, 0.004, cordLength, 6), materials.matteBlackMetal);
-      cord.position.y = -cordLength / 2;
-      bulbGroup.add(cord);
+    bulbDropConfig.forEach((cfg, idx) => {
+      const fixture = new THREE.Group();
+      fixture.position.set(cfg.x, cfg.y, barCenterZ);
 
-      // Knurled Brass Socket
-      const socket = new THREE.Mesh(new THREE.CylinderGeometry(0.024, 0.024, 0.06, 14), materials.brassGold);
-      socket.position.y = -cordLength - 0.03;
-      bulbGroup.add(socket);
+      // Cord extending up to ladder
+      const cordLen = 2.65 - cfg.y;
+      const cord = new THREE.Mesh(new THREE.CylinderGeometry(0.0035, 0.0035, cordLen, 6), materials.blackenedStructuralSteel);
+      cord.position.y = cordLen / 2;
+      fixture.add(cord);
 
-      // Glass Teardrop Envelope
-      const bulbGlass = new THREE.Mesh(new THREE.SphereGeometry(0.052, 16, 16), materials.clearGlass);
-      bulbGlass.scale.set(1, 1.4, 1);
-      bulbGlass.position.y = -cordLength - 0.09;
-      bulbGroup.add(bulbGlass);
+      // Brass Socket Cap
+      const socket = new THREE.Mesh(new THREE.CylinderGeometry(0.022, 0.022, 0.055, 14), materials.solidBrass);
+      socket.position.y = 0.027;
+      fixture.add(socket);
 
-      // Glowing Tungsten Spiral Filament
-      const filament = new THREE.Mesh(new THREE.CylinderGeometry(0.012, 0.012, 0.045, 10), materials.edisonFilament);
-      filament.position.y = -cordLength - 0.085;
-      bulbGroup.add(filament);
+      // Tear-drop clear ST64 glass bulb
+      const st64 = new THREE.Mesh(new THREE.SphereGeometry(0.048, 16, 16), materials.borosilicateGlass);
+      st64.scale.set(1, 1.45, 1);
+      st64.position.y = -0.045;
+      fixture.add(st64);
 
-      // Amber PointLight inside Bulb (soft warm glow)
-      const pLight = new THREE.PointLight(0xffaa44, 4.0, 5.5, 2.0);
-      pLight.position.y = -cordLength - 0.09;
-      pLight.castShadow = true;
-      pLight.shadow.bias = -0.002;
-      pLight.shadow.mapSize.width = 512;
-      pLight.shadow.mapSize.height = 512;
-      bulbGroup.add(pLight);
+      // Glowing Double-Spiral Filament Wire
+      const filament = new THREE.Mesh(new THREE.CylinderGeometry(0.011, 0.011, 0.042, 10), materials.glowingFilamentWire);
+      filament.position.y = -0.042;
+      fixture.add(filament);
 
-      lightingRig.add(bulbGroup);
-      edisonBulbs.push({ group: bulbGroup, light: pLight, filament });
+      // Photometric PointLight: 2200K vintage ultra-warm amber (#ff9838)
+      // Radius: 4.8m, decay: 2.0, shadow map: 1024x1024, bias: -0.002
+      const pointLight = new THREE.PointLight(0xff9838, cfg.intensity, 4.8, 2.0);
+      pointLight.position.y = -0.045;
+      pointLight.castShadow = true;
+      pointLight.shadow.mapSize.width = 1024;
+      pointLight.shadow.mapSize.height = 1024;
+      pointLight.shadow.bias = -0.002;
+      fixture.add(pointLight);
+
+      lightingSystem.add(fixture);
+      edisonFixtures.push({ fixture, pointLight, filament, baseIntensity: cfg.intensity });
     });
 
-    // Ambient Lighting & Window Sunlight
-    const ambientLight = new THREE.AmbientLight(0xffecd6, 0.38);
-    scene.add(ambientLight);
+    // Natural Sunlight (Primary Scene Key):
+    // Position: X = -8.5m, Y = 6.0m, Z = 2.0m, Color: 5000K (#fff3e6), Intensity: 2.4
+    const sunlight = new THREE.DirectionalLight(0xfff3e6, 2.4);
+    sunlight.position.set(-8.5, 6.0, 2.0);
+    sunlight.target.position.set(0, 0.9, -1.0);
+    sunlight.castShadow = true;
+    sunlight.shadow.mapSize.width = 2048;
+    sunlight.shadow.mapSize.height = 2048;
+    sunlight.shadow.bias = -0.001;
+    lightingSystem.add(sunlight);
+    lightingSystem.add(sunlight.target);
 
-    // Directional Sunlight Streaming from Industrial Window
-    const sunLight = new THREE.DirectionalLight(0xffe6c2, 0.85);
-    sunLight.position.set(-8.0, 4.0, 1.0);
-    sunLight.target.position.set(-1.0, 1.0, -0.5);
-    sunLight.castShadow = true;
-    sunLight.shadow.mapSize.width = 1024;
-    sunLight.shadow.mapSize.height = 1024;
-    sunLight.shadow.bias = -0.001;
-    scene.add(sunLight);
-    scene.add(sunLight.target);
+    // Architectural Counter Kick-Plate Underglow (Concealed Warm LED Linear Wash: 2700K #ffaa44, intensity: 0.6)
+    [-1.6, 0.0, 1.6].forEach(kx => {
+      const kickLight = new THREE.PointLight(0xffaa44, 0.22, 1.8, 2.0);
+      kickLight.position.set(kx, 0.06, barCenterZ + 0.46);
+      lightingSystem.add(kickLight);
+    });
 
-    // ==========================================
-    // 9. Rising Coffee Steam Particles
-    // ==========================================
+    // Chalkboard Graze Spots: Two ceiling-recessed brass spot heads (SpotLight, angle: 0.35, penumbra: 0.5, intensity: 1.1)
+    [-1.2, 1.2].forEach(sx => {
+      const spot = new THREE.SpotLight(0xffe6cb, 1.1, 4.5, 0.35, 0.5, 2.0);
+      spot.position.set(sx, 3.45, -2.5);
+      spot.target.position.set(sx, 2.1, -3.58);
+      lightingSystem.add(spot);
+      lightingSystem.add(spot.target);
+    });
 
-    const steamCount = 35;
+    // Ambient Fill: Rich Warm Sepia Tone (#261912, intensity: 0.55)
+    const ambientLight = new THREE.AmbientLight(0x261912, 0.55);
+    lightingSystem.add(ambientLight);
+
+    // =========================================================================
+    // 8. Dynamic Rising Coffee Steam System
+    // =========================================================================
+
+    const steamCount = 30;
     const steamGeo = new THREE.BufferGeometry();
-    const steamPositions = new Float32Array(steamCount * 3);
-    const steamVelocities = [];
+    const steamPos = new Float32Array(steamCount * 3);
+    const steamData = [];
 
-    // Steam origins near hot coffee & siphons
-    const steamOrigins = [
-      new THREE.Vector3(1.71, 1.08, -1.55), // Espresso cup
-      new THREE.Vector3(2.35, 1.38, -1.8),  // Siphon 1
-      new THREE.Vector3(2.8, 1.38, -1.8),   // Siphon 2
-      new THREE.Vector3(3.6, 1.25, -1.58)   // Espresso group
+    const emitterAnchors = [
+      new THREE.Vector3(-0.85, 1.42, barCenterZ), // Siphon 1
+      new THREE.Vector3(-0.45, 1.42, barCenterZ), // Siphon 2
+      new THREE.Vector3(0.35, 1.22, barCenterZ),  // Espresso 1
+      new THREE.Vector3(-0.19, 1.05, barCenterZ + 0.32) // Ethiopian cup
     ];
 
     for (let i = 0; i < steamCount; i++) {
-      const origin = steamOrigins[i % steamOrigins.length];
-      steamPositions[i * 3] = origin.x + (Math.random() - 0.5) * 0.06;
-      steamPositions[i * 3 + 1] = origin.y + Math.random() * 0.3;
-      steamPositions[i * 3 + 2] = origin.z + (Math.random() - 0.5) * 0.06;
-      steamVelocities.push({
-        origin,
-        vy: 0.004 + Math.random() * 0.006,
-        vx: (Math.random() - 0.5) * 0.002,
-        vz: (Math.random() - 0.5) * 0.002
+      const anchor = emitterAnchors[i % emitterAnchors.length];
+      steamPos[i * 3] = anchor.x + (Math.random() - 0.5) * 0.04;
+      steamPos[i * 3 + 1] = anchor.y + Math.random() * 0.25;
+      steamPos[i * 3 + 2] = anchor.z + (Math.random() - 0.5) * 0.04;
+      steamData.push({
+        anchor,
+        vy: 0.003 + Math.random() * 0.005,
+        vx: (Math.random() - 0.5) * 0.0015,
+        vz: (Math.random() - 0.5) * 0.0015
       });
     }
+    steamGeo.setAttribute('position', new THREE.BufferAttribute(steamPos, 3));
 
-    steamGeo.setAttribute('position', new THREE.BufferAttribute(steamPositions, 3));
-
-    // Particle Texture
-    const steamCanvas = document.createElement('canvas');
-    steamCanvas.width = 32;
-    steamCanvas.height = 32;
-    const sCtx = steamCanvas.getContext('2d');
-    const grad = sCtx.createRadialGradient(16, 16, 0, 16, 16, 16);
-    grad.addColorStop(0, 'rgba(255, 255, 255, 0.45)');
-    grad.addColorStop(0.5, 'rgba(255, 255, 255, 0.15)');
-    grad.addColorStop(1, 'rgba(255, 255, 255, 0)');
-    sCtx.fillStyle = grad;
+    const sCanvas = document.createElement('canvas');
+    sCanvas.width = 32;
+    sCanvas.height = 32;
+    const sCtx = sCanvas.getContext('2d');
+    const sGrad = sCtx.createRadialGradient(16, 16, 0, 16, 16, 16);
+    sGrad.addColorStop(0, 'rgba(255, 255, 255, 0.35)');
+    sGrad.addColorStop(0.5, 'rgba(255, 255, 255, 0.12)');
+    sGrad.addColorStop(1, 'rgba(255, 255, 255, 0)');
+    sCtx.fillStyle = sGrad;
     sCtx.fillRect(0, 0, 32, 32);
 
-    const steamTex = new THREE.CanvasTexture(steamCanvas);
     const steamMat = new THREE.PointsMaterial({
-      size: 0.14,
-      map: steamTex,
+      size: 0.16,
+      map: new THREE.CanvasTexture(sCanvas),
       transparent: true,
-      opacity: 0.35,
+      opacity: 0.32,
       depthWrite: false,
       blending: THREE.AdditiveBlending
     });
-
     const steamParticles = new THREE.Points(steamGeo, steamMat);
     scene.add(steamParticles);
 
-    function updateSteam() {
+    function updateSteamSimulation() {
       const pos = steamParticles.geometry.attributes.position.array;
       for (let i = 0; i < steamCount; i++) {
-        pos[i * 3 + 1] += steamVelocities[i].vy;
-        pos[i * 3] += steamVelocities[i].vx;
-        pos[i * 3 + 2] += steamVelocities[i].vz;
-
-        // Reset particle when it rises too high
-        if (pos[i * 3 + 1] > steamVelocities[i].origin.y + 0.45) {
-          pos[i * 3] = steamVelocities[i].origin.x + (Math.random() - 0.5) * 0.05;
-          pos[i * 3 + 1] = steamVelocities[i].origin.y;
-          pos[i * 3 + 2] = steamVelocities[i].origin.z + (Math.random() - 0.5) * 0.05;
+        pos[i * 3 + 1] += steamData[i].vy;
+        pos[i * 3] += steamData[i].vx;
+        pos[i * 3 + 2] += steamData[i].vz;
+        if (pos[i * 3 + 1] > steamData[i].anchor.y + 0.42) {
+          pos[i * 3] = steamData[i].anchor.x + (Math.random() - 0.5) * 0.04;
+          pos[i * 3 + 1] = steamData[i].anchor.y;
+          pos[i * 3 + 2] = steamData[i].anchor.z + (Math.random() - 0.5) * 0.04;
         }
       }
       steamParticles.geometry.attributes.position.needsUpdate = true;
     }
 
-    // ==========================================
-    // 10. Camera Presets & Smooth Orbit Transitions
-    // ==========================================
+    // =========================================================================
+    // 9. Camera Choreography & Preset Transitions
+    // =========================================================================
 
-    const cameraPresets = {
-      overview: {
-        pos: new THREE.Vector3(0.3, 2.1, 5.8),
-        target: new THREE.Vector3(0.6, 1.25, -0.8)
+    const views = {
+      default: {
+        pos: new THREE.Vector3(-2.8, 1.55, 3.2),
+        target: new THREE.Vector3(0, 1.0, -1.2)
       },
-      barista: {
-        pos: new THREE.Vector3(3.8, 1.55, -0.35),
-        target: new THREE.Vector3(3.9, 1.25, -1.8)
+      espresso: {
+        pos: new THREE.Vector3(0.75, 1.42, 0.05),
+        target: new THREE.Vector3(0.75, 1.15, barCenterZ)
       },
       siphon: {
-        pos: new THREE.Vector3(2.6, 1.45, -0.9),
-        target: new THREE.Vector3(2.55, 1.3, -1.8)
+        pos: new THREE.Vector3(-0.65, 1.38, -0.45),
+        target: new THREE.Vector3(-0.65, 1.18, barCenterZ)
+      },
+      juice: {
+        pos: new THREE.Vector3(2.0, 1.45, 0.1),
+        target: new THREE.Vector3(1.95, 1.18, barCenterZ)
       },
       lounge: {
-        pos: new THREE.Vector3(-1.4, 1.6, 1.8),
-        target: new THREE.Vector3(-4.4, 0.9, 0.5)
-      },
-      window: {
-        pos: new THREE.Vector3(-3.2, 1.85, 3.2),
-        target: new THREE.Vector3(-5.8, 1.8, 0)
+        pos: new THREE.Vector3(2.4, 1.50, 1.8),
+        target: new THREE.Vector3(4.6, 0.85, 0.2)
       }
     };
 
-    let targetCamPos = camera.position.clone();
-    let targetLookAt = controls.target.clone();
-    let isTransitioning = false;
+    let targetCam = camera.position.clone();
+    let targetTarget = controls.target.clone();
+    let isMovingCam = false;
 
-    function switchCameraView(viewKey) {
-      const preset = cameraPresets[viewKey];
-      if (!preset) return;
-      targetCamPos.copy(preset.pos);
-      targetLookAt.copy(preset.target);
-      isTransitioning = true;
+    function activateView(viewKey) {
+      const v = views[viewKey];
+      if (!v) return;
+      targetCam.copy(v.pos);
+      targetTarget.copy(v.target);
+      isMovingCam = true;
     }
 
-    // ==========================================
-    // 11. Lighting Atmosphere Modes
-    // ==========================================
-
-    function setAtmosphereMode(mode) {
-      if (mode === 'cozy') { // Golden Hour
-        scene.fog.color.setHex(0x18120c);
-        scene.fog.density = 0.024;
-        ambientLight.color.setHex(0xffecd6);
-        ambientLight.intensity = 0.38;
-        sunLight.color.setHex(0xffaa44);
-        sunLight.intensity = 0.85;
-        sunLight.position.set(-8.0, 3.2, 1.5);
-        edisonBulbs.forEach(b => {
-          b.light.intensity = 4.0;
-          b.filament.material.color.setHex(0xffb84d);
-        });
-        if (bloomPass) bloomPass.strength = 0.32;
-      } else if (mode === 'night') { // Candlelit Night
-        scene.fog.color.setHex(0x0a0806);
-        scene.fog.density = 0.038;
-        ambientLight.color.setHex(0x2d1f14);
-        ambientLight.intensity = 0.22;
-        sunLight.color.setHex(0x1a2638); // Cool blue exterior moonlight
-        sunLight.intensity = 0.25;
-        sunLight.position.set(-8.0, 4.0, 0);
-        edisonBulbs.forEach(b => {
-          b.light.intensity = 6.0;
-          b.filament.material.color.setHex(0xff9922);
-        });
-        if (bloomPass) bloomPass.strength = 0.45;
-      } else if (mode === 'day') { // Crisp Morning Sun
-        scene.fog.color.setHex(0x28231d);
-        scene.fog.density = 0.015;
-        ambientLight.color.setHex(0xfff8ed);
-        ambientLight.intensity = 0.6;
-        sunLight.color.setHex(0xffffff);
-        sunLight.intensity = 1.1;
-        sunLight.position.set(-8.0, 5.0, 2.0);
-        edisonBulbs.forEach(b => {
-          b.light.intensity = 2.2;
-          b.filament.material.color.setHex(0xffd580);
-        });
-        if (bloomPass) bloomPass.strength = 0.22;
+    // Photometric Atmosphere Modes
+    function setLightingMode(mode) {
+      if (mode === 'daylight') {
+        sunlight.color.setHex(0xfff3e6);
+        sunlight.intensity = 2.4;
+        sunlight.position.set(-8.5, 6.0, 2.0);
+        ambientLight.color.setHex(0x261912);
+        ambientLight.intensity = 0.55;
+        edisonFixtures.forEach(f => f.pointLight.intensity = f.baseIntensity);
+        if (bloomPass) bloomPass.strength = 0.28;
+      } else if (mode === 'golden') {
+        sunlight.color.setHex(0xffaa44);
+        sunlight.intensity = 1.6;
+        sunlight.position.set(-8.5, 3.2, 1.5);
+        ambientLight.color.setHex(0x381f12);
+        ambientLight.intensity = 0.45;
+        edisonFixtures.forEach(f => f.pointLight.intensity = f.baseIntensity * 1.35);
+        if (bloomPass) bloomPass.strength = 0.42;
+      } else if (mode === 'evening') {
+        sunlight.color.setHex(0x1a2638);
+        sunlight.intensity = 0.35;
+        ambientLight.color.setHex(0x18100a);
+        ambientLight.intensity = 0.28;
+        edisonFixtures.forEach(f => f.pointLight.intensity = f.baseIntensity * 1.8);
+        if (bloomPass) bloomPass.strength = 0.65;
       }
     }
 
-    // ==========================================
-    // 12. Procedural Web Audio Cafe Soundscape
-    // ==========================================
+    // =========================================================================
+    // 10. Procedural Ambient Rain & Vinyl Resonance Audio
+    // =========================================================================
 
-    let audioCtx = null;
-    let isAudioPlaying = false;
-    let rainGainNode = null;
+    let audioContext = null;
+    let isSoundOn = false;
+    let masterGain = null;
 
-    function initProceduralAudio() {
-      if (audioCtx) return;
-      const AudioContext = window.AudioContext || window.webkitAudioContext;
-      audioCtx = new AudioContext();
+    function startProceduralAudio() {
+      if (audioContext) return;
+      const AudioCtx = window.AudioContext || window.webkitAudioContext;
+      audioContext = new AudioCtx();
 
-      // Pink/Brown Noise Generator for Warm Ambient Rain & Vinyl Rumble
-      const bufferSize = audioCtx.sampleRate * 2;
-      const noiseBuffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
-      const output = noiseBuffer.getChannelData(0);
+      const bufferSize = audioContext.sampleRate * 2;
+      const noiseBuffer = audioContext.createBuffer(1, bufferSize, audioContext.sampleRate);
+      const out = noiseBuffer.getChannelData(0);
       let b0 = 0, b1 = 0, b2 = 0;
       for (let i = 0; i < bufferSize; i++) {
         const white = Math.random() * 2 - 1;
         b0 = 0.99886 * b0 + white * 0.0555179;
         b1 = 0.99332 * b1 + white * 0.0750759;
         b2 = 0.96900 * b2 + white * 0.1538520;
-        output[i] = (b0 + b1 + b2) * 0.08;
+        out[i] = (b0 + b1 + b2) * 0.06;
       }
 
-      const whiteNoise = audioCtx.createBufferSource();
-      whiteNoise.buffer = noiseBuffer;
-      whiteNoise.loop = true;
+      const whiteSrc = audioContext.createBufferSource();
+      whiteSrc.buffer = noiseBuffer;
+      whiteSrc.loop = true;
 
-      const lowpass = audioCtx.createBiquadFilter();
+      const lowpass = audioContext.createBiquadFilter();
       lowpass.type = 'lowpass';
-      lowpass.frequency.setValueAtTime(650, audioCtx.currentTime);
+      lowpass.frequency.setValueAtTime(540, audioContext.currentTime);
 
-      rainGainNode = audioCtx.createGain();
-      rainGainNode.gain.setValueAtTime(0.0, audioCtx.currentTime);
+      masterGain = audioContext.createGain();
+      masterGain.gain.setValueAtTime(0, audioContext.currentTime);
 
-      whiteNoise.connect(lowpass);
-      lowpass.connect(rainGainNode);
-      rainGainNode.connect(audioCtx.destination);
-      whiteNoise.start();
+      whiteSrc.connect(lowpass);
+      lowpass.connect(masterGain);
+      masterGain.connect(audioContext.destination);
+      whiteSrc.start();
     }
 
-    function toggleAudio() {
-      initProceduralAudio();
-      if (audioCtx.state === 'suspended') {
-        audioCtx.resume();
-      }
-      isAudioPlaying = !isAudioPlaying;
-      const btn = document.getElementById('audio-toggle');
-      if (isAudioPlaying) {
-        rainGainNode.gain.setTargetAtTime(0.25, audioCtx.currentTime, 0.4);
+    function toggleSound() {
+      startProceduralAudio();
+      if (audioContext.state === 'suspended') audioContext.resume();
+      isSoundOn = !isSoundOn;
+      const btn = document.getElementById('audio-btn');
+      if (isSoundOn) {
+        masterGain.gain.setTargetAtTime(0.22, audioContext.currentTime, 0.4);
         btn.classList.add('active');
         btn.innerHTML = '🔊';
       } else {
-        rainGainNode.gain.setTargetAtTime(0.0, audioCtx.currentTime, 0.4);
+        masterGain.gain.setTargetAtTime(0, audioContext.currentTime, 0.4);
         btn.classList.remove('active');
         btn.innerHTML = '🔇';
       }
     }
 
-    // ==========================================
-    // 13. Raycasting & Interactive Prop Inspector
-    // ==========================================
+    // =========================================================================
+    // 11. Raycasting & Interactive Modal Inspections
+    // =========================================================================
 
     const raycaster = new THREE.Raycaster();
-    const mouse = new THREE.Vector2();
-    const infoCard = document.getElementById('info-card');
-    const cardTitle = document.getElementById('card-title');
-    const cardTag = document.getElementById('card-tag');
-    const cardDesc = document.getElementById('card-desc');
-    const cardSpecs = document.getElementById('card-specs');
+    const pointer = new THREE.Vector2();
+    const modal = document.getElementById('spec-modal');
+    const modalTitle = document.getElementById('modal-title');
+    const modalTag = document.getElementById('modal-tag');
+    const modalDesc = document.getElementById('modal-desc');
+    const modalGrid = document.getElementById('modal-grid');
 
     function onPointerDown(event) {
-      if (event.target.tagName === 'BUTTON' || event.target.closest('.glass-panel')) return;
-      mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-      mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+      if (event.target.closest('.glass-hud')) return;
+      pointer.x = (event.clientX / window.innerWidth) * 2 - 1;
+      pointer.y = -(event.clientY / window.innerHeight) * 2 + 1;
 
-      raycaster.setFromCamera(mouse, camera);
-      const intersects = raycaster.intersectObjects(interactiveProps, false);
+      raycaster.setFromCamera(pointer, camera);
+      const hits = raycaster.intersectObjects(interactiveObjects, false);
 
-      if (intersects.length > 0) {
-        const data = intersects[0].object.userData;
-        if (data && data.title) {
-          cardTitle.textContent = data.title;
-          cardTag.textContent = data.tag || 'Boutique Spec';
-          cardDesc.textContent = data.desc;
-
-          cardSpecs.innerHTML = '';
-          if (data.specs) {
-            data.specs.forEach(([lbl, val]) => {
+      if (hits.length > 0) {
+        const d = hits[0].object.userData;
+        if (d && d.title) {
+          modalTitle.textContent = d.title;
+          modalTag.textContent = d.tag || "Boutique Hospitality";
+          modalDesc.textContent = d.desc;
+          modalGrid.innerHTML = '';
+          if (d.specs) {
+            d.specs.forEach(([lbl, val]) => {
               const row = document.createElement('div');
-              row.className = 'spec-row';
+              row.className = 'spec-item';
               row.innerHTML = `<span class="spec-label">${lbl}</span><span class="spec-val">${val}</span>`;
-              cardSpecs.appendChild(row);
+              modalGrid.appendChild(row);
             });
           }
-          infoCard.classList.add('visible');
+          modal.classList.add('visible');
         }
       }
     }
 
-    document.getElementById('close-card').addEventListener('click', () => {
-      infoCard.classList.remove('visible');
+    document.getElementById('btn-close').addEventListener('click', () => {
+      modal.classList.remove('visible');
     });
-
     window.addEventListener('pointerdown', onPointerDown);
 
-    // ==========================================
-    // 14. UI Event Bindings
-    // ==========================================
-
-    document.querySelectorAll('[data-cam]').forEach(btn => {
+    // Button Bindings
+    document.querySelectorAll('[data-view]').forEach(btn => {
       btn.addEventListener('click', (e) => {
-        document.querySelectorAll('[data-cam]').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('[data-view]').forEach(b => b.classList.remove('active'));
         e.currentTarget.classList.add('active');
-        switchCameraView(e.currentTarget.dataset.cam);
+        activateView(e.currentTarget.dataset.view);
       });
     });
 
-    document.querySelectorAll('[data-mood]').forEach(btn => {
+    document.querySelectorAll('[data-light]').forEach(btn => {
       btn.addEventListener('click', (e) => {
-        document.querySelectorAll('[data-mood]').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('[data-light]').forEach(b => b.classList.remove('active'));
         e.currentTarget.classList.add('active');
-        setAtmosphereMode(e.currentTarget.dataset.mood);
+        setLightingMode(e.currentTarget.dataset.light);
       });
     });
 
-    document.getElementById('audio-toggle').addEventListener('click', toggleAudio);
+    document.getElementById('audio-btn').addEventListener('click', toggleSound);
 
-    // Window Resize Handler
     window.addEventListener('resize', () => {
       camera.aspect = window.innerWidth / window.innerHeight;
       camera.updateProjectionMatrix();
@@ -2215,47 +1993,46 @@
       if (composer) composer.setSize(window.innerWidth, window.innerHeight);
     });
 
-    // Remove loading screen
     setTimeout(() => {
-      const loader = document.getElementById('loader');
+      const loader = document.getElementById('preloader');
       if (loader) {
         loader.style.opacity = '0';
         setTimeout(() => loader.remove(), 750);
       }
-    }, 600);
+    }, 550);
 
-    // ==========================================
-    // 15. Animation Render Loop
-    // ==========================================
+    // =========================================================================
+    // 12. Main Architectural Render Loop
+    // =========================================================================
 
     const clock = new THREE.Clock();
 
-    function animate() {
-      requestAnimationFrame(animate);
-      const elapsedTime = clock.getElapsedTime();
+    function renderLoop() {
+      requestAnimationFrame(renderLoop);
+      const elapsed = clock.getElapsedTime();
 
-      // Smooth camera preset interpolation
-      if (isTransitioning) {
-        camera.position.lerp(targetCamPos, 0.055);
-        controls.target.lerp(targetLookAt, 0.055);
-        if (camera.position.distanceTo(targetCamPos) < 0.04 && controls.target.distanceTo(targetLookAt) < 0.04) {
-          camera.position.copy(targetCamPos);
-          controls.target.copy(targetLookAt);
-          isTransitioning = false;
+      // Camera Lerp
+      if (isMovingCam) {
+        camera.position.lerp(targetCam, 0.05);
+        controls.target.lerp(targetTarget, 0.05);
+        if (camera.position.distanceTo(targetCam) < 0.03 && controls.target.distanceTo(targetTarget) < 0.03) {
+          camera.position.copy(targetCam);
+          controls.target.copy(targetTarget);
+          isMovingCam = false;
         }
       }
 
       controls.update();
 
-      // Subtle flicker on candle flames and Edison filaments
-      edisonBulbs.forEach((b, i) => {
-        b.light.intensity += (Math.sin(elapsedTime * 5 + i) * 0.15);
+      // Delicate filament pulse
+      edisonFixtures.forEach((f, i) => {
+        f.pointLight.intensity = f.baseIntensity + Math.sin(elapsed * 4 + i) * 0.04;
       });
 
-      // Update rising coffee steam particles
-      updateSteam();
+      // Steam Particle Simulation
+      updateSteamSimulation();
 
-      // Render with post-processing bloom or standard fallback
+      // Render
       if (composer) {
         composer.render();
       } else {
@@ -2263,7 +2040,7 @@
       }
     }
 
-    animate();
+    renderLoop();
   </script>
 </body>
 </html>
