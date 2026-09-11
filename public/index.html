@@ -668,6 +668,238 @@
       return new THREE.CanvasTexture(canvas);
     }
 
+    // Circular Pressure Gauge Face (45mm dial with green extraction and red overpressure arcs, tick marks, needle)
+    function generateSoniferPressureGaugeTexture() {
+      const canvas = document.createElement('canvas');
+      canvas.width = 256;
+      canvas.height = 256;
+      const ctx = canvas.getContext('2d');
+
+      // White/cream dial faceplate
+      ctx.fillStyle = '#f8f7f4';
+      ctx.beginPath();
+      ctx.arc(128, 128, 126, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Outer bezel trim
+      ctx.strokeStyle = '#222222';
+      ctx.lineWidth = 4;
+      ctx.beginPath();
+      ctx.arc(128, 128, 124, 0, Math.PI * 2);
+      ctx.stroke();
+
+      const startAngle = 0.75 * Math.PI;
+      const totalSpan = 1.5 * Math.PI;
+
+      // Green Extraction Pressure Arc (8 to 12 Bar)
+      ctx.strokeStyle = '#2e7d32';
+      ctx.lineWidth = 10;
+      ctx.beginPath();
+      ctx.arc(128, 128, 100, startAngle + totalSpan * (8 / 16), startAngle + totalSpan * (12 / 16));
+      ctx.stroke();
+
+      // Red Over-Pressure Arc (12 to 16 Bar)
+      ctx.strokeStyle = '#c62828';
+      ctx.lineWidth = 10;
+      ctx.beginPath();
+      ctx.arc(128, 128, 100, startAngle + totalSpan * (12 / 16), startAngle + totalSpan);
+      ctx.stroke();
+
+      // 0-16 Bar Calibration Tick Marks
+      for (let i = 0; i <= 16; i++) {
+        const angle = startAngle + totalSpan * (i / 16);
+        const rInner = i % 4 === 0 ? 84 : 92;
+        const rOuter = 108;
+        ctx.strokeStyle = '#1a1a1a';
+        ctx.lineWidth = i % 4 === 0 ? 3 : 1.5;
+        ctx.beginPath();
+        ctx.moveTo(128 + Math.cos(angle) * rInner, 128 + Math.sin(angle) * rInner);
+        ctx.lineTo(128 + Math.cos(angle) * rOuter, 128 + Math.sin(angle) * rOuter);
+        ctx.stroke();
+      }
+
+      // Barometer Typography
+      ctx.fillStyle = '#1a1a1a';
+      ctx.font = 'bold 18px "Plus Jakarta Sans", sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText('BAR', 128, 172);
+      ctx.font = 'bold 9px "Plus Jakarta Sans", sans-serif';
+      ctx.fillStyle = '#555555';
+      ctx.fillText('EXTRACTION', 128, 186);
+
+      // Black Indicator Needle (Pivoted at ~9.2 Bar optimal delivery)
+      const needleAngle = startAngle + totalSpan * (9.2 / 16);
+      ctx.strokeStyle = '#111111';
+      ctx.lineWidth = 3.5;
+      ctx.beginPath();
+      ctx.moveTo(128 - Math.cos(needleAngle) * 16, 128 - Math.sin(needleAngle) * 16);
+      ctx.lineTo(128 + Math.cos(needleAngle) * 88, 128 + Math.sin(needleAngle) * 88);
+      ctx.stroke();
+
+      // Center pivot cap
+      ctx.fillStyle = '#111111';
+      ctx.beginPath();
+      ctx.arc(128, 128, 9, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = '#c0c0c0';
+      ctx.beginPath();
+      ctx.arc(128, 128, 4, 0, Math.PI * 2);
+      ctx.fill();
+
+      return new THREE.CanvasTexture(canvas);
+    }
+
+    // Screen-Printed Sonifer SF3531 Logo Plate Texture
+    function generateSoniferLogoTexture() {
+      const canvas = document.createElement('canvas');
+      canvas.width = 256;
+      canvas.height = 64;
+      const ctx = canvas.getContext('2d');
+
+      ctx.fillStyle = '#e0e0e0';
+      ctx.fillRect(0, 0, 256, 64);
+
+      // Fine anisotropic horizontal metal brushing
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.035)';
+      for (let y = 0; y < 64; y += 2) {
+        ctx.fillRect(0, y, 256, 1);
+      }
+
+      ctx.fillStyle = '#111111';
+      ctx.textAlign = 'center';
+      ctx.font = 'bold 26px "Plus Jakarta Sans", sans-serif';
+      ctx.fillText('Sonifer', 128, 36);
+
+      ctx.font = '700 8.5px "Plus Jakarta Sans", sans-serif';
+      ctx.fillStyle = '#333333';
+      ctx.fillText('MODEL SF-3531 • 15 BAR', 128, 52);
+
+      return new THREE.CanvasTexture(canvas);
+    }
+
+    // Vintage Pressed Glass Embossed Relief ("Cold Drink / Glassware Company")
+    function generateDispenserEmbossedTexture() {
+      const canvas = document.createElement('canvas');
+      canvas.width = 512;
+      canvas.height = 512;
+      const ctx = canvas.getContext('2d');
+
+      // 50% neutral gray for bump mapping
+      ctx.fillStyle = '#808080';
+      ctx.fillRect(0, 0, 512, 512);
+
+      // Raised concentric glass bead ridges
+      ctx.strokeStyle = '#ffffff';
+      ctx.lineWidth = 6;
+      ctx.beginPath();
+      ctx.arc(256, 256, 192, 0, Math.PI * 2);
+      ctx.stroke();
+
+      ctx.strokeStyle = '#404040';
+      ctx.lineWidth = 4;
+      ctx.beginPath();
+      ctx.arc(256, 256, 186, 0, Math.PI * 2);
+      ctx.stroke();
+
+      ctx.strokeStyle = '#ffffff';
+      ctx.lineWidth = 3.5;
+      ctx.beginPath();
+      ctx.arc(256, 256, 142, 0, Math.PI * 2);
+      ctx.stroke();
+
+      // Top arc embossed lettering: "COLD DRINK"
+      ctx.save();
+      ctx.translate(256, 256);
+      ctx.font = 'bold 36px "Cinzel", serif';
+      ctx.fillStyle = '#ffffff';
+      ctx.textAlign = 'center';
+      const textTop = "COLD DRINK";
+      for (let i = 0; i < textTop.length; i++) {
+        const char = textTop[i];
+        const theta = -Math.PI / 2 + (i - (textTop.length - 1) / 2) * 0.18;
+        ctx.save();
+        ctx.rotate(theta);
+        ctx.translate(0, -158);
+        ctx.fillText(char, 0, 0);
+        ctx.restore();
+      }
+
+      // Center Star Medallion
+      ctx.font = 'bold 44px serif';
+      ctx.fillText('★', 0, 14);
+
+      // Bottom arc embossed lettering: "GLASSWARE CO."
+      const textBot = "GLASSWARE CO.";
+      for (let i = 0; i < textBot.length; i++) {
+        const char = textBot[i];
+        const theta = Math.PI / 2 - (i - (textBot.length - 1) / 2) * 0.17;
+        ctx.save();
+        ctx.rotate(theta);
+        ctx.translate(0, 168);
+        ctx.rotate(Math.PI);
+        ctx.fillText(char, 0, 0);
+        ctx.restore();
+      }
+      ctx.restore();
+
+      return new THREE.CanvasTexture(canvas);
+    }
+
+    // Traditional Regional Floral Decal Pattern for Espresso Ceramic Cup
+    function generateFloralDecalTexture() {
+      const canvas = document.createElement('canvas');
+      canvas.width = 512;
+      canvas.height = 256;
+      const ctx = canvas.getContext('2d');
+
+      // Pure porcelain glaze
+      ctx.fillStyle = '#f8f6f0';
+      ctx.fillRect(0, 0, 512, 256);
+
+      // Traditional gold and terracotta trim bands
+      ctx.fillStyle = '#d4af37';
+      ctx.fillRect(0, 18, 512, 6);
+      ctx.fillStyle = '#8b2e1b';
+      ctx.fillRect(0, 28, 512, 4);
+
+      ctx.fillStyle = '#8b2e1b';
+      ctx.fillRect(0, 224, 512, 4);
+      ctx.fillStyle = '#d4af37';
+      ctx.fillRect(0, 232, 512, 6);
+
+      // Repeating floral rosettes along cup circumference
+      for (let x = 32; x < 512; x += 64) {
+        ctx.fillStyle = '#8b2e1b';
+        ctx.beginPath();
+        ctx.arc(x, 128, 12, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.fillStyle = '#d4af37';
+        ctx.beginPath();
+        ctx.arc(x, 128, 5, 0, Math.PI * 2);
+        ctx.fill();
+
+        // 6 terracotta petals
+        for (let p = 0; p < 6; p++) {
+          const angle = (p * Math.PI) / 3;
+          const px = x + Math.cos(angle) * 22;
+          const py = 128 + Math.sin(angle) * 22;
+          ctx.fillStyle = '#c46238';
+          ctx.beginPath();
+          ctx.arc(px, py, 9, 0, Math.PI * 2);
+          ctx.fill();
+        }
+
+        // Green leaf sprigs
+        ctx.fillStyle = '#3e5c32';
+        ctx.beginPath();
+        ctx.ellipse(x + 28, 128, 7, 3.5, 0.4, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      return new THREE.CanvasTexture(canvas);
+    }
+
     // =========================================================================
     // 2. Scene, Photometric Pipeline & Renderer Setup
     // =========================================================================
@@ -689,6 +921,7 @@
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.outputColorSpace = THREE.SRGBColorSpace;
+    renderer.outputEncoding = THREE.sRGBEncoding;
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 1.10;
 
@@ -730,35 +963,40 @@
     const woodFloorTex = generateSmokedOakTextures();
     const walnutCounterTex = generateWalnutCountertopTexture();
     const chalkboardTex = generateChalkboardTexture();
+    const soniferGaugeTex = generateSoniferPressureGaugeTexture();
+    const soniferLogoTex = generateSoniferLogoTexture();
+    const dispenserEmbossedBump = generateDispenserEmbossedTexture();
+    const floralDecalTex = generateFloralDecalTexture();
 
     const materials = {
-      // Rear Flemish Masonry Wall
+      // Rear Flemish Masonry Wall (roughness: 0.88)
       flemishBrick: new THREE.MeshStandardMaterial({
         map: brickDiff,
         bumpMap: brickBump,
         bumpScale: 0.06,
-        roughness: 0.86,
+        roughness: 0.88,
         metalness: 0.02
       }),
-      // Smoked French Oak Ground Plane
+      // Smoked French Oak Ground Plane (roughness: 0.38, metalness: 0.04)
       smokedFrenchOak: new THREE.MeshStandardMaterial({
         map: woodFloorTex,
         roughness: 0.38,
         metalness: 0.04
       }),
-      // Solid End-Grain Walnut Countertop
+      // Solid Dark Walnut Butcher-Block Countertop (color: 0x331e12, roughness: 0.32)
       endGrainWalnut: new THREE.MeshStandardMaterial({
+        color: 0x331e12,
         map: walnutCounterTex,
-        roughness: 0.30,
+        roughness: 0.32,
         metalness: 0.03
       }),
-      // Vertical Timber Slats Apron
+      // Vertical Timber Slats (35mm × 18mm)
       counterFlutedSlat: new THREE.MeshStandardMaterial({
         color: 0x24150d,
         roughness: 0.72,
         metalness: 0.02
       }),
-      // Recessed Matte Black Shadow Gap Toe-Kick
+      // Recessed 80mm Matte Black Toe-Kick
       matteBlackToeKick: new THREE.MeshStandardMaterial({
         color: 0x0c0c0c,
         roughness: 0.95
@@ -800,53 +1038,135 @@
         transmission: 0.92,
         ior: 1.52
       }),
-      // High-Borosilicate Showcase & Siphon Glass
+      // High-Clarity Borosilicate Showcase & Siphon Glass
       borosilicateGlass: new THREE.MeshPhysicalMaterial({
         color: 0xffffff,
         transparent: true,
-        opacity: 0.24,
-        roughness: 0.05,
-        transmission: 0.94,
+        opacity: 0.18,
+        roughness: 0.04,
+        transmission: 0.96,
         ior: 1.50
       }),
-      // Translucent Amber Brewed Coffee Liquid
+      // Siphon Pedestal Base: Dark gunmetal/bronze electroplate (roughness: 0.35, metalness: 0.85)
+      gunmetalElectroplate: new THREE.MeshStandardMaterial({
+        color: 0x2f2c28,
+        roughness: 0.35,
+        metalness: 0.85
+      }),
+      // Siphon Cantilever & Polished Hardware: Heavy C-shaped curved chrome casting (roughness: 0.10, metalness: 0.98)
+      polishedChrome: new THREE.MeshStandardMaterial({
+        color: 0xf2f2f2,
+        roughness: 0.10,
+        metalness: 0.98
+      }),
+      // Insulated Bakelite Grip: (roughness: 0.65, metalness: 0.05)
+      bakeliteGrip: new THREE.MeshStandardMaterial({
+        color: 0x121212,
+        roughness: 0.65,
+        metalness: 0.05
+      }),
+      // Siphon Liquid Mesh: Translucent brewed amber coffee (transmission: 0.88, roughness: 0.1, color: 0x4a2109, ior: 1.34)
       amberBrewedCoffee: new THREE.MeshPhysicalMaterial({
         color: 0x4a2109,
         transparent: true,
         opacity: 0.88,
-        roughness: 0.08,
-        transmission: 0.82,
+        roughness: 0.10,
+        transmission: 0.88,
         ior: 1.34
       }),
-      // Hand-Brushed Stainless Steel (Espresso Chassis)
-      brushedStainlessSteel: new THREE.MeshStandardMaterial({
-        color: 0xd8d8d8,
-        metalness: 0.86,
-        roughness: 0.22
+      // Saturated Ground Coffee Bed (35mm thickness)
+      coffeeGroundsBed: new THREE.MeshStandardMaterial({
+        color: 0x1e130a,
+        roughness: 0.95,
+        metalness: 0.02
       }),
-      // Polished Chrome Hardware
-      polishedChrome: new THREE.MeshStandardMaterial({
-        color: 0xeeeeee,
-        metalness: 0.94,
-        roughness: 0.10
-      }),
-      // Solid Brass (Group Heads & Burners)
+      // Solid Brass: Spirit Burner Pot & Group Heads
       solidBrass: new THREE.MeshStandardMaterial({
         color: 0xd4af37,
         metalness: 0.90,
         roughness: 0.24
       }),
-      // Dense Tropical Mango/Passionfruit Nectar
-      mangoPulpNectar: new THREE.MeshStandardMaterial({
-        color: 0xea9418,
-        roughness: 0.35,
+      // Wire Riser Stand: Semi-gloss black powder coat (roughness: 0.4, metalness: 0.8)
+      wireStandBlack: new THREE.MeshStandardMaterial({
+        color: 0x181818,
+        roughness: 0.40,
+        metalness: 0.80
+      }),
+      // Turned Natural Beechwood Rolling Handle Grips
+      beechwoodGrip: new THREE.MeshStandardMaterial({
+        color: 0xc89d6c,
+        roughness: 0.60,
+        metalness: 0.04
+      }),
+      // Galvanized Tin Screw-Cap: Brushed matte-pewter finish
+      mattePewterLid: new THREE.MeshStandardMaterial({
+        color: 0x7c8288,
+        roughness: 0.45,
+        metalness: 0.75
+      }),
+      // Dispenser Unit 1 Fluid: Opaque tropical mango nectar (color: 0xeb911c, roughness: 0.28, opacity: 0.96)
+      mangoNectarFluid: new THREE.MeshStandardMaterial({
+        color: 0xeb911c,
+        roughness: 0.28,
+        opacity: 0.96,
+        transparent: true
+      }),
+      // Dispenser Unit 2 Fluid: Crimson cold-pressed beetroot juice (color: 0x820921, roughness: 0.22, opacity: 0.92)
+      beetrootJuiceFluid: new THREE.MeshStandardMaterial({
+        color: 0x820921,
+        roughness: 0.22,
+        opacity: 0.92,
+        transparent: true
+      }),
+      // Sonifer Fascia: Vertical brushed stainless steel (metalness: 0.90, roughness: 0.22, color: 0xe0e0e0)
+      soniferBrushedSteel: new THREE.MeshStandardMaterial({
+        color: 0xe0e0e0,
+        metalness: 0.90,
+        roughness: 0.22
+      }),
+      // Sonifer Casing: Textured injection-molded matte-black ABS plastic (roughness: 0.65, metalness: 0.05)
+      soniferMatteBlackABS: new THREE.MeshStandardMaterial({
+        color: 0x161616,
+        roughness: 0.65,
         metalness: 0.05
       }),
-      // Deep Ruby-Crimson Cold-Pressed Beetroot Juice
-      rubyBeetrootJuice: new THREE.MeshStandardMaterial({
-        color: 0x7a0c1e,
-        roughness: 0.32,
-        metalness: 0.05
+      // Grinder Tilt Drum: 304 food-grade stainless steel mirror chrome (metalness: 0.96, roughness: 0.12)
+      grinderMirrorChrome: new THREE.MeshStandardMaterial({
+        color: 0xf5f5f5,
+        metalness: 0.96,
+        roughness: 0.12
+      }),
+      // Grinder Cast-Aluminum Cradle Stand
+      grinderCastAluminum: new THREE.MeshStandardMaterial({
+        color: 0xb0b3b5,
+        metalness: 0.75,
+        roughness: 0.38
+      }),
+      // Natural Oiled Acacia Wood Presentation Tray (roughness: 0.45)
+      acaciaWood: new THREE.MeshStandardMaterial({
+        color: 0x54321b,
+        roughness: 0.45,
+        metalness: 0.03
+      }),
+      // Straight-Walled Water Tumbler Fluid (transmission: 0.98, opacity: 0.1, ior: 1.333)
+      pureWaterFluid: new THREE.MeshPhysicalMaterial({
+        color: 0xffffff,
+        transparent: true,
+        opacity: 0.10,
+        roughness: 0.02,
+        transmission: 0.98,
+        ior: 1.333
+      }),
+      // Unglazed Dark Terracotta Saucer
+      darkTerracotta: new THREE.MeshStandardMaterial({
+        color: 0x241a15,
+        roughness: 0.85
+      }),
+      // Wrinkled Medjool Dates with Glossy Dark Amber-Brown Skins (roughness: 0.65, color: 0x291207)
+      medjoolDateSkin: new THREE.MeshStandardMaterial({
+        color: 0x291207,
+        roughness: 0.65,
+        metalness: 0.08
       }),
       // Tailored Chocolate-Brown Saddle Leather Bench
       saddleLeather: new THREE.MeshStandardMaterial({
@@ -867,11 +1187,11 @@
         color: 0x4b583e,
         roughness: 0.90
       }),
-      // Glowing Edison Double-Spiral Filaments
+      // Glowing Edison Double-Spiral Filaments (emissive: 0xffa033, emissiveIntensity: 4.5)
       glowingFilamentWire: new THREE.MeshStandardMaterial({
         color: 0xffa033,
         emissive: 0xffa033,
-        emissiveIntensity: 4.2
+        emissiveIntensity: 4.5
       })
     };
 
@@ -888,9 +1208,9 @@
     floor.receiveShadow = true;
     envelope.add(floor);
 
-    // Rear Masonry Brick Wall at Z = -3.6m
+    // Rear Masonry Brick Wall at Z = -3.5m
     const rearWall = new THREE.Mesh(new THREE.BoxGeometry(10.5, 3.6, 0.25), materials.flemishBrick);
-    rearWall.position.set(0, 1.8, -3.725);
+    rearWall.position.set(0, 1.8, -3.625);
     rearWall.receiveShadow = true;
     envelope.add(rearWall);
 
@@ -916,15 +1236,15 @@
     rightWall.receiveShadow = true;
     envelope.add(rightWall);
 
-    // Recessed Chalkboard Panel (4.4m wide × 1.5m tall at Z = -3.58m)
-    const chalkboard = new THREE.Mesh(new THREE.BoxGeometry(4.4, 1.5, 0.04), materials.chalkboardSlate);
-    chalkboard.position.set(0, 2.05, -3.58);
+    // Framed Black Slate Chalkboard (4.2m wide × 1.4m tall mounted at Y = 1.6m)
+    const chalkboard = new THREE.Mesh(new THREE.BoxGeometry(4.2, 1.4, 0.04), materials.chalkboardSlate);
+    chalkboard.position.set(0, 1.6, -3.48);
     chalkboard.receiveShadow = true;
     envelope.add(chalkboard);
 
     // 60mm Beveled Solid American Walnut Frame
-    const walnutFrame = new THREE.Mesh(new THREE.BoxGeometry(4.52, 1.62, 0.06), materials.americanWalnutFrame);
-    walnutFrame.position.set(0, 2.05, -3.61);
+    const walnutFrame = new THREE.Mesh(new THREE.BoxGeometry(4.32, 1.52, 0.06), materials.americanWalnutFrame);
+    walnutFrame.position.set(0, 1.6, -3.51);
     envelope.add(walnutFrame);
 
     // Storefront Fenestration at X = -5.25m (Industrial Steel-Framed Window Partition)
@@ -996,41 +1316,47 @@
     const serviceBar = new THREE.Group();
     scene.add(serviceBar);
 
-    // Service Bar Placement: 5.2m total length, 0.88m depth, 0.96m height
-    // Centered along X: -2.6 to +2.6, centered at Z = -1.5m
+    // Service Bar Placement: 5.4m total length, 0.90m depth, 0.95m height
     const barCenterZ = -1.5;
 
-    // Solid End-Grain Walnut Butcher-Block Countertop (50mm thick, 3mm bullnose)
-    const countertop = new THREE.Mesh(new THREE.BoxGeometry(5.2, 0.05, 0.88), materials.endGrainWalnut);
-    countertop.position.set(0, 0.935, barCenterZ);
+    // Solid End-Grain Walnut Butcher-Block Countertop (45mm thick, color: 0x331e12, roughness: 0.32)
+    const countertop = new THREE.Mesh(new THREE.BoxGeometry(5.4, 0.045, 0.90), materials.endGrainWalnut);
+    countertop.position.set(0, 0.9275, barCenterZ);
     countertop.castShadow = true;
     countertop.receiveShadow = true;
     serviceBar.add(countertop);
 
-    // Recessed 70mm Shadow-Gap Toe Kick in Matte Black
-    const toeKick = new THREE.Mesh(new THREE.BoxGeometry(5.0, 0.07, 0.72), materials.matteBlackToeKick);
-    toeKick.position.set(0, 0.035, barCenterZ);
+    // Recessed 80mm Toe Kick in Matte Black (height: 80mm)
+    const toeKick = new THREE.Mesh(new THREE.BoxGeometry(5.2, 0.08, 0.74), materials.matteBlackToeKick);
+    toeKick.position.set(0, 0.04, barCenterZ + 0.04);
     toeKick.receiveShadow = true;
     serviceBar.add(toeKick);
 
-    // Front Apron Cladding: Vertical Fluted Timber Slats (35mm × 18mm, 10mm gap = 45mm pitch)
+    // Concealed Warm LED Downlight Strip along Recessed Toe-Kick (2700K #ffaa44)
+    [-1.8, 0.0, 1.8].forEach(kx => {
+      const kickLight = new THREE.PointLight(0xffaa44, 0.30, 1.8, 2.0);
+      kickLight.position.set(kx, 0.06, barCenterZ + 0.40);
+      serviceBar.add(kickLight);
+    });
+
+    // Front Apron Cladding: Dark Vertical Timber Slats (35mm width × 18mm depth, spaced 12mm apart = 47mm pitch)
     const slatW = 0.035;
     const slatD = 0.018;
-    const slatH = 0.84;
-    const slatPitch = 0.045;
-    const slatZ = barCenterZ + 0.44 + slatD / 2;
+    const slatH = 0.825; // 0.95 - 0.045 - 0.08 = 0.825m
+    const slatPitch = 0.047; // 35mm + 12mm
+    const slatZ = barCenterZ + 0.45 - slatD / 2;
 
-    for (let x = -2.55; x <= 2.55; x += slatPitch) {
+    for (let x = -2.65; x <= 2.65; x += slatPitch) {
       const slat = new THREE.Mesh(new THREE.BoxGeometry(slatW, slatH, slatD), materials.counterFlutedSlat);
-      slat.position.set(x, 0.49, slatZ);
+      slat.position.set(x, 0.4925, slatZ);
       slat.castShadow = true;
       slat.receiveShadow = true;
       serviceBar.add(slat);
     }
 
-    // Counter Core Box
-    const counterCore = new THREE.Mesh(new THREE.BoxGeometry(5.16, 0.84, 0.84), materials.matteBlackToeKick);
-    counterCore.position.set(0, 0.49, barCenterZ);
+    // Counter Structural Sub-Chassis Box
+    const counterCore = new THREE.Mesh(new THREE.BoxGeometry(5.36, 0.825, 0.86), materials.matteBlackToeKick);
+    counterCore.position.set(0, 0.4925, barCenterZ);
     serviceBar.add(counterCore);
 
     // Interactive Props Array
@@ -1045,455 +1371,1094 @@
       });
     }
 
-    // --- ZONE 1: Pastry & Merchandising (X = -2.1m to -1.4m) ---
-    const pastryZone = new THREE.Group();
-    pastryZone.position.set(-1.75, 0.96, barCenterZ);
+    // =========================================================================
+    // COUNTER EQUIPMENT ARRANGEMENT (LEFT TO RIGHT: ZONES 1 TO 7)
+    // =========================================================================
 
-    // Frameless 8mm UV-Bonded Tempered Glass Pastry Vitrine
-    const caseWidth = 0.85;
-    const caseHeight = 0.42;
-    const caseDepth = 0.52;
-    const glassCase = new THREE.Mesh(new THREE.BoxGeometry(caseWidth, caseHeight, caseDepth), materials.borosilicateGlass);
-    glassCase.position.y = caseHeight / 2;
+    // --- ZONE 1: Pastry Vitrine (X = -2.2m to -1.6m) ---
+    const pastryZone = new THREE.Group();
+    pastryZone.name = 'pastryZone';
+    pastryZone.position.set(-1.90, 0.95, barCenterZ);
+
+    const caseWidth = 0.60;
+    const caseHeight = 0.40;
+    const caseDepth = 0.50;
+
+    // Wooden Frame Base for Pastry Case
+    const caseBase = new THREE.Mesh(new THREE.BoxGeometry(caseWidth, 0.024, caseDepth), materials.americanWalnutFrame);
+    caseBase.position.y = 0.012;
+    caseBase.castShadow = true;
+    pastryZone.add(caseBase);
+
+    // Frameless Glass Vitrine Enclosure
+    const glassCase = new THREE.Mesh(new THREE.BoxGeometry(caseWidth - 0.02, caseHeight - 0.02, caseDepth - 0.02), materials.borosilicateGlass);
+    glassCase.position.y = caseHeight / 2 + 0.01;
     glassCase.castShadow = true;
     pastryZone.add(glassCase);
 
-    // Three-Tiered Walnut Riser Steps
-    for (let s = 0; s < 3; s++) {
+    // Wooden Corner Corner Columns
+    [[-caseWidth / 2 + 0.01, -caseDepth / 2 + 0.01], [caseWidth / 2 - 0.01, -caseDepth / 2 + 0.01], [-caseWidth / 2 + 0.01, caseDepth / 2 - 0.01], [caseWidth / 2 - 0.01, caseDepth / 2 - 0.01]].forEach(([cx, cz]) => {
+      const col = new THREE.Mesh(new THREE.BoxGeometry(0.016, caseHeight, 0.016), materials.americanWalnutFrame);
+      col.position.set(cx, caseHeight / 2 + 0.012, cz);
+      pastryZone.add(col);
+    });
+
+    // Two-Tier Walnut Riser Steps
+    for (let s = 0; s < 2; s++) {
       const riser = new THREE.Mesh(
-        new THREE.BoxGeometry(caseWidth - 0.06, 0.04, 0.14),
+        new THREE.BoxGeometry(caseWidth - 0.08, 0.035, 0.18),
         materials.endGrainWalnut
       );
-      riser.position.set(0, 0.04 + s * 0.08, -0.14 + s * 0.14);
+      riser.position.set(0, 0.04 + s * 0.08, -0.10 + s * 0.18);
       riser.castShadow = true;
       pastryZone.add(riser);
 
-      // Fresh Croissants & Morning Breads on Each Tier
-      [-0.24, 0.0, 0.24].forEach(px => {
-        const pastry = new THREE.Mesh(
-          new THREE.TorusGeometry(0.038, 0.022, 10, 18, Math.PI * 0.92),
+      // Fresh French Butter Croissants
+      [-0.16, 0.0, 0.16].forEach(px => {
+        const croissant = new THREE.Mesh(
+          new THREE.TorusGeometry(0.034, 0.020, 10, 16, Math.PI * 0.92),
           new THREE.MeshStandardMaterial({ color: 0xd98c36, roughness: 0.58 })
         );
-        pastry.rotation.x = Math.PI / 2;
-        pastry.position.set(px, 0.07 + s * 0.08, -0.14 + s * 0.14);
-        pastry.castShadow = true;
-        pastryZone.add(pastry);
+        croissant.rotation.x = Math.PI / 2;
+        croissant.position.set(px, 0.07 + s * 0.08, -0.10 + s * 0.18);
+        croissant.castShadow = true;
+        pastryZone.add(croissant);
       });
     }
     serviceBar.add(pastryZone);
 
     registerInteractive(pastryZone, {
-      title: "Frameless UV-Bonded Pastry Showcase",
-      tag: "Morning Boulangerie",
-      desc: "Architectural 8mm low-iron tempered vitrine showcasing daily slow-fermented French croissants, pain au chocolat, and cardamom pastries on tiered American walnut risers.",
+      title: "Artisan Boulangerie Pastry Showcase",
+      tag: "Zone 1: Morning Bake",
+      desc: "Framed American walnut glass showcase displaying freshly baked, slow-fermented French cultured butter croissants and pain au chocolat.",
       specs: [
-        ["Glazing", "8mm Optiwhite UV-Bonded Glass"],
-        ["Riser Wood", "Solid FSC American Black Walnut"],
-        ["Daily Bake", "Fermented 24-hours, baked at 5:30 AM"]
+        ["Frame", "Solid FSC American Black Walnut"],
+        ["Glazing", "Optiwhite UV-Bonded Low-Iron Glass"],
+        ["Pastries", "Laminated with 84% Cultured Butter"]
       ]
     });
 
-    // --- ZONE 2: Specialty Siphon Slow-Bar (X = -1.1m to -0.3m) ---
-    function buildSiphonBrewer(xPos) {
+    // --- ZONE 2: Siphon Steam Coffee Makers (2 Units, Dual-Chamber Balancer Style) ---
+    // (X = -1.2m to -0.4m, 180mm clearance between 130mm bases: siphonUnit1 at X = -0.95m, siphonUnit2 at X = -0.64m)
+    function buildSiphonBrewer(xPos, unitId) {
       const siphon = new THREE.Group();
-      siphon.position.set(xPos, 0.96, barCenterZ);
+      siphon.name = unitId;
+      // Local origin anchor at equipment base on countertop (Y = 0.95m)
+      siphon.position.set(xPos, 0.95, barCenterZ);
 
-      // Dark Slate Burner Pad on Counter Surface
-      const pad = new THREE.Mesh(new THREE.BoxGeometry(0.26, 0.015, 0.26), materials.chalkboardSlate);
-      pad.position.y = 0.008;
-      siphon.add(pad);
+      // A. Support Base & Main Pillar:
+      // Base: Solid circular cast-alloy disc pedestal (130mm diameter -> radius 0.065m, 22mm height, chamfered upper edge)
+      // Finished in dark gunmetal/bronze electroplate (roughness: 0.35, metalness: 0.85)
+      const basePedestal = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.061, 0.065, 0.022, 32),
+        materials.gunmetalElectroplate
+      );
+      basePedestal.position.y = 0.011;
+      basePedestal.castShadow = true;
+      basePedestal.receiveShadow = true;
+      siphon.add(basePedestal);
 
-      // Balanced Polished Chrome Arched Support Arm
-      const baseArm = new THREE.Mesh(new THREE.CylinderGeometry(0.09, 0.10, 0.022, 24), materials.polishedChrome);
-      baseArm.position.y = 0.025;
-      baseArm.castShadow = true;
-      siphon.add(baseArm);
+      // Stepped lower collar connecting to lower heating bracket
+      const lowerCollar = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.013, 0.016, 0.010, 20),
+        materials.gunmetalElectroplate
+      );
+      lowerCollar.position.set(0.052, 0.027, 0);
+      siphon.add(lowerCollar);
 
-      const spine = new THREE.Mesh(new THREE.CylinderGeometry(0.011, 0.011, 0.46, 12), materials.polishedChrome);
-      spine.position.set(0.065, 0.24, 0);
-      siphon.add(spine);
+      // Vertical Stem: Upright cylindrical column (18mm diameter -> radius 0.009m, 160mm height -> 0.160m)
+      const verticalStem = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.009, 0.009, 0.160, 20),
+        materials.gunmetalElectroplate
+      );
+      verticalStem.position.set(0.052, 0.032 + 0.080, 0);
+      verticalStem.castShadow = true;
+      siphon.add(verticalStem);
 
-      // Knurled Tension Dial Clamp
-      const clampDial = new THREE.Mesh(new THREE.CylinderGeometry(0.02, 0.02, 0.025, 16), materials.polishedChrome);
-      clampDial.rotation.z = Math.PI / 2;
-      clampDial.position.set(0.07, 0.23, 0);
-      siphon.add(clampDial);
+      // Lower Spirit Burner Bracket Arm
+      const burnerBracket = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.006, 0.006, 0.054, 12),
+        materials.gunmetalElectroplate
+      );
+      burnerBracket.rotation.z = Math.PI / 2;
+      burnerBracket.position.set(0.026, 0.028, 0);
+      siphon.add(burnerBracket);
 
-      // Lower Borosilicate Globe with Translucent Amber Liquid
-      const lowerGlobe = new THREE.Mesh(new THREE.SphereGeometry(0.076, 24, 24), materials.borosilicateGlass);
-      lowerGlobe.position.set(0, 0.21, 0);
-      siphon.add(lowerGlobe);
-
-      const amberFluid = new THREE.Mesh(new THREE.SphereGeometry(0.071, 20, 20), materials.amberBrewedCoffee);
-      amberFluid.position.set(0, 0.20, 0);
-      siphon.add(amberFluid);
-
-      // Upper Funnel Chamber with Silicone Gasket Seal & Mesh Rod
-      const upperFunnel = new THREE.Mesh(new THREE.CylinderGeometry(0.052, 0.042, 0.19, 20), materials.borosilicateGlass);
-      upperFunnel.position.set(0, 0.39, 0);
-      siphon.add(upperFunnel);
-
-      const siliconeGasket = new THREE.Mesh(new THREE.CylinderGeometry(0.043, 0.043, 0.018, 16), materials.matteBlackToeKick);
-      siliconeGasket.position.set(0, 0.295, 0);
-      siphon.add(siliconeGasket);
-
-      const filterRod = new THREE.Mesh(new THREE.CylinderGeometry(0.008, 0.008, 0.19, 8), materials.polishedChrome);
-      filterRod.position.set(0, 0.25, 0);
-      siphon.add(filterRod);
-
-      // Heavy Brass Spirit Burner
-      const brassBurner = new THREE.Mesh(new THREE.CylinderGeometry(0.042, 0.048, 0.045, 16), materials.solidBrass);
-      brassBurner.position.y = 0.04;
+      // Spirit Burner: Miniature cylindrical brass alcohol burner pot with exposed cotton wick centered directly beneath lower globe
+      const brassBurner = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.023, 0.025, 0.036, 24),
+        materials.solidBrass
+      );
+      brassBurner.position.set(0, 0.022 + 0.018, 0);
       brassBurner.castShadow = true;
       siphon.add(brassBurner);
 
-      // Subtle Halogen / Spirit Glow
-      const glowPoint = new THREE.PointLight(0xff9838, 0.20, 0.5, 2);
-      glowPoint.position.set(0, 0.08, 0);
-      siphon.add(glowPoint);
+      const wickCollar = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.007, 0.007, 0.008, 12),
+        materials.solidBrass
+      );
+      wickCollar.position.set(0, 0.060, 0);
+      siphon.add(wickCollar);
+
+      const cottonWick = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.003, 0.003, 0.012, 8),
+        new THREE.MeshStandardMaterial({ color: 0xedebe4, roughness: 0.9 })
+      );
+      cottonWick.position.set(0, 0.068, 0);
+      siphon.add(cottonWick);
+
+      // Active warm flame glow from spirit burner
+      const spiritGlow = new THREE.PointLight(0xff9838, 0.28, 0.50, 2.0);
+      spiritGlow.position.set(0, 0.074, 0);
+      siphon.add(spiritGlow);
+
+      // B. Lower Brewing Globe & Arched Cantilever Handle:
+      // Lower Chamber: High-clarity borosilicate glass sphere (125mm outer diameter -> radius 0.0625m)
+      const lowerGlobe = new THREE.Mesh(
+        new THREE.SphereGeometry(0.0625, 28, 28),
+        materials.borosilicateGlass
+      );
+      lowerGlobe.position.set(0, 0.160, 0);
+      lowerGlobe.castShadow = true;
+      siphon.add(lowerGlobe);
+
+      // Integrated forward-facing glass pour spout collar
+      const spoutCollar = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.012, 0.015, 0.028, 16),
+        materials.borosilicateGlass
+      );
+      spoutCollar.rotation.x = -Math.PI / 4;
+      spoutCollar.position.set(0, 0.175, 0.058);
+      siphon.add(spoutCollar);
+
+      // Liquid Mesh: Lower half of sphere filled with convex meniscus of translucent brewed amber coffee
+      // (transmission: 0.88, roughness: 0.1, color: 0x4a2109, ior: 1.34)
+      const liquidMeniscus = new THREE.Mesh(
+        new THREE.SphereGeometry(0.059, 24, 18, 0, Math.PI * 2, Math.PI * 0.45, Math.PI * 0.55),
+        materials.amberBrewedCoffee
+      );
+      liquidMeniscus.position.set(0, 0.158, 0);
+      siphon.add(liquidMeniscus);
+
+      // Cantilever Armature: Heavy C-shaped curved chrome casting (roughness: 0.10, metalness: 0.98)
+      // Gripping the sphere collar horizontally with an insulated black bakelite grip on the upper arch
+      const cArmCurve = new THREE.Mesh(
+        new THREE.TorusGeometry(0.048, 0.007, 12, 24, Math.PI * 1.15),
+        materials.polishedChrome
+      );
+      cArmCurve.rotation.y = Math.PI / 2;
+      cArmCurve.rotation.z = Math.PI * 0.45;
+      cArmCurve.position.set(0.025, 0.170, 0);
+      siphon.add(cArmCurve);
+
+      // Horizontal collar grip ring around globe neck
+      const collarGrip = new THREE.Mesh(
+        new THREE.TorusGeometry(0.026, 0.005, 8, 20),
+        materials.polishedChrome
+      );
+      collarGrip.rotation.x = Math.PI / 2;
+      collarGrip.position.set(0, 0.208, 0);
+      siphon.add(collarGrip);
+
+      // Insulated black bakelite grip on upper arch (roughness: 0.65, metalness: 0.05)
+      const bakeliteGripMesh = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.011, 0.011, 0.052, 16),
+        materials.bakeliteGrip
+      );
+      bakeliteGripMesh.rotation.z = 0.42;
+      bakeliteGripMesh.position.set(0.045, 0.205, 0);
+      siphon.add(bakeliteGripMesh);
+
+      // Horizontal bridge arm connecting collar to vertical pillar
+      const bridgeArm = new THREE.Mesh(
+        new THREE.BoxGeometry(0.052, 0.010, 0.014),
+        materials.polishedChrome
+      );
+      bridgeArm.position.set(0.026, 0.188, 0);
+      siphon.add(bridgeArm);
+
+      // C. Upper Extraction Funnel:
+      // Tall borosilicate glass cylinder (80mm diameter -> radius 0.040m, 180mm height -> 0.180m) with open top
+      const upperFunnel = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.040, 0.038, 0.180, 24, 1, true),
+        materials.borosilicateGlass
+      );
+      upperFunnel.position.set(0, 0.315, 0);
+      siphon.add(upperFunnel);
+
+      // Silicone gasket collar sealing junction
+      const gasket = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.026, 0.026, 0.024, 20),
+        materials.matteBlackToeKick
+      );
+      gasket.position.set(0, 0.220, 0);
+      siphon.add(gasket);
+
+      // Narrow glass down-tube stem running into lower globe
+      const glassStem = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.009, 0.009, 0.135, 16),
+        materials.borosilicateGlass
+      );
+      glassStem.position.set(0, 0.180, 0);
+      siphon.add(glassStem);
+
+      // Internal central cloth/metal filter spring rod running down narrow glass stem into lower globe
+      const filterRod = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.0025, 0.0025, 0.150, 8),
+        materials.polishedChrome
+      );
+      filterRod.position.set(0, 0.190, 0);
+      siphon.add(filterRod);
+
+      const filterDisc = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.035, 0.035, 0.004, 20),
+        materials.polishedChrome
+      );
+      filterDisc.position.set(0, 0.230, 0);
+      siphon.add(filterDisc);
+
+      // Coffee Grounds Layer: Dark brown saturated ground coffee bed (35mm thickness = 0.035m)
+      const groundsBed = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.0385, 0.0375, 0.035, 20),
+        materials.coffeeGroundsBed
+      );
+      groundsBed.position.set(0, 0.250, 0);
+      siphon.add(groundsBed);
 
       serviceBar.add(siphon);
       return siphon;
     }
 
-    const siphonA = buildSiphonBrewer(-0.85);
-    const siphonB = buildSiphonBrewer(-0.45);
+    const siphonUnit1 = buildSiphonBrewer(-0.95, 'siphonUnit1');
+    const siphonUnit2 = buildSiphonBrewer(-0.64, 'siphonUnit2');
 
-    registerInteractive(siphonA, {
+    registerInteractive(siphonUnit1, {
       title: "Twin Vacuum Siphon Reserve (Unit 1)",
-      tag: "Vapor-Pressure Slow-Bar",
-      desc: "Engineered vacuum extraction harnessing expansion and contraction of air and steam through pure borosilicate glass, delivering an aromatic cup of African coffee with tea-like clarity.",
+      tag: "Zone 2: Vapor-Pressure Slow-Bar",
+      desc: "Articulated dual-chamber balancer vacuum siphon brewer built from gunmetal pedestal base, borosilicate glass sphere with pour spout, heavy C-shaped chrome cantilever armature with bakelite grip, and active brass spirit burner.",
       specs: [
-        ["Glass Grade", "Heat-Resistant Borosilicate 3.3"],
-        ["Filtration", "Woven Organic Cotton Disc"],
-        ["Target Reserve", "Yirgacheffe Lot #24 Micro-Lot"]
+        ["Base & Pillar", "130mm Gunmetal Electroplate (roughness: 0.35, metalness: 0.85)"],
+        ["Lower Globe", "125mm Borosilicate Glass with Translucent Amber Meniscus"],
+        ["Armature", "Polished Chrome (roughness: 0.10, metalness: 0.98) with Bakelite Grip"],
+        ["Extraction Funnel", "80mm x 180mm with 35mm Saturated Coffee Grounds Layer"]
       ]
     });
-    registerInteractive(siphonB, {
+
+    registerInteractive(siphonUnit2, {
       title: "Twin Vacuum Siphon Reserve (Unit 2)",
-      tag: "Slow-Bar Laboratory",
-      desc: "Twin station tuned for experimental anaerobic natural lots, maintaining precise 92.8°C slurry saturation before vacuum drawdown.",
+      tag: "Zone 2: Vapor-Pressure Slow-Bar",
+      desc: "Twin balancer station standing with 180mm clearance between bases. Tuned for micro-lot vacuum extraction with 92.8°C thermal balance.",
       specs: [
-        ["Armature", "Polished Marine-Grade Chrome"],
-        ["Burner", "Machined Solid Brass Spirit Lamp"],
-        ["Extraction Yield", "21.5% Total Dissolved Solids"]
+        ["Clearance", "180mm Between Circular Bases"],
+        ["Burner", "Machined Brass Pot with Exposed Cotton Wick"],
+        ["Filter Spring", "Internal Central Cloth/Metal Spring Rod"]
       ]
     });
 
-    // --- ZONE 3: Signature Espresso Hub (X = +0.2m to +1.3m) ---
-    function buildSoniferEspressoUnit(xPos) {
-      const unit = new THREE.Group();
-      unit.position.set(xPos, 0.96, barCenterZ);
+    // --- ZONE 3: Traditional Hospitality Service Set (Front Center Counter Edge, X = 0.0m) ---
+    function buildHospitalityServiceSet() {
+      const setGroup = new THREE.Group();
+      setGroup.name = 'hospitalityServiceSet';
+      // Local origin anchor at front counter edge (X = 0.0m, Y = 0.95m, Z = barCenterZ + 0.32m)
+      setGroup.position.set(0.0, 0.95, barCenterZ + 0.32);
 
-      // Hand-Brushed Stainless Steel Front Fascia with Textured Matte Black Sides
-      const chassis = new THREE.Mesh(new THREE.BoxGeometry(0.44, 0.44, 0.42), materials.brushedStainlessSteel);
-      chassis.position.y = 0.22;
+      // 1. Wood Tray: 280mm x 160mm x 20mm shallow-rim rectangular tray made of natural oiled acacia wood (roughness: 0.45)
+      const trayBase = new THREE.Mesh(
+        new THREE.BoxGeometry(0.280, 0.010, 0.160),
+        materials.acaciaWood
+      );
+      trayBase.position.set(0, 0.005, 0);
+      trayBase.castShadow = true;
+      trayBase.receiveShadow = true;
+      setGroup.add(trayBase);
+
+      // Shallow Rims (20mm outer elevation, 10mm rim above tray floor)
+      const rimF = new THREE.Mesh(new THREE.BoxGeometry(0.280, 0.015, 0.008), materials.acaciaWood);
+      rimF.position.set(0, 0.0125, 0.076);
+      const rimB = new THREE.Mesh(new THREE.BoxGeometry(0.280, 0.015, 0.008), materials.acaciaWood);
+      rimB.position.set(0, 0.0125, -0.076);
+      const rimL = new THREE.Mesh(new THREE.BoxGeometry(0.008, 0.015, 0.144), materials.acaciaWood);
+      rimL.position.set(-0.136, 0.0125, 0);
+      const rimR = new THREE.Mesh(new THREE.BoxGeometry(0.008, 0.015, 0.144), materials.acaciaWood);
+      rimR.position.set(0.136, 0.0125, 0);
+      setGroup.add(rimF, rimB, rimL, rimR);
+
+      // 2. Espresso Cup: Handleless ceramic tumbler (60mm diameter -> radius 0.030m, 55mm height -> 0.055m)
+      // White glossy porcelain glaze with traditional regional floral decal pattern
+      const cupGroup = new THREE.Group();
+      cupGroup.position.set(-0.075, 0.010, 0);
+
+      const cupBody = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.030, 0.022, 0.055, 24),
+        new THREE.MeshStandardMaterial({
+          map: floralDecalTex,
+          roughness: 0.18,
+          metalness: 0.02
+        })
+      );
+      cupBody.position.set(0, 0.055 / 2, 0);
+      cupBody.castShadow = true;
+      cupGroup.add(cupBody);
+
+      // Rich amber espresso brew inside cup
+      const cupFluid = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.027, 0.027, 0.004, 20),
+        new THREE.MeshStandardMaterial({ color: 0x6e3512, roughness: 0.55 })
+      );
+      cupFluid.position.set(0, 0.046, 0);
+      cupGroup.add(cupFluid);
+      setGroup.add(cupGroup);
+
+      // 3. Water Tumbler: Straight-walled clear cylindrical drinking glass (55mm diameter -> radius 0.0275m, 85mm height -> 0.085m, 2mm wall thickness)
+      // Filled with water (transmission: 0.98, opacity: 0.1, ior: 1.333)
+      const tumblerGroup = new THREE.Group();
+      tumblerGroup.position.set(0.005, 0.010, 0);
+
+      const tumblerGlass = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.0275, 0.0265, 0.085, 24),
+        materials.borosilicateGlass
+      );
+      tumblerGlass.position.set(0, 0.085 / 2, 0);
+      tumblerGlass.castShadow = true;
+      tumblerGroup.add(tumblerGlass);
+
+      const tumblerWater = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.0255, 0.0245, 0.065, 20),
+        materials.pureWaterFluid
+      );
+      tumblerWater.position.set(0, 0.035, 0);
+      tumblerGroup.add(tumblerWater);
+      setGroup.add(tumblerGroup);
+
+      // 4. Date Dish: Shallow unglazed dark-terracotta saucer (75mm diameter -> radius 0.0375m)
+      // Holding 3 wrinkled Medjool dates with glossy dark amber-brown skins (roughness: 0.65, color: 0x291207)
+      const dishGroup = new THREE.Group();
+      dishGroup.position.set(0.082, 0.010, 0);
+
+      const saucer = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.0375, 0.028, 0.014, 20),
+        materials.darkTerracotta
+      );
+      saucer.position.set(0, 0.007, 0);
+      saucer.castShadow = true;
+      dishGroup.add(saucer);
+
+      const datePositions = [
+        { x: -0.012, z: 0.008, rotY: 0.4 },
+        { x: 0.012, z: 0.006, rotY: -0.5 },
+        { x: 0.000, z: -0.010, rotY: 1.2 }
+      ];
+      datePositions.forEach(dp => {
+        const date = new THREE.Mesh(
+          new THREE.SphereGeometry(0.013, 12, 10),
+          materials.medjoolDateSkin
+        );
+        date.scale.set(1.4, 0.75, 0.8);
+        date.position.set(dp.x, 0.015, dp.z);
+        date.rotation.y = dp.rotY;
+        date.castShadow = true;
+        dishGroup.add(date);
+      });
+      setGroup.add(dishGroup);
+
+      serviceBar.add(setGroup);
+      return setGroup;
+    }
+
+    const hospitalityServiceSet = buildHospitalityServiceSet();
+
+    registerInteractive(hospitalityServiceSet, {
+      title: "Traditional Hospitality Presentation Set",
+      tag: "Zone 3: Ancestral Ritual",
+      desc: "Authentic welcome presentation featuring a 280mm x 160mm oiled acacia wood tray, handleless ceramic cup with regional floral decal pattern, straight-walled water tumbler (1.333 IOR), and dark-terracotta saucer with 3 wrinkled Medjool dates.",
+      specs: [
+        ["Wood Tray", "280mm x 160mm x 20mm Oiled Acacia Wood (roughness: 0.45)"],
+        ["Espresso Cup", "60mm x 55mm Handleless Porcelain with Floral Motif"],
+        ["Water Tumbler", "55mm x 85mm Clear Glass (transmission: 0.98, ior: 1.333)"],
+        ["Dates Dish", "75mm Unglazed Dark-Terracotta with 3 Medjool Dates (#291207)"]
+      ]
+    });
+
+    // --- ZONE 4: Sonifer Espresso Machines (2 Units, Model SF3531 Style) ---
+    // (X = +0.3m to +1.3m, 220mm W x 260mm D x 300mm H, spaced 120mm apart: soniferUnit1 at X = 0.63m, soniferUnit2 at X = 0.97m)
+    function buildSoniferEspressoMachine(xPos, unitId) {
+      const machine = new THREE.Group();
+      machine.name = unitId;
+      // Local origin anchor at equipment base on countertop (Y = 0.95m)
+      machine.position.set(xPos, 0.95, barCenterZ);
+
+      const w = 0.22; // 220mm
+      const d = 0.26; // 260mm
+      const h = 0.30; // 300mm
+
+      // Main Chassis & Side/Top Casing: Textured injection-molded matte-black ABS plastic (roughness: 0.65, metalness: 0.05)
+      const chassis = new THREE.Mesh(
+        new THREE.BoxGeometry(w, h, d),
+        materials.soniferMatteBlackABS
+      );
+      chassis.position.set(0, h / 2, 0);
       chassis.castShadow = true;
-      unit.add(chassis);
+      chassis.receiveShadow = true;
+      machine.add(chassis);
 
-      // Textured Matte Black Composite Side Panels
-      [-0.225, 0.225].forEach(sx => {
-        const sidePanel = new THREE.Mesh(new THREE.BoxGeometry(0.015, 0.42, 0.40), materials.blackenedStructuralSteel);
-        sidePanel.position.set(sx, 0.22, 0);
-        unit.add(sidePanel);
+      // Front Fascia: Vertical brushed stainless steel faceplate (metalness: 0.90, roughness: 0.22, color: 0xe0e0e0)
+      const fascia = new THREE.Mesh(
+        new THREE.BoxGeometry(w - 0.010, h - 0.040, 0.008),
+        materials.soniferBrushedSteel
+      );
+      fascia.position.set(0, (h - 0.040) / 2 + 0.030, d / 2 + 0.004);
+      machine.add(fascia);
+
+      // Control Interface:
+      // Left Vertical Button Strip: 3 tactile push buttons (Single Shot, Double Shot, Steam Function) with rubberized dark grey caps
+      const buttonMat = new THREE.MeshStandardMaterial({ color: 0x222222, roughness: 0.7 });
+      const btnX = -0.075;
+      [0.235, 0.205, 0.175].forEach((by) => {
+        const btnBezel = new THREE.Mesh(new THREE.CylinderGeometry(0.009, 0.009, 0.004, 14), materials.polishedChrome);
+        btnBezel.rotation.x = Math.PI / 2;
+        btnBezel.position.set(btnX, by, d / 2 + 0.008);
+        const btnCap = new THREE.Mesh(new THREE.CylinderGeometry(0.007, 0.007, 0.007, 14), buttonMat);
+        btnCap.rotation.x = Math.PI / 2;
+        btnCap.position.set(btnX, by, d / 2 + 0.010);
+        machine.add(btnBezel, btnCap);
       });
 
-      // Top Chrome Cup Warming Rack
-      const rack = new THREE.Mesh(new THREE.BoxGeometry(0.40, 0.02, 0.36), materials.polishedChrome);
-      rack.position.y = 0.45;
-      unit.add(rack);
+      // Circular Pressure Gauge: Top center circular dial (45mm diameter -> radius 0.0225m) with clear lens,
+      // brushed chrome bezel, white face with green/red extraction pressure arcs, and black indicator needle
+      const gaugeY = 0.220;
+      const gaugeZ = d / 2 + 0.008;
+      const gaugeBezel = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.024, 0.024, 0.008, 24),
+        materials.polishedChrome
+      );
+      gaugeBezel.rotation.x = Math.PI / 2;
+      gaugeBezel.position.set(0, gaugeY, gaugeZ);
+      machine.add(gaugeBezel);
 
-      // Miniature White Porcelain Espresso Demitasses on Warming Rack
-      for (let cx = -0.13; cx <= 0.13; cx += 0.08) {
-        const cup = new THREE.Mesh(
-          new THREE.CylinderGeometry(0.03, 0.02, 0.045, 14),
-          new THREE.MeshStandardMaterial({ color: 0xf6f5f2, roughness: 0.2 })
+      const gaugeFace = new THREE.Mesh(
+        new THREE.CircleGeometry(0.0225, 24),
+        new THREE.MeshBasicMaterial({ map: soniferGaugeTex })
+      );
+      gaugeFace.position.set(0, gaugeY, gaugeZ + 0.0045);
+      machine.add(gaugeFace);
+
+      const gaugeLens = new THREE.Mesh(
+        new THREE.CircleGeometry(0.0225, 24),
+        materials.borosilicateGlass
+      );
+      gaugeLens.position.set(0, gaugeY, gaugeZ + 0.0055);
+      machine.add(gaugeLens);
+
+      // Branding: Screen-printed black "Sonifer" logo horizontally centered below the dial
+      const logoPlate = new THREE.Mesh(
+        new THREE.PlaneGeometry(0.080, 0.020),
+        new THREE.MeshBasicMaterial({ map: soniferLogoTex })
+      );
+      logoPlate.position.set(0, 0.168, d / 2 + 0.009);
+      machine.add(logoPlate);
+
+      // Right Steam Knob: Textured rotary dial knob (36mm diameter -> radius 0.018m) set into right outer shell
+      const steamKnob = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.018, 0.018, 0.024, 18),
+        new THREE.MeshStandardMaterial({ color: 0x1c1c1c, roughness: 0.55, metalness: 0.25 })
+      );
+      steamKnob.rotation.z = Math.PI / 2;
+      steamKnob.position.set(w / 2 + 0.010, 0.210, 0.040);
+      steamKnob.castShadow = true;
+      machine.add(steamKnob);
+
+      // Brewing Group Head: Recessed solid chrome-plated group collar
+      const groupCollar = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.035, 0.035, 0.028, 20),
+        materials.polishedChrome
+      );
+      groupCollar.position.set(0, 0.130, 0.070);
+      machine.add(groupCollar);
+
+      // Portafilter: Heavy chrome brass filter holder with dual downward-pointing spouts and horizontal ergonomic black phenolic resin handle (160mm long) angled toward barista
+      const filterCup = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.032, 0.030, 0.032, 20),
+        materials.polishedChrome
+      );
+      filterCup.position.set(0, 0.120, 0.070);
+      machine.add(filterCup);
+
+      [-0.010, 0.010].forEach(sx => {
+        const spout = new THREE.Mesh(new THREE.CylinderGeometry(0.004, 0.003, 0.018, 8), materials.polishedChrome);
+        spout.position.set(sx, 0.096, 0.070);
+        machine.add(spout);
+      });
+
+      const pfHandle = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.011, 0.009, 0.160, 14),
+        materials.bakeliteGrip
+      );
+      pfHandle.rotation.x = Math.PI / 2 - 0.12;
+      pfHandle.rotation.y = -0.15;
+      pfHandle.position.set(-0.015, 0.122, 0.070 + 0.090);
+      pfHandle.castShadow = true;
+      machine.add(pfHandle);
+
+      // Steam Wand: Ball-jointed stainless steel pipe (6mm diameter) with rubber burn-guard finger grip and single-hole frothing tip on right side
+      const wandJoint = new THREE.Mesh(new THREE.SphereGeometry(0.008, 10, 10), materials.polishedChrome);
+      wandJoint.position.set(0.075, 0.135, 0.065);
+      machine.add(wandJoint);
+
+      const wandPipe = new THREE.Mesh(new THREE.CylinderGeometry(0.003, 0.003, 0.110, 8), materials.soniferBrushedSteel);
+      wandPipe.rotation.z = -0.28;
+      wandPipe.rotation.x = 0.20;
+      wandPipe.position.set(0.090, 0.085, 0.080);
+      machine.add(wandPipe);
+
+      const burnGuard = new THREE.Mesh(new THREE.CylinderGeometry(0.0055, 0.0055, 0.028, 10), materials.bakeliteGrip);
+      burnGuard.rotation.z = -0.28;
+      burnGuard.rotation.x = 0.20;
+      burnGuard.position.set(0.085, 0.100, 0.075);
+      machine.add(burnGuard);
+
+      const frothingTip = new THREE.Mesh(new THREE.CylinderGeometry(0.004, 0.002, 0.012, 8), materials.polishedChrome);
+      frothingTip.rotation.z = -0.28;
+      frothingTip.rotation.x = 0.20;
+      frothingTip.position.set(0.104, 0.035, 0.095);
+      machine.add(frothingTip);
+
+      // Drip Tray: Recessed matte-black plastic reservoir topped with removable stainless steel slotted drainage grate
+      const trayBase = new THREE.Mesh(
+        new THREE.BoxGeometry(w - 0.012, 0.035, 0.110),
+        materials.soniferMatteBlackABS
+      );
+      trayBase.position.set(0, 0.0175, d / 2 - 0.055 + 0.030);
+      machine.add(trayBase);
+
+      const trayGrate = new THREE.Mesh(
+        new THREE.BoxGeometry(w - 0.018, 0.004, 0.100),
+        materials.soniferBrushedSteel
+      );
+      trayGrate.position.set(0, 0.036, d / 2 - 0.055 + 0.030);
+      machine.add(trayGrate);
+
+      // Top Surface: Passive cup-warming tray with raised chrome wire retaining rails around perimeter holding two inverted white porcelain demitasse cups
+      const railMat = materials.polishedChrome;
+      const railH = 0.014;
+      const topY = h;
+
+      const railBack = new THREE.Mesh(new THREE.CylinderGeometry(0.002, 0.002, w - 0.02, 6), railMat);
+      railBack.rotation.z = Math.PI / 2;
+      railBack.position.set(0, topY + railH, -d / 2 + 0.015);
+      const railLeft = new THREE.Mesh(new THREE.CylinderGeometry(0.002, 0.002, d - 0.03, 6), railMat);
+      railLeft.rotation.x = Math.PI / 2;
+      railLeft.position.set(-w / 2 + 0.015, topY + railH, 0);
+      const railRight = new THREE.Mesh(new THREE.CylinderGeometry(0.002, 0.002, d - 0.03, 6), railMat);
+      railRight.rotation.x = Math.PI / 2;
+      railRight.position.set(w / 2 - 0.015, topY + railH, 0);
+      machine.add(railBack, railLeft, railRight);
+
+      // Two inverted white porcelain demitasse cups
+      [-0.050, 0.050].forEach(cx => {
+        const demitasse = new THREE.Mesh(
+          new THREE.CylinderGeometry(0.024, 0.032, 0.046, 16),
+          new THREE.MeshStandardMaterial({ color: 0xfbf9f5, roughness: 0.15 })
         );
-        cup.position.set(cx, 0.485, (Math.random() - 0.5) * 0.12);
-        unit.add(cup);
+        demitasse.position.set(cx, topY + 0.023, -0.020);
+        demitasse.castShadow = true;
+        machine.add(demitasse);
+      });
+
+      serviceBar.add(machine);
+      return machine;
+    }
+
+    const soniferUnit1 = buildSoniferEspressoMachine(0.63, 'soniferUnit1');
+    const soniferUnit2 = buildSoniferEspressoMachine(0.97, 'soniferUnit2');
+
+    registerInteractive(soniferUnit1, {
+      title: "Sonifer Espresso Machine (Unit 1)",
+      tag: "Zone 4: Model SF3531",
+      desc: "Compact semi-automatic espresso machine (220mm W x 260mm D x 300mm H) with brushed stainless steel fascia, injection-molded matte-black casing, circular pressure dial with green/red arcs, 3 tactile buttons, 160mm ergonomic portafilter, and cup warming rails.",
+      specs: [
+        ["Dimensions", "220mm W x 260mm D x 300mm H"],
+        ["Front Fascia", "304 Brushed Stainless Steel (metalness: 0.90, roughness: 0.22)"],
+        ["Telemetry", "45mm Mechanical Pressure Gauge (9.2 Bar Target)"],
+        ["Portafilter", "Dual Downward Spouts with 160mm Phenolic Resin Handle"]
+      ]
+    });
+
+    registerInteractive(soniferUnit2, {
+      title: "Sonifer Espresso Machine (Unit 2)",
+      tag: "Zone 4: Model SF3531",
+      desc: "Second Sonifer SF3531 unit spaced exactly 120mm apart for high-velocity tandem barista service, with ball-jointed steam wand and slotted drainage grate.",
+      specs: [
+        ["Spacing", "120mm Clearance to Sister Machine"],
+        ["Steam System", "Ball-Jointed Stainless Wand with Rubber Burn Guard"],
+        ["Cup Warmer", "Passive Perimeter Rail with Inverted Porcelain Demitasses"]
+      ]
+    });
+
+    // --- ZONE 5: Commercial High-Speed Blade/Spice Grinder (Right of Espresso Machines, X = +1.48m) ---
+    function buildCommercialGrinder(xPos) {
+      const grinder = new THREE.Group();
+      grinder.name = 'grinderUnit';
+      // Local origin anchor at equipment base on countertop (Y = 0.95m)
+      grinder.position.set(xPos, 0.95, barCenterZ);
+
+      // Motor Base & Tilt Mechanism:
+      // Base: Sturdy cast-aluminum cradle stand (180mm W x 220mm D) with rubber leveling feet and central pivoting hinge knuckle
+      const cradleBase = new THREE.Mesh(
+        new THREE.BoxGeometry(0.180, 0.040, 0.220),
+        materials.grinderCastAluminum
+      );
+      cradleBase.position.set(0, 0.020, 0);
+      cradleBase.castShadow = true;
+      cradleBase.receiveShadow = true;
+      grinder.add(cradleBase);
+
+      [[-0.075, -0.090], [0.075, -0.090], [-0.075, 0.090], [0.075, 0.090]].forEach(([fx, fz]) => {
+        const foot = new THREE.Mesh(
+          new THREE.CylinderGeometry(0.012, 0.014, 0.010, 12),
+          materials.matteBlackToeKick
+        );
+        foot.position.set(fx, 0.005, fz);
+        grinder.add(foot);
+      });
+
+      // Upright cradle arms for tilt drum knuckle
+      [-0.078, 0.078].forEach(ax => {
+        const cradleArm = new THREE.Mesh(
+          new THREE.BoxGeometry(0.018, 0.110, 0.050),
+          materials.grinderCastAluminum
+        );
+        cradleArm.position.set(ax, 0.040 + 0.055, 0);
+        cradleArm.castShadow = true;
+        grinder.add(cradleArm);
+      });
+
+      // Central pivoting hinge knuckle
+      const hingeKnuckle = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.016, 0.016, 0.176, 16),
+        materials.polishedChrome
+      );
+      hingeKnuckle.rotation.z = Math.PI / 2;
+      hingeKnuckle.position.set(0, 0.135, 0);
+      grinder.add(hingeKnuckle);
+
+      // Angled front switchplate
+      const switchPlate = new THREE.Mesh(
+        new THREE.BoxGeometry(0.140, 0.045, 0.010),
+        materials.soniferBrushedSteel
+      );
+      switchPlate.rotation.x = -Math.PI / 6;
+      switchPlate.position.set(0, 0.045, 0.105);
+      grinder.add(switchPlate);
+
+      // Blue rotary mechanical timer knob (0-5 min increments)
+      const timerKnob = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.014, 0.014, 0.016, 16),
+        new THREE.MeshStandardMaterial({ color: 0x1976d2, roughness: 0.35, metalness: 0.2 })
+      );
+      timerKnob.rotation.x = Math.PI / 3;
+      timerKnob.position.set(-0.038, 0.050, 0.112);
+      grinder.add(timerKnob);
+
+      // Red power indicator pilot lamp
+      const pilotLamp = new THREE.Mesh(
+        new THREE.SphereGeometry(0.006, 12, 12),
+        new THREE.MeshStandardMaterial({ color: 0xff1744, emissive: 0xd50000, emissiveIntensity: 1.2 })
+      );
+      pilotLamp.position.set(0.015, 0.050, 0.112);
+      grinder.add(pilotLamp);
+
+      // Toggle power lever
+      const toggleSwitch = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.003, 0.003, 0.018, 8),
+        materials.polishedChrome
+      );
+      toggleSwitch.rotation.x = Math.PI / 4;
+      toggleSwitch.position.set(0.045, 0.050, 0.112);
+      grinder.add(toggleSwitch);
+
+      // Grinding Chamber (Tilt Drum):
+      // Drum Body: Cylindrical 304 food-grade stainless steel chamber (160mm diameter -> radius 0.080m, 150mm height)
+      // Mirror chrome finish (metalness: 0.96, roughness: 0.12)
+      const drumGroup = new THREE.Group();
+      drumGroup.position.set(0, 0.140, 0);
+
+      const drumBody = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.080, 0.080, 0.150, 28),
+        materials.grinderMirrorChrome
+      );
+      drumBody.position.set(0, 0.075, 0);
+      drumBody.castShadow = true;
+      drumGroup.add(drumBody);
+
+      // Clamping Lid: Heavy domed lid secured by dual vertical threaded swing-arm toggle latches with knurled wing nuts
+      const domedLid = new THREE.Mesh(
+        new THREE.SphereGeometry(0.082, 24, 16, 0, Math.PI * 2, 0, Math.PI * 0.35),
+        materials.grinderMirrorChrome
+      );
+      domedLid.position.set(0, 0.150, 0);
+      domedLid.castShadow = true;
+      drumGroup.add(domedLid);
+
+      const lidHandle = new THREE.Mesh(
+        new THREE.TorusGeometry(0.024, 0.005, 8, 16, Math.PI),
+        materials.polishedChrome
+      );
+      lidHandle.position.set(0, 0.178, 0);
+      drumGroup.add(lidHandle);
+
+      [-0.086, 0.086].forEach(lx => {
+        const toggleArm = new THREE.Mesh(
+          new THREE.CylinderGeometry(0.0035, 0.0035, 0.070, 8),
+          materials.polishedChrome
+        );
+        toggleArm.position.set(lx, 0.130, 0);
+        const wingNut = new THREE.Mesh(
+          new THREE.BoxGeometry(0.026, 0.008, 0.010),
+          materials.polishedChrome
+        );
+        wingNut.position.set(lx, 0.165, 0);
+        drumGroup.add(toggleArm, wingNut);
+      });
+
+      // Four-leaf curved stainless steel pulverizing cross-blade visible at base of chamber
+      const bladeCenter = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.012, 0.012, 0.015, 12),
+        materials.polishedChrome
+      );
+      bladeCenter.position.set(0, 0.018, 0);
+      drumGroup.add(bladeCenter);
+
+      for (let b = 0; b < 4; b++) {
+        const leaf = new THREE.Mesh(
+          new THREE.BoxGeometry(0.055, 0.003, 0.012),
+          materials.polishedChrome
+        );
+        leaf.rotation.y = (b * Math.PI) / 2;
+        leaf.position.set(Math.cos((b * Math.PI) / 2) * 0.028, 0.018, Math.sin((b * Math.PI) / 2) * 0.028);
+        drumGroup.add(leaf);
       }
 
-      // 58mm Commercial Brass Group Heads & Portafilters
-      [-0.10, 0.10].forEach(gx => {
-        const groupHead = new THREE.Mesh(new THREE.CylinderGeometry(0.042, 0.042, 0.05, 16), materials.solidBrass);
-        groupHead.position.set(gx, 0.24, 0.22);
-        unit.add(groupHead);
-
-        const portafilter = new THREE.Mesh(new THREE.CylinderGeometry(0.013, 0.013, 0.15, 12), materials.blackenedStructuralSteel);
-        portafilter.rotation.x = Math.PI / 2 + 0.12;
-        portafilter.position.set(gx, 0.22, 0.31);
-        unit.add(portafilter);
-      });
-
-      // Circular Mechanical Boiler Pressure Gauges with Cream Faces
-      [-0.13, 0.13].forEach(qx => {
-        const bezel = new THREE.Mesh(new THREE.CylinderGeometry(0.028, 0.028, 0.018, 16), materials.polishedChrome);
-        bezel.rotation.x = Math.PI / 2;
-        bezel.position.set(qx, 0.36, 0.215);
-
-        const face = new THREE.Mesh(
-          new THREE.CylinderGeometry(0.024, 0.024, 0.005, 14),
-          new THREE.MeshStandardMaterial({ color: 0xfdf7eb, roughness: 0.4 })
-        );
-        face.rotation.x = Math.PI / 2;
-        face.position.set(qx, 0.36, 0.225);
-        unit.add(bezel, face);
-      });
-
-      // Rotary Steam Valves & Wand
-      const steamKnob = new THREE.Mesh(new THREE.CylinderGeometry(0.02, 0.02, 0.025, 12), materials.polishedChrome);
-      steamKnob.position.set(0.18, 0.38, 0.21);
-      const steamWand = new THREE.Mesh(new THREE.CylinderGeometry(0.007, 0.007, 0.21, 8), materials.brushedStainlessSteel);
-      steamWand.rotation.z = -0.32;
-      steamWand.position.set(0.19, 0.20, 0.22);
-      unit.add(steamKnob, steamWand);
-
-      serviceBar.add(unit);
-      return unit;
+      grinder.add(drumGroup);
+      serviceBar.add(grinder);
+      return grinder;
     }
 
-    const espressoA = buildSoniferEspressoUnit(0.35);
-    const espressoB = buildSoniferEspressoUnit(1.15);
+    const grinderUnit = buildCommercialGrinder(1.48);
 
-    // Commercial Espresso Grinder Between Espresso Units (X = +0.75m)
-    const grinder = new THREE.Group();
-    grinder.position.set(0.75, 0.96, barCenterZ);
-
-    const gCastBase = new THREE.Mesh(new THREE.CylinderGeometry(0.10, 0.12, 0.10, 20), materials.blackenedStructuralSteel);
-    gCastBase.position.y = 0.05;
-    gCastBase.castShadow = true;
-    grinder.add(gCastBase);
-
-    const gCastAluminumBody = new THREE.Mesh(new THREE.CylinderGeometry(0.09, 0.09, 0.32, 20), materials.brushedStainlessSteel);
-    gCastAluminumBody.position.y = 0.26;
-    gCastAluminumBody.castShadow = true;
-    grinder.add(gCastAluminumBody);
-
-    // Tinted Cylindrical Acrylic Bean Hopper with Roasted Beans
-    const gHopper = new THREE.Mesh(new THREE.CylinderGeometry(0.105, 0.08, 0.24, 20), materials.borosilicateGlass);
-    gHopper.position.y = 0.54;
-    grinder.add(gHopper);
-
-    const gBeans = new THREE.Mesh(
-      new THREE.CylinderGeometry(0.098, 0.075, 0.20, 16),
-      new THREE.MeshStandardMaterial({ color: 0x24140b, roughness: 0.9 })
-    );
-    gBeans.position.y = 0.52;
-    grinder.add(gBeans);
-
-    const gLid = new THREE.Mesh(new THREE.CylinderGeometry(0.11, 0.11, 0.025, 20), materials.blackenedStructuralSteel);
-    gLid.position.y = 0.67;
-    grinder.add(gLid);
-
-    serviceBar.add(grinder);
-
-    registerInteractive(espressoA, {
-      title: "Sonifer Commercial Espresso Unit 1",
-      tag: "Dual-Boiler Architecture",
-      desc: "Hand-brushed stainless steel commercial espresso machine with independent saturated copper boilers, manual flow paddle, and dual analog pressure telemetry.",
+    registerInteractive(grinderUnit, {
+      title: "Commercial High-Speed Blade/Spice Grinder",
+      tag: "Zone 5: Pulverizing Mill",
+      desc: "Heavy-duty commercial tilt-drum grinder with cast-aluminum cradle stand, blue rotary timer knob (0-5 min), pilot lamp, 160mm x 150mm mirror-chrome tilt chamber with domed clamping lid, dual knurled wing nuts, and internal 4-leaf cross-blade.",
       specs: [
-        ["Fascia", "304 Hand-Brushed Stainless Steel"],
-        ["Group Heads", "58mm Forged Solid Marine Brass"],
-        ["Boiler Pressure", "9.2 Bar Saturated Delivery"]
-      ]
-    });
-    registerInteractive(grinder, {
-      title: "Commercial Heavy Cast-Aluminum Grinder",
-      tag: "Micron Particle Distribution",
-      desc: "Stepless industrial grinder with 83mm titanium burrs and tinted acrylic bean hopper maintaining low temperature during peak continuous morning service.",
-      specs: [
-        ["Burrs", "83mm Titanium-Coated Flat Burrs"],
-        ["Body", "Heavy Cast Die-Cast Aluminum"],
-        ["Retention", "< 0.08g Zero-Dead-Space Delivery"]
+        ["Cradle Stand", "180mm W x 220mm D Cast Aluminum with Pivoting Hinge"],
+        ["Grinding Drum", "160mm x 150mm 304 Stainless Steel (metalness: 0.96, roughness: 0.12)"],
+        ["Controls", "Blue Mechanical Timer, Red Pilot Lamp, Toggle Lever"],
+        ["Lid Assembly", "Dual Vertical Threaded Swing-Arm Latches with Wing Nuts"]
       ]
     });
 
-    // --- ZONE 4: Cold Craft Hydration & Juice Bar (X = +1.6m to +2.4m) ---
-    function buildSquareVintageDispenser(xPos, liquidMat, isMango) {
-      const unit = new THREE.Group();
-      unit.position.set(xPos, 0.96, barCenterZ);
+    // --- ZONE 6: Vintage Glass Beverage Dispensers on Stands (2 Units, X = +1.8m to +2.4m) ---
+    // (dispenserUnit1 at X = 1.92m, dispenserUnit2 at X = 2.22m)
+    function buildVintageDispenser(xPos, unitId, isMango) {
+      const dispenser = new THREE.Group();
+      dispenser.name = unitId;
+      // Local origin anchor at equipment base on countertop (Y = 0.95m)
+      dispenser.position.set(xPos, 0.95, barCenterZ);
 
-      // 160mm Matte-Black Geometric Wrought-Iron Wire Stand
-      const wireStand = new THREE.Group();
-      // Stand ring/square
-      const topRing = new THREE.Mesh(new THREE.BoxGeometry(0.23, 0.015, 0.23), materials.blackenedStructuralSteel);
-      topRing.position.y = 0.16;
-      topRing.castShadow = true;
-      wireStand.add(topRing);
+      // 1. Wire Riser Stand:
+      // Open geometric wireframe stand bent from 6mm solid round steel rod (radius 0.003m) in semi-gloss black powder coat
+      // Footprint: 180mm x 180mm x 190mm height (0.18m x 0.18m x 0.19m)
+      const standGroup = new THREE.Group();
+      const wireMat = materials.wireStandBlack;
 
-      [[-0.10, -0.10], [0.10, -0.10], [-0.10, 0.10], [0.10, 0.10]].forEach(([lx, lz]) => {
-        const leg = new THREE.Mesh(new THREE.CylinderGeometry(0.008, 0.008, 0.16, 8), materials.blackenedStructuralSteel);
-        leg.position.set(lx, 0.08, lz);
+      const legOffsets = [
+        [-0.087, -0.087],
+        [0.087, -0.087],
+        [-0.087, 0.087],
+        [0.087, 0.087]
+      ];
+      legOffsets.forEach(([lx, lz]) => {
+        const leg = new THREE.Mesh(new THREE.CylinderGeometry(0.003, 0.003, 0.190, 10), wireMat);
+        leg.position.set(lx, 0.095, lz);
         leg.castShadow = true;
-        wireStand.add(leg);
+        standGroup.add(leg);
+
+        const foot = new THREE.Mesh(new THREE.SphereGeometry(0.005, 8, 8), wireMat);
+        foot.position.set(lx, 0.004, lz);
+        standGroup.add(foot);
       });
-      unit.add(wireStand);
 
-      // Heavy Thick-Walled Square-Cut Glass Dispenser
-      const glassUrn = new THREE.Mesh(new THREE.BoxGeometry(0.21, 0.34, 0.21), materials.borosilicateGlass);
-      glassUrn.position.y = 0.34;
-      unit.add(glassUrn);
+      // Horizontal perimeter crossbars at 25mm and 180mm elevations
+      [0.025, 0.180].forEach(elev => {
+        const barX1 = new THREE.Mesh(new THREE.CylinderGeometry(0.003, 0.003, 0.174, 8), wireMat);
+        barX1.rotation.z = Math.PI / 2;
+        barX1.position.set(0, elev, -0.087);
+        const barX2 = new THREE.Mesh(new THREE.CylinderGeometry(0.003, 0.003, 0.174, 8), wireMat);
+        barX2.rotation.z = Math.PI / 2;
+        barX2.position.set(0, elev, 0.087);
 
-      // Liquid Mesh (Dense Tropical Mango or Ruby Beetroot)
-      const liquidBlock = new THREE.Mesh(new THREE.BoxGeometry(0.196, 0.30, 0.196), liquidMat);
-      liquidBlock.position.y = 0.32;
-      unit.add(liquidBlock);
+        const barZ1 = new THREE.Mesh(new THREE.CylinderGeometry(0.003, 0.003, 0.174, 8), wireMat);
+        barZ1.rotation.x = Math.PI / 2;
+        barZ1.position.set(-0.087, elev, 0);
+        const barZ2 = new THREE.Mesh(new THREE.CylinderGeometry(0.003, 0.003, 0.174, 8), wireMat);
+        barZ2.rotation.x = Math.PI / 2;
+        barZ2.position.set(0.087, elev, 0);
 
-      // Stainless Steel Locking Bail-Lid Clamp
-      const bailClamp = new THREE.Mesh(new THREE.CylinderGeometry(0.07, 0.07, 0.04, 16), materials.polishedChrome);
-      bailClamp.position.y = 0.53;
-      unit.add(bailClamp);
+        standGroup.add(barX1, barX2, barZ1, barZ2);
+      });
 
-      // Metal Lever-Action Spigot
-      const spigot = new THREE.Mesh(new THREE.CylinderGeometry(0.01, 0.01, 0.07, 10), materials.polishedChrome);
-      spigot.rotation.x = Math.PI / 2;
-      spigot.position.set(0, 0.22, 0.13);
-      const lever = new THREE.Mesh(new THREE.BoxGeometry(0.012, 0.045, 0.012), materials.polishedChrome);
-      lever.position.set(0, 0.25, 0.15);
-      unit.add(spigot, lever);
+      // Top Crossbars supporting glass jar base
+      const crossA = new THREE.Mesh(new THREE.CylinderGeometry(0.003, 0.003, 0.24, 8), wireMat);
+      crossA.rotation.z = Math.PI / 2;
+      crossA.rotation.y = Math.PI / 4;
+      crossA.position.set(0, 0.180, 0);
+      const crossB = new THREE.Mesh(new THREE.CylinderGeometry(0.003, 0.003, 0.24, 8), wireMat);
+      crossB.rotation.z = Math.PI / 2;
+      crossB.rotation.y = -Math.PI / 4;
+      crossB.position.set(0, 0.180, 0);
+      standGroup.add(crossA, crossB);
 
-      serviceBar.add(unit);
-      return unit;
+      // Side Handles: Two U-shaped wire bale handles extending upwards with turned natural beechwood rolling handle grips
+      [-0.092, 0.092].forEach(hx => {
+        [-0.035, 0.035].forEach(hz => {
+          const wireUp = new THREE.Mesh(new THREE.CylinderGeometry(0.003, 0.003, 0.085, 8), wireMat);
+          wireUp.position.set(hx, 0.180 + 0.042, hz);
+          standGroup.add(wireUp);
+        });
+
+        const grip = new THREE.Mesh(
+          new THREE.CylinderGeometry(0.008, 0.008, 0.070, 14),
+          materials.beechwoodGrip
+        );
+        grip.rotation.x = Math.PI / 2;
+        grip.position.set(hx, 0.265, 0);
+        grip.castShadow = true;
+        standGroup.add(grip);
+      });
+      dispenser.add(standGroup);
+
+      // 2. Glass Urn Vessel:
+      // Thick-walled, heavy square-profile pressed glass jar (160mm x 160mm with 25mm rounded corners, 280mm height)
+      // Elevated on top of stand: vessel base at Y = 0.185m, top at Y = 0.465m
+      const urnGroup = new THREE.Group();
+
+      const glassUrn = new THREE.Mesh(
+        new THREE.BoxGeometry(0.160, 0.280, 0.160),
+        materials.borosilicateGlass
+      );
+      glassUrn.position.set(0, 0.185 + 0.140, 0);
+      glassUrn.castShadow = true;
+      urnGroup.add(glassUrn);
+
+      // Surface Relief: Front face features circular raised embossed glass lettering ("Cold Drink / Glassware Company")
+      const embossedPlate = new THREE.Mesh(
+        new THREE.PlaneGeometry(0.11, 0.11),
+        new THREE.MeshStandardMaterial({
+          bumpMap: dispenserEmbossedBump,
+          bumpScale: 0.025,
+          color: 0xffffff,
+          transparent: true,
+          opacity: 0.22,
+          roughness: 0.10
+        })
+      );
+      embossedPlate.position.set(0, 0.335, 0.0805);
+      urnGroup.add(embossedPlate);
+
+      // Lid Assembly: Wide threaded galvanized tin screw-cap (120mm diameter -> radius 0.060m) with brushed matte-pewter finish
+      const pewterLid = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.060, 0.060, 0.032, 28),
+        materials.mattePewterLid
+      );
+      pewterLid.position.set(0, 0.465 + 0.016, 0);
+      pewterLid.castShadow = true;
+      urnGroup.add(pewterLid);
+
+      const lidKnob = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.020, 0.024, 0.014, 18),
+        materials.mattePewterLid
+      );
+      lidKnob.position.set(0, 0.497 + 0.007, 0);
+      urnGroup.add(lidKnob);
+
+      // Spigot Tap: Horizontal stainless steel quarter-turn lever spigot mounted through rubber bulkhead grommet 35mm above vessel base
+      // Base is Y = 0.185m -> 0.185 + 0.035 = 0.220m
+      const spigotY = 0.220;
+      const grommet = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.014, 0.014, 0.008, 16),
+        materials.matteBlackToeKick
+      );
+      grommet.rotation.x = Math.PI / 2;
+      grommet.position.set(0, spigotY, 0.082);
+      urnGroup.add(grommet);
+
+      const spigotStem = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.007, 0.007, 0.055, 12),
+        materials.polishedChrome
+      );
+      spigotStem.rotation.x = Math.PI / 2;
+      spigotStem.position.set(0, spigotY, 0.108);
+      urnGroup.add(spigotStem);
+
+      const spigotNozzle = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.006, 0.004, 0.022, 10),
+        materials.polishedChrome
+      );
+      spigotNozzle.position.set(0, spigotY - 0.012, 0.130);
+      urnGroup.add(spigotNozzle);
+
+      const spigotLever = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.0035, 0.0035, 0.038, 8),
+        materials.polishedChrome
+      );
+      spigotLever.position.set(0, spigotY + 0.018, 0.125);
+      urnGroup.add(spigotLever);
+
+      // 3. Internal Fluid Mesh:
+      // Unit 1 (Left): Opaque tropical mango nectar with suspended orange and lime citrus wheels floating near top surface (color: 0xeb911c, roughness: 0.28, opacity: 0.96)
+      // Unit 2 (Right): Crimson cold-pressed beetroot/pomegranate juice with submerged lemon slices (color: 0x820921, roughness: 0.22, opacity: 0.92)
+      const fluidMat = isMango ? materials.mangoNectarFluid : materials.beetrootJuiceFluid;
+      const fluidMesh = new THREE.Mesh(
+        new THREE.BoxGeometry(0.150, 0.240, 0.150),
+        fluidMat
+      );
+      fluidMesh.position.set(0, 0.190 + 0.120, 0);
+      urnGroup.add(fluidMesh);
+
+      if (isMango) {
+        // Suspended orange and lime citrus wheels floating near top surface
+        const citrusWheels = [
+          { r: 0.028, rindColor: 0xff6d00, pulpColor: 0xffa000, x: -0.035, y: 0.405, z: 0.020, rotX: 0.25, rotZ: 0.10 },
+          { r: 0.024, rindColor: 0x558b2f, pulpColor: 0x7cb342, x: 0.030, y: 0.410, z: -0.020, rotX: -0.20, rotZ: 0.35 },
+          { r: 0.026, rindColor: 0xff6d00, pulpColor: 0xffb300, x: 0.010, y: 0.395, z: 0.035, rotX: 0.40, rotZ: -0.25 }
+        ];
+        citrusWheels.forEach(cw => {
+          const slice = new THREE.Group();
+          const rind = new THREE.Mesh(
+            new THREE.CylinderGeometry(cw.r, cw.r, 0.004, 16),
+            new THREE.MeshStandardMaterial({ color: cw.rindColor, roughness: 0.4 })
+          );
+          const pulp = new THREE.Mesh(
+            new THREE.CylinderGeometry(cw.r - 0.003, cw.r - 0.003, 0.0042, 16),
+            new THREE.MeshStandardMaterial({ color: cw.pulpColor, roughness: 0.28, transparent: true, opacity: 0.88 })
+          );
+          slice.add(rind, pulp);
+          slice.position.set(cw.x, cw.y, cw.z);
+          slice.rotation.set(cw.rotX, 0, cw.rotZ);
+          urnGroup.add(slice);
+        });
+      } else {
+        // Submerged lemon slices
+        const lemonSlices = [
+          { x: -0.028, y: 0.380, z: 0.025, rotX: 0.35, rotZ: 0.20 },
+          { x: 0.035, y: 0.320, z: -0.030, rotX: -0.40, rotZ: 0.50 },
+          { x: -0.020, y: 0.260, z: -0.025, rotX: 0.60, rotZ: -0.30 },
+          { x: 0.022, y: 0.215, z: 0.032, rotX: -0.25, rotZ: 0.45 }
+        ];
+        lemonSlices.forEach(ls => {
+          const slice = new THREE.Group();
+          const rind = new THREE.Mesh(
+            new THREE.CylinderGeometry(0.026, 0.026, 0.004, 16),
+            new THREE.MeshStandardMaterial({ color: 0xfbc02d, roughness: 0.4 })
+          );
+          const pulp = new THREE.Mesh(
+            new THREE.CylinderGeometry(0.023, 0.023, 0.0042, 16),
+            new THREE.MeshStandardMaterial({ color: 0xffeb3b, roughness: 0.22, transparent: true, opacity: 0.85 })
+          );
+          slice.add(rind, pulp);
+          slice.position.set(ls.x, ls.y, ls.z);
+          slice.rotation.set(ls.rotX, 0, ls.rotZ);
+          urnGroup.add(slice);
+        });
+      }
+
+      dispenser.add(urnGroup);
+      serviceBar.add(dispenser);
+      return dispenser;
     }
 
-    const dispenserMango = buildSquareVintageDispenser(1.72, materials.mangoPulpNectar, true);
-    const dispenserBeet = buildSquareVintageDispenser(2.22, materials.rubyBeetrootJuice, false);
+    const dispenserUnit1 = buildVintageDispenser(1.92, 'dispenserUnit1', true);
+    const dispenserUnit2 = buildVintageDispenser(2.22, 'dispenserUnit2', false);
 
-    registerInteractive(dispenserMango, {
-      title: "Square Vintage Dispenser: Tropical Mango Nectar",
-      tag: "Cold-Pressed Hydration",
-      desc: "Dense, unpasteurized Alphonso mango pulp infused with Valencia orange nectar and passionfruit coulis, held in heavy square-cut glass on geometric wrought-iron wirework.",
+    registerInteractive(dispenserUnit1, {
+      title: "Vintage Pressed Glass Beverage Dispenser (Unit 1)",
+      tag: "Zone 6: Tropical Mango Nectar",
+      desc: "Heavy square-profile pressed glass jar (160mm x 160mm x 280mm H) with embossed 'Cold Drink / Glassware Company' lettering on a 180mm x 180mm x 190mm H powder-coated wire stand with beechwood handles. Filled with opaque tropical mango nectar and floating citrus wheels.",
       specs: [
-        ["Vessel", "Heavy Square-Cut Pressed Architectural Glass"],
-        ["Base", "160mm Matte-Black Geometric Wire Stand"],
-        ["Ingredients", "100% Cold-Pressed Alphonso, Orange, Passionfruit"]
-      ]
-    });
-    registerInteractive(dispenserBeet, {
-      title: "Square Vintage Dispenser: Ruby Beetroot Tonic",
-      tag: "Superfood Cold-Press",
-      desc: "Deep ruby-crimson cold-pressed elixir of roasted organic beetroot, crisp gala apples, grated fresh ginger, and lime.",
-      specs: [
-        ["Spigot", "Precision Food-Grade 316 Stainless Lever"],
-        ["Color Profile", "Unfiltered Deep Ruby-Crimson (#7A0C1E)"],
-        ["Steeping", "Slow cold-press maceration"]
+        ["Stand", "180mm x 180mm x 190mm H Bent 6mm Steel Rod with Beechwood Grips"],
+        ["Jar Vessel", "160mm x 160mm x 280mm H Glass with Embossed Lettering"],
+        ["Cap", "120mm Galvanized Tin Screw-Cap (Brushed Matte Pewter)"],
+        ["Fluid", "Opaque Tropical Mango Nectar (#EB911C) with Orange & Lime Wheels"]
       ]
     });
 
-    // Artisan Fresh Fruit Basket (Wide, shallow woven Ethiopian raffia sweetgrass)
+    registerInteractive(dispenserUnit2, {
+      title: "Vintage Pressed Glass Beverage Dispenser (Unit 2)",
+      tag: "Zone 6: Ruby Beetroot Cold-Press",
+      desc: "Sister vintage beverage dispenser on geometric wire stand with stainless steel quarter-turn lever spigot. Filled with crimson cold-pressed beetroot/pomegranate juice and submerged lemon slices.",
+      specs: [
+        ["Fluid", "Crimson Cold-Pressed Beetroot Juice (#820921)"],
+        ["Spigot", "Stainless Lever Mounted through Rubber Bulkhead Grommet 35mm Above Base"],
+        ["Inclusions", "Submerged Whole Lemon Slices at Multi-Depth Elevations"]
+      ]
+    });
+
+    // --- ZONE 7: Artisan Sweetgrass Fruit Basket (Far Right Corner, X = +2.50m) ---
     const fruitBasket = new THREE.Group();
-    fruitBasket.position.set(1.97, 0.96, barCenterZ + 0.28);
+    fruitBasket.name = 'fruitBasket';
+    fruitBasket.position.set(2.50, 0.95, barCenterZ + 0.20);
 
     const basketDish = new THREE.Mesh(
-      new THREE.CylinderGeometry(0.24, 0.18, 0.08, 20),
-      new THREE.MeshStandardMaterial({ color: 0x9b7b52, roughness: 0.9 })
+      new THREE.CylinderGeometry(0.22, 0.17, 0.075, 20),
+      new THREE.MeshStandardMaterial({ color: 0x9e7e55, roughness: 0.92 })
     );
-    basketDish.position.y = 0.04;
+    basketDish.position.y = 0.038;
     basketDish.castShadow = true;
     fruitBasket.add(basketDish);
 
-    // Textured Pineapple
+    // Spiky Pineapple
     const pineBody = new THREE.Mesh(
-      new THREE.CylinderGeometry(0.065, 0.075, 0.19, 14),
-      new THREE.MeshStandardMaterial({ color: 0x825a24, roughness: 0.82 })
+      new THREE.CylinderGeometry(0.060, 0.070, 0.18, 14),
+      new THREE.MeshStandardMaterial({ color: 0x7d5520, roughness: 0.85 })
     );
-    pineBody.position.set(0.04, 0.14, -0.02);
+    pineBody.position.set(0.03, 0.13, -0.02);
     pineBody.castShadow = true;
     fruitBasket.add(pineBody);
 
-    // Crisp spiky leaves
     for (let l = 0; l < 8; l++) {
-      const leaf = new THREE.Mesh(new THREE.ConeGeometry(0.018, 0.12, 4), new THREE.MeshStandardMaterial({ color: 0x365428 }));
-      leaf.position.set(0.04 + (Math.random() - 0.5) * 0.04, 0.25, -0.02 + (Math.random() - 0.5) * 0.04);
+      const leaf = new THREE.Mesh(new THREE.ConeGeometry(0.016, 0.11, 4), new THREE.MeshStandardMaterial({ color: 0x325224 }));
+      leaf.position.set(0.03 + (Math.random() - 0.5) * 0.03, 0.23, -0.02 + (Math.random() - 0.5) * 0.03);
       leaf.rotation.z = (Math.random() - 0.5) * 0.5;
       leaf.rotation.x = (Math.random() - 0.5) * 0.5;
       fruitBasket.add(leaf);
     }
 
-    // Unwaxed Lemons, Navel Oranges, Dark Red Apples
-    const fruitList = [
-      { color: 0xebb734, r: 0.038, x: -0.09, z: 0.05 }, // Lemon
-      { color: 0xe87a20, r: 0.044, x: 0.02, z: 0.09 },  // Orange
-      { color: 0x961a1a, r: 0.042, x: -0.05, z: -0.08 },// Red Apple
-      { color: 0xe87a20, r: 0.042, x: 0.11, z: 0.06 },  // Orange
-      { color: 0xebb734, r: 0.036, x: -0.11, z: -0.02 } // Lemon
+    // Fresh whole lemons and oranges
+    const fruits = [
+      { color: 0xfbc02d, r: 0.036, x: -0.08, z: 0.04 }, // Lemon
+      { color: 0xf57c00, r: 0.042, x: 0.02, z: 0.08 },  // Orange
+      { color: 0xfbc02d, r: 0.034, x: -0.05, z: -0.06 },// Lemon
+      { color: 0xf57c00, r: 0.040, x: 0.09, z: 0.05 },  // Orange
+      { color: 0xfbc02d, r: 0.035, x: -0.09, z: -0.02 } // Lemon
     ];
-    fruitList.forEach(f => {
-      const fruit = new THREE.Mesh(new THREE.SphereGeometry(f.r, 14, 14), new THREE.MeshStandardMaterial({ color: f.color, roughness: 0.45 }));
-      fruit.position.set(f.x, 0.08 + f.r, f.z);
+    fruits.forEach(f => {
+      const fruit = new THREE.Mesh(
+        new THREE.SphereGeometry(f.r, 14, 14),
+        new THREE.MeshStandardMaterial({ color: f.color, roughness: 0.45 })
+      );
+      fruit.position.set(f.x, 0.075 + f.r, f.z);
       fruit.castShadow = true;
       fruitBasket.add(fruit);
     });
     serviceBar.add(fruitBasket);
 
-    // --- ZONE 5: Traditional Ethiopian Hospitality Board (X = -0.1m, Counter Center Front) ---
-    const boardGroup = new THREE.Group();
-    boardGroup.position.set(-0.1, 0.96, barCenterZ + 0.36);
-
-    // Hand-Carved Acacia Wood Presentation Paddle
-    const paddle = new THREE.Mesh(
-      new THREE.BoxGeometry(0.36, 0.018, 0.20),
-      materials.endGrainWalnut
-    );
-    paddle.position.y = 0.009;
-    paddle.castShadow = true;
-    boardGroup.add(paddle);
-
-    // Handleless White Ceramic Espresso Cup with Earthy Ring Pattern
-    const cup = new THREE.Mesh(
-      new THREE.CylinderGeometry(0.028, 0.022, 0.05, 16),
-      new THREE.MeshStandardMaterial({ color: 0xf6f3ed, roughness: 0.3 })
-    );
-    cup.position.set(-0.09, 0.042, 0);
-    cup.castShadow = true;
-    const cupFluid = new THREE.Mesh(new THREE.CylinderGeometry(0.025, 0.02, 0.035, 14), materials.amberBrewedCoffee);
-    cupFluid.position.set(-0.09, 0.038, 0);
-    boardGroup.add(cup, cupFluid);
-
-    // Slender Cylindrical Clear Glass Tumbler Filled with Water (transmission: 0.98, ior: 1.33)
-    const waterGlassMat = new THREE.MeshPhysicalMaterial({
-      color: 0xffffff,
-      transparent: true,
-      opacity: 0.18,
-      transmission: 0.98,
-      ior: 1.33,
-      roughness: 0.04
-    });
-    const waterGlass = new THREE.Mesh(new THREE.CylinderGeometry(0.026, 0.022, 0.065, 16), waterGlassMat);
-    waterGlass.position.set(0.01, 0.05, 0);
-    waterGlass.castShadow = true;
-    boardGroup.add(waterGlass);
-
-    // Small Shallow Unglazed Dark-Clay Saucer with Three Wrinkled Medjool Dates (#261208)
-    const dateSaucer = new THREE.Mesh(
-      new THREE.CylinderGeometry(0.045, 0.036, 0.012, 16),
-      new THREE.MeshStandardMaterial({ color: 0x1f1d1c, roughness: 0.85 })
-    );
-    dateSaucer.position.set(0.10, 0.018, 0);
-    dateSaucer.castShadow = true;
-    boardGroup.add(dateSaucer);
-
-    [-0.014, 0.0, 0.014].forEach((dx, i) => {
-      const dateFruit = new THREE.Mesh(
-        new THREE.SphereGeometry(0.014, 10, 10),
-        new THREE.MeshStandardMaterial({ color: 0x261208, roughness: 0.55 })
-      );
-      dateFruit.scale.set(1.4, 0.8, 0.8);
-      dateFruit.position.set(0.10 + dx, 0.03, (i % 2 === 0 ? 0.008 : -0.008));
-      dateFruit.castShadow = true;
-      boardGroup.add(dateFruit);
-    });
-
-    serviceBar.add(boardGroup);
-
-    registerInteractive(boardGroup, {
-      title: "Traditional Ethiopian Hospitality Board",
-      tag: "Ancestral Presentation",
-      desc: "Hand-carved acacia wood presentation paddle bearing a handleless finjan ceramic cup of single-origin Bunna, crystal sparkling water, and wrinkled organic Medjool dates on unglazed dark clay.",
+    registerInteractive(fruitBasket, {
+      title: "Woven Sweetgrass Fresh Fruit Basket",
+      tag: "Zone 7: Far Right Corner",
+      desc: "Shallow woven sweetgrass basket displaying ripe whole lemons, navel oranges, and a crown-topped spiky pineapple for fresh cold-pressed extraction.",
       specs: [
-        ["Ceramic", "Handleless White Porcelain with Earthy Band"],
-        ["Tumbler Glass", "Ultra-Clear Borosilicate (1.33 IOR Water)"],
-        ["Dates", "Glossy Sun-Cured Medjool (#261208)"]
+        ["Craft", "Hand-Woven Natural Ethiopian Raffia Sweetgrass"],
+        ["Produce", "Unwaxed Organic Lemons, Valencia Oranges, Whole Pineapple"]
       ]
     });
 
@@ -1614,9 +2579,10 @@
     const lightingSystem = new THREE.Group();
     scene.add(lightingSystem);
 
-    // Suspended Overhead Feature: Vintage Five-Rung Wooden Utility Ladder (3.4m × 0.50m) at Y = 2.65m
+    // Suspended Overhead Feature: Vintage Five-Rung Wooden Utility Ladder (3.4m × 0.50m) at Y = 2.60m
+    // Strict requirement: No cups attached to the ladder or pendant cords.
     const ladderGroup = new THREE.Group();
-    ladderGroup.position.set(0, 2.65, barCenterZ);
+    ladderGroup.position.set(0, 2.60, barCenterZ);
 
     // Ladder Rails
     const railMat = materials.reclaimedTimberBeam;
@@ -1638,33 +2604,33 @@
       ladderGroup.add(rung);
     });
 
-    // 4 Matte-Black Braided Steel Cables Anchored to Ceiling Beams
+    // 4 Matte-Black Braided Steel Cables (2mm diameter) Anchored to Ceiling Beams
     const cableMat = materials.blackenedStructuralSteel;
     [[-1.5, -0.225], [1.5, -0.225], [-1.5, 0.225], [1.5, 0.225]].forEach(([cx, cz]) => {
-      const cable = new THREE.Mesh(new THREE.CylinderGeometry(0.004, 0.004, 0.82, 8), cableMat);
-      cable.position.set(cx, 0.41, cz);
+      const cable = new THREE.Mesh(new THREE.CylinderGeometry(0.001, 0.001, 1.0, 8), cableMat);
+      cable.position.set(cx, 0.50, cz);
       ladderGroup.add(cable);
     });
     lightingSystem.add(ladderGroup);
 
     // Exactly 5 Twisted Black Cloth Cord Pendants Dropping Through Ladder Rungs
-    // Staggered deliberate elevations: Y = 2.45m down to Y = 2.05m
+    // Staggered deliberate elevations: dropping from Y = 2.35m down to Y = 2.05m
     const edisonFixtures = [];
     const bulbDropConfig = [
-      { x: -1.36, y: 2.38, intensity: 1.5 },
-      { x: -0.68, y: 2.15, intensity: 1.6 },
-      { x: 0.00,  y: 2.45, intensity: 1.4 },
-      { x: 0.68,  y: 2.08, intensity: 1.7 },
-      { x: 1.36,  y: 2.25, intensity: 1.5 }
+      { x: -1.36, y: 2.30, intensity: 1.6 },
+      { x: -0.68, y: 2.12, intensity: 1.6 },
+      { x: 0.00,  y: 2.35, intensity: 1.6 },
+      { x: 0.68,  y: 2.05, intensity: 1.6 },
+      { x: 1.36,  y: 2.22, intensity: 1.6 }
     ];
 
     bulbDropConfig.forEach((cfg, idx) => {
       const fixture = new THREE.Group();
       fixture.position.set(cfg.x, cfg.y, barCenterZ);
 
-      // Cord extending up to ladder
-      const cordLen = 2.65 - cfg.y;
-      const cord = new THREE.Mesh(new THREE.CylinderGeometry(0.0035, 0.0035, cordLen, 6), materials.blackenedStructuralSteel);
+      // Cord extending up to ladder (ladder at Y = 2.60m)
+      const cordLen = 2.60 - cfg.y;
+      const cord = new THREE.Mesh(new THREE.CylinderGeometry(0.002, 0.002, cordLen, 6), materials.blackenedStructuralSteel);
       cord.position.y = cordLen / 2;
       fixture.add(cord);
 
@@ -1679,14 +2645,14 @@
       st64.position.y = -0.045;
       fixture.add(st64);
 
-      // Glowing Double-Spiral Filament Wire
+      // Glowing Double-Spiral Coiled Filament Wire (emissive: 0xffa033, emissiveIntensity: 4.5)
       const filament = new THREE.Mesh(new THREE.CylinderGeometry(0.011, 0.011, 0.042, 10), materials.glowingFilamentWire);
       filament.position.y = -0.042;
       fixture.add(filament);
 
-      // Photometric PointLight: 2200K vintage ultra-warm amber (#ff9838)
-      // Radius: 4.8m, decay: 2.0, shadow map: 1024x1024, bias: -0.002
-      const pointLight = new THREE.PointLight(0xff9838, cfg.intensity, 4.8, 2.0);
+      // Photometric PointLight: 2200K vintage ultra-warm amber (#ff9c38)
+      // Radius: 5.0m, decay: 2.0, shadow map: 1024x1024, bias: -0.002
+      const pointLight = new THREE.PointLight(0xff9c38, cfg.intensity, 5.0, 2.0);
       pointLight.position.y = -0.045;
       pointLight.castShadow = true;
       pointLight.shadow.mapSize.width = 1024;
@@ -1699,9 +2665,9 @@
     });
 
     // Natural Sunlight (Primary Scene Key):
-    // Position: X = -8.5m, Y = 6.0m, Z = 2.0m, Color: 5000K (#fff3e6), Intensity: 2.4
-    const sunlight = new THREE.DirectionalLight(0xfff3e6, 2.4);
-    sunlight.position.set(-8.5, 6.0, 2.0);
+    // Position: X = -7.5m, Y = 5.5m, Z = 2.5m, Color: 5000K (#fff1e0), Intensity: 2.4
+    const sunlight = new THREE.DirectionalLight(0xfff1e0, 2.4);
+    sunlight.position.set(-7.5, 5.5, 2.5);
     sunlight.target.position.set(0, 0.9, -1.0);
     sunlight.castShadow = true;
     sunlight.shadow.mapSize.width = 2048;
@@ -1726,31 +2692,32 @@
       lightingSystem.add(spot.target);
     });
 
-    // Ambient Fill: Rich Warm Sepia Tone (#261912, intensity: 0.55)
-    const ambientLight = new THREE.AmbientLight(0x261912, 0.55);
+    // Ambient Fill: Rich Warm Sepia Tone (#2c1d14, intensity: 0.6)
+    const ambientLight = new THREE.AmbientLight(0x2c1d14, 0.6);
     lightingSystem.add(ambientLight);
 
     // =========================================================================
     // 8. Dynamic Rising Coffee Steam System
     // =========================================================================
 
-    const steamCount = 30;
+    const steamCount = 35;
     const steamGeo = new THREE.BufferGeometry();
     const steamPos = new Float32Array(steamCount * 3);
     const steamData = [];
 
     const emitterAnchors = [
-      new THREE.Vector3(-0.85, 1.42, barCenterZ), // Siphon 1
-      new THREE.Vector3(-0.45, 1.42, barCenterZ), // Siphon 2
-      new THREE.Vector3(0.35, 1.22, barCenterZ),  // Espresso 1
-      new THREE.Vector3(-0.19, 1.05, barCenterZ + 0.32) // Ethiopian cup
+      new THREE.Vector3(-0.95, 1.36, barCenterZ),        // Siphon 1
+      new THREE.Vector3(-0.64, 1.36, barCenterZ),        // Siphon 2
+      new THREE.Vector3(0.72, 1.05, barCenterZ + 0.08),  // Sonifer 1 Steam Wand
+      new THREE.Vector3(1.06, 1.05, barCenterZ + 0.08),  // Sonifer 2 Steam Wand
+      new THREE.Vector3(-0.075, 1.02, barCenterZ + 0.32) // Ethiopian Hospitality Cup
     ];
 
     for (let i = 0; i < steamCount; i++) {
       const anchor = emitterAnchors[i % emitterAnchors.length];
-      steamPos[i * 3] = anchor.x + (Math.random() - 0.5) * 0.04;
+      steamPos[i * 3] = anchor.x + (Math.random() - 0.5) * 0.03;
       steamPos[i * 3 + 1] = anchor.y + Math.random() * 0.25;
-      steamPos[i * 3 + 2] = anchor.z + (Math.random() - 0.5) * 0.04;
+      steamPos[i * 3 + 2] = anchor.z + (Math.random() - 0.5) * 0.03;
       steamData.push({
         anchor,
         vy: 0.003 + Math.random() * 0.005,
@@ -1788,10 +2755,10 @@
         pos[i * 3 + 1] += steamData[i].vy;
         pos[i * 3] += steamData[i].vx;
         pos[i * 3 + 2] += steamData[i].vz;
-        if (pos[i * 3 + 1] > steamData[i].anchor.y + 0.42) {
-          pos[i * 3] = steamData[i].anchor.x + (Math.random() - 0.5) * 0.04;
+        if (pos[i * 3 + 1] > steamData[i].anchor.y + 0.40) {
+          pos[i * 3] = steamData[i].anchor.x + (Math.random() - 0.5) * 0.03;
           pos[i * 3 + 1] = steamData[i].anchor.y;
-          pos[i * 3 + 2] = steamData[i].anchor.z + (Math.random() - 0.5) * 0.04;
+          pos[i * 3 + 2] = steamData[i].anchor.z + (Math.random() - 0.5) * 0.03;
         }
       }
       steamParticles.geometry.attributes.position.needsUpdate = true;
@@ -1807,16 +2774,16 @@
         target: new THREE.Vector3(0, 1.0, -1.2)
       },
       espresso: {
-        pos: new THREE.Vector3(0.75, 1.42, 0.05),
-        target: new THREE.Vector3(0.75, 1.15, barCenterZ)
+        pos: new THREE.Vector3(0.80, 1.38, -0.40),
+        target: new THREE.Vector3(0.80, 1.10, barCenterZ)
       },
       siphon: {
-        pos: new THREE.Vector3(-0.65, 1.38, -0.45),
-        target: new THREE.Vector3(-0.65, 1.18, barCenterZ)
+        pos: new THREE.Vector3(-0.80, 1.38, -0.45),
+        target: new THREE.Vector3(-0.80, 1.15, barCenterZ)
       },
       juice: {
-        pos: new THREE.Vector3(2.0, 1.45, 0.1),
-        target: new THREE.Vector3(1.95, 1.18, barCenterZ)
+        pos: new THREE.Vector3(2.07, 1.42, -0.40),
+        target: new THREE.Vector3(2.07, 1.15, barCenterZ)
       },
       lounge: {
         pos: new THREE.Vector3(2.4, 1.50, 1.8),
@@ -1839,19 +2806,19 @@
     // Photometric Atmosphere Modes
     function setLightingMode(mode) {
       if (mode === 'daylight') {
-        sunlight.color.setHex(0xfff3e6);
+        sunlight.color.setHex(0xfff1e0);
         sunlight.intensity = 2.4;
-        sunlight.position.set(-8.5, 6.0, 2.0);
-        ambientLight.color.setHex(0x261912);
-        ambientLight.intensity = 0.55;
+        sunlight.position.set(-7.5, 5.5, 2.5);
+        ambientLight.color.setHex(0x2c1d14);
+        ambientLight.intensity = 0.60;
         edisonFixtures.forEach(f => f.pointLight.intensity = f.baseIntensity);
         if (bloomPass) bloomPass.strength = 0.28;
       } else if (mode === 'golden') {
         sunlight.color.setHex(0xffaa44);
         sunlight.intensity = 1.6;
-        sunlight.position.set(-8.5, 3.2, 1.5);
+        sunlight.position.set(-7.5, 3.2, 2.0);
         ambientLight.color.setHex(0x381f12);
-        ambientLight.intensity = 0.45;
+        ambientLight.intensity = 0.48;
         edisonFixtures.forEach(f => f.pointLight.intensity = f.baseIntensity * 1.35);
         if (bloomPass) bloomPass.strength = 0.42;
       } else if (mode === 'evening') {
