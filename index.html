@@ -1250,6 +1250,464 @@
       return tex;
     }
 
+function generateChalkboardTexture() {
+      const canvas = document.createElement('canvas');
+      canvas.width = 1024;
+      canvas.height = 512;
+      const ctx = canvas.getContext('2d');
+
+      // Matte charcoal slate
+      ctx.fillStyle = '#171918';
+      ctx.fillRect(0, 0, 1024, 512);
+
+      // Fine chalk dust patina
+      for (let i = 0; i < 35; i++) {
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.012)';
+        ctx.beginPath();
+        ctx.arc(Math.random() * 1024, Math.random() * 512, Math.random() * 100 + 40, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      // Framing double-line border
+      ctx.strokeStyle = 'rgba(240, 235, 225, 0.35)';
+      ctx.lineWidth = 2.5;
+      ctx.strokeRect(18, 18, 1024 - 36, 512 - 36);
+      ctx.strokeRect(26, 26, 1024 - 52, 512 - 52);
+
+      // Centered Top Header
+      ctx.fillStyle = '#f8f4ec';
+      ctx.textAlign = 'center';
+      ctx.font = 'bold 26px "Cinzel", serif, sans-serif';
+      ctx.fillText('SPECIALTY COFFEE & ARTISANAL SLOW-BAR', 512, 65);
+
+      ctx.beginPath();
+      ctx.moveTo(220, 78);
+      ctx.lineTo(804, 78);
+      ctx.strokeStyle = 'rgba(240, 235, 225, 0.4)';
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+
+      // Left Column: Single-Origin Menu & Extraction Parameters
+      ctx.textAlign = 'left';
+      ctx.font = 'bold 18px "Cinzel", serif, sans-serif';
+      ctx.fillStyle = '#e5a33c';
+      ctx.fillText('ORIGIN RESERVE ROASTS', 56, 118);
+
+      const origins = [
+        ['Yirgacheffe G1 Washed', 'Bergamot, Jasmine, White Peach', '$5.50'],
+        ['Guji Hambela Natural', 'Wild Strawberry, Dark Cocoa', '$5.75'],
+        ['Sidama Bensa Anaerobic', 'Papaya Nectar, Meyer Lemon', '$6.00'],
+        ['Jebena Ancestral Roast', 'Spiced Honey, Roasted Walnut', '$4.25'],
+        ['Cascara Botanical Tonic', 'Sun-Dried Coffee Cherries', '$4.50']
+      ];
+
+      origins.forEach((item, idx) => {
+        const py = 150 + idx * 44;
+        ctx.font = 'bold 14px "Plus Jakarta Sans", sans-serif';
+        ctx.fillStyle = '#f2ece4';
+        ctx.fillText(item[0], 56, py);
+
+        ctx.font = 'italic 11px "Plus Jakarta Sans", sans-serif';
+        ctx.fillStyle = '#b3a291';
+        ctx.fillText(item[1], 56, py + 16);
+
+        ctx.font = 'bold 13px "Plus Jakarta Sans", sans-serif';
+        ctx.fillStyle = '#e5a33c';
+        ctx.textAlign = 'right';
+        ctx.fillText(item[2], 375, py);
+        ctx.textAlign = 'left';
+      });
+
+      // Extraction Parameters Callout
+      ctx.fillStyle = 'rgba(229, 163, 60, 0.12)';
+      ctx.fillRect(56, 385, 320, 68);
+      ctx.strokeStyle = 'rgba(229, 163, 60, 0.35)';
+      ctx.strokeRect(56, 385, 320, 68);
+      ctx.fillStyle = '#e5a33c';
+      ctx.font = 'bold 11px "Cinzel", serif';
+      ctx.fillText('EXTRACTION BENCHMARK:', 68, 404);
+      ctx.font = '11px "Plus Jakarta Sans", monospace';
+      ctx.fillStyle = '#e8dfd2';
+      ctx.fillText('Dose: 19.5g | Yield: 42g | Temp: 93.4°C', 68, 424);
+      ctx.fillText('Pressure: 9.2 Bar | Pre-infuse: 5.5s', 68, 440);
+
+      // Center: Delicate Technical Line Drawing of Vacuum Siphon Anatomy
+      ctx.strokeStyle = '#f8f4ec';
+      ctx.lineWidth = 2.2;
+
+      // Lower Glass Flask
+      ctx.beginPath();
+      ctx.arc(512, 245, 42, 0, Math.PI * 2);
+      ctx.stroke();
+
+      // Lower Amber Liquid Line
+      ctx.fillStyle = 'rgba(212, 130, 42, 0.32)';
+      ctx.beginPath();
+      ctx.arc(512, 245, 39, 0.2, Math.PI - 0.2);
+      ctx.fill();
+
+      // Upper Funnel Chamber
+      ctx.strokeRect(492, 122, 40, 72);
+
+      // Connecting Filter Tube
+      ctx.beginPath();
+      ctx.moveTo(512, 194);
+      ctx.lineTo(512, 220);
+      ctx.stroke();
+
+      // Stand & Burner Pad
+      ctx.beginPath();
+      ctx.moveTo(465, 305);
+      ctx.lineTo(559, 305);
+      ctx.moveTo(470, 305);
+      ctx.lineTo(470, 205);
+      ctx.lineTo(492, 205);
+      ctx.stroke();
+
+      // Center Diagram Labels
+      ctx.font = 'italic 10px "Cinzel", serif';
+      ctx.fillStyle = '#d4c2af';
+      ctx.textAlign = 'center';
+      ctx.fillText('Vacuum Siphon Reserve', 512, 332);
+      ctx.font = '9px "Plus Jakarta Sans", monospace';
+      ctx.fillText('Slow Extraction 92.8°C', 512, 348);
+
+      // Right Column: Boulangerie & Fruit Bar
+      ctx.textAlign = 'left';
+      ctx.font = 'bold 18px "Cinzel", serif, sans-serif';
+      ctx.fillStyle = '#e5a33c';
+      ctx.fillText('BOULANGERIE & CRAFT JUICE', 700, 118);
+
+      const goods = [
+        ['Normandy Butter Croissant', '84% Cultured French Butter', '$3.75'],
+        ['Valrhona Pain au Chocolat', '70% Guanaja Dark Ganache', '$4.50'],
+        ['Cardamom Blueberry Brioche', 'Wild Nordic Berries, Brown Sugar', '$4.25'],
+        ['Raw Alphonso Mango Nectar', 'Cold-Pressed Valencia & Passionfruit', '$5.25'],
+        ['Ruby Beetroot & Pomegranate', 'Organic Ginger Root, Fresh Lime', '$5.50']
+      ];
+
+      goods.forEach((item, idx) => {
+        const py = 150 + idx * 44;
+        ctx.font = 'bold 14px "Plus Jakarta Sans", sans-serif';
+        ctx.fillStyle = '#f2ece4';
+        ctx.fillText(item[0], 700, py);
+
+        ctx.font = 'italic 11px "Plus Jakarta Sans", sans-serif';
+        ctx.fillStyle = '#b3a291';
+        ctx.fillText(item[1], 700, py + 16);
+
+        ctx.font = 'bold 13px "Plus Jakarta Sans", sans-serif';
+        ctx.fillStyle = '#e5a33c';
+        ctx.textAlign = 'right';
+        ctx.fillText(item[2], 965, py);
+        ctx.textAlign = 'left';
+      });
+
+      // Bottom Inscription
+      ctx.font = 'italic 12px "Cinzel", serif';
+      ctx.fillStyle = '#a89481';
+      ctx.textAlign = 'center';
+      ctx.fillText('"Every Harvest Tells a Story, Brewed with Uncompromising Precision"', 512, 475);
+
+      return new THREE.CanvasTexture(canvas);
+    }
+
+    // Circular Pressure Gauge Face (45mm dial with green extraction and red overpressure arcs, tick marks, needle)
+    function generateSoniferPressureGaugeTexture() {
+      const canvas = document.createElement('canvas');
+      canvas.width = 256;
+      canvas.height = 256;
+      const ctx = canvas.getContext('2d');
+
+      // White/cream dial faceplate
+      ctx.fillStyle = '#f8f7f4';
+      ctx.beginPath();
+      ctx.arc(128, 128, 126, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Outer bezel trim
+      ctx.strokeStyle = '#222222';
+      ctx.lineWidth = 4;
+      ctx.beginPath();
+      ctx.arc(128, 128, 124, 0, Math.PI * 2);
+      ctx.stroke();
+
+      const startAngle = 0.75 * Math.PI;
+      const totalSpan = 1.5 * Math.PI;
+
+      // Green Extraction Pressure Arc (8 to 12 Bar)
+      ctx.strokeStyle = '#2e7d32';
+      ctx.lineWidth = 10;
+      ctx.beginPath();
+      ctx.arc(128, 128, 100, startAngle + totalSpan * (8 / 16), startAngle + totalSpan * (12 / 16));
+      ctx.stroke();
+
+      // Red Over-Pressure Arc (12 to 16 Bar)
+      ctx.strokeStyle = '#c62828';
+      ctx.lineWidth = 10;
+      ctx.beginPath();
+      ctx.arc(128, 128, 100, startAngle + totalSpan * (12 / 16), startAngle + totalSpan);
+      ctx.stroke();
+
+      // 0-16 Bar Calibration Tick Marks
+      for (let i = 0; i <= 16; i++) {
+        const angle = startAngle + totalSpan * (i / 16);
+        const rInner = i % 4 === 0 ? 84 : 92;
+        const rOuter = 108;
+        ctx.strokeStyle = '#1a1a1a';
+        ctx.lineWidth = i % 4 === 0 ? 3 : 1.5;
+        ctx.beginPath();
+        ctx.moveTo(128 + Math.cos(angle) * rInner, 128 + Math.sin(angle) * rInner);
+        ctx.lineTo(128 + Math.cos(angle) * rOuter, 128 + Math.sin(angle) * rOuter);
+        ctx.stroke();
+      }
+
+      // Barometer Typography
+      ctx.fillStyle = '#1a1a1a';
+      ctx.font = 'bold 18px "Plus Jakarta Sans", sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText('BAR', 128, 172);
+      ctx.font = 'bold 9px "Plus Jakarta Sans", sans-serif';
+      ctx.fillStyle = '#555555';
+      ctx.fillText('EXTRACTION', 128, 186);
+
+      // Black Indicator Needle (Pivoted at ~9.2 Bar optimal delivery)
+      const needleAngle = startAngle + totalSpan * (9.2 / 16);
+      ctx.strokeStyle = '#111111';
+      ctx.lineWidth = 3.5;
+      ctx.beginPath();
+      ctx.moveTo(128 - Math.cos(needleAngle) * 16, 128 - Math.sin(needleAngle) * 16);
+      ctx.lineTo(128 + Math.cos(needleAngle) * 88, 128 + Math.sin(needleAngle) * 88);
+      ctx.stroke();
+
+      // Center pivot cap
+      ctx.fillStyle = '#111111';
+      ctx.beginPath();
+      ctx.arc(128, 128, 9, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = '#c0c0c0';
+      ctx.beginPath();
+      ctx.arc(128, 128, 4, 0, Math.PI * 2);
+      ctx.fill();
+
+      return new THREE.CanvasTexture(canvas);
+    }
+
+    // Screen-Printed Sonifer SF3531 Logo Plate Texture
+    function generateSoniferLogoTexture() {
+      const canvas = document.createElement('canvas');
+      canvas.width = 256;
+      canvas.height = 64;
+      const ctx = canvas.getContext('2d');
+
+      ctx.fillStyle = '#e0e0e0';
+      ctx.fillRect(0, 0, 256, 64);
+
+      // Fine anisotropic horizontal metal brushing
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.035)';
+      for (let y = 0; y < 64; y += 2) {
+        ctx.fillRect(0, y, 256, 1);
+      }
+
+      ctx.fillStyle = '#111111';
+      ctx.textAlign = 'center';
+      ctx.font = 'bold 26px "Plus Jakarta Sans", sans-serif';
+      ctx.fillText('Sonifer', 128, 36);
+
+      ctx.font = '700 8.5px "Plus Jakarta Sans", sans-serif';
+      ctx.fillStyle = '#333333';
+      ctx.fillText('MODEL SF-3531 • 15 BAR', 128, 52);
+
+      return new THREE.CanvasTexture(canvas);
+    }
+
+    // Vintage Pressed Glass Embossed Relief ("Cold Drink / Glassware Company")
+    function generateDispenserEmbossedTexture() {
+      const canvas = document.createElement('canvas');
+      canvas.width = 512;
+      canvas.height = 512;
+      const ctx = canvas.getContext('2d');
+
+      // 50% neutral gray for bump mapping
+      ctx.fillStyle = '#808080';
+      ctx.fillRect(0, 0, 512, 512);
+
+      // Raised concentric glass bead ridges
+      ctx.strokeStyle = '#ffffff';
+      ctx.lineWidth = 6;
+      ctx.beginPath();
+      ctx.arc(256, 256, 192, 0, Math.PI * 2);
+      ctx.stroke();
+
+      ctx.strokeStyle = '#404040';
+      ctx.lineWidth = 4;
+      ctx.beginPath();
+      ctx.arc(256, 256, 186, 0, Math.PI * 2);
+      ctx.stroke();
+
+      ctx.strokeStyle = '#ffffff';
+      ctx.lineWidth = 3.5;
+      ctx.beginPath();
+      ctx.arc(256, 256, 142, 0, Math.PI * 2);
+      ctx.stroke();
+
+      // Top arc embossed lettering: "COLD DRINK"
+      ctx.save();
+      ctx.translate(256, 256);
+      ctx.font = 'bold 36px "Cinzel", serif';
+      ctx.fillStyle = '#ffffff';
+      ctx.textAlign = 'center';
+      const textTop = "COLD DRINK";
+      for (let i = 0; i < textTop.length; i++) {
+        const char = textTop[i];
+        const theta = -Math.PI / 2 + (i - (textTop.length - 1) / 2) * 0.18;
+        ctx.save();
+        ctx.rotate(theta);
+        ctx.translate(0, -158);
+        ctx.fillText(char, 0, 0);
+        ctx.restore();
+      }
+
+      // Center Star Medallion
+      ctx.font = 'bold 44px serif';
+      ctx.fillText('★', 0, 14);
+
+      // Bottom arc embossed lettering: "GLASSWARE CO."
+      const textBot = "GLASSWARE CO.";
+      for (let i = 0; i < textBot.length; i++) {
+        const char = textBot[i];
+        const theta = Math.PI / 2 - (i - (textBot.length - 1) / 2) * 0.17;
+        ctx.save();
+        ctx.rotate(theta);
+        ctx.translate(0, 168);
+        ctx.rotate(Math.PI);
+        ctx.fillText(char, 0, 0);
+        ctx.restore();
+      }
+      ctx.restore();
+
+      return new THREE.CanvasTexture(canvas);
+    }
+
+    // Traditional Regional Floral Decal Pattern for Espresso Ceramic Cup
+    function generateFloralDecalTexture() {
+      const canvas = document.createElement('canvas');
+      canvas.width = 512;
+      canvas.height = 256;
+      const ctx = canvas.getContext('2d');
+
+      // Pure porcelain glaze
+      ctx.fillStyle = '#f8f6f0';
+      ctx.fillRect(0, 0, 512, 256);
+
+      // Traditional gold and terracotta trim bands
+      ctx.fillStyle = '#d4af37';
+      ctx.fillRect(0, 18, 512, 6);
+      ctx.fillStyle = '#8b2e1b';
+      ctx.fillRect(0, 28, 512, 4);
+
+      ctx.fillStyle = '#8b2e1b';
+      ctx.fillRect(0, 224, 512, 4);
+      ctx.fillStyle = '#d4af37';
+      ctx.fillRect(0, 232, 512, 6);
+
+      // Repeating floral rosettes along cup circumference
+      for (let x = 32; x < 512; x += 64) {
+        ctx.fillStyle = '#8b2e1b';
+        ctx.beginPath();
+        ctx.arc(x, 128, 12, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.fillStyle = '#d4af37';
+        ctx.beginPath();
+        ctx.arc(x, 128, 5, 0, Math.PI * 2);
+        ctx.fill();
+
+        // 6 terracotta petals
+        for (let p = 0; p < 6; p++) {
+          const angle = (p * Math.PI) / 3;
+          const px = x + Math.cos(angle) * 22;
+          const py = 128 + Math.sin(angle) * 22;
+          ctx.fillStyle = '#c46238';
+          ctx.beginPath();
+          ctx.arc(px, py, 9, 0, Math.PI * 2);
+          ctx.fill();
+        }
+
+        // Green leaf sprigs
+        ctx.fillStyle = '#3e5c32';
+        ctx.beginPath();
+        ctx.ellipse(x + 28, 128, 7, 3.5, 0.4, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      return new THREE.CanvasTexture(canvas);
+    }
+
+    // Exterior Sunset Sky Panorama Backdrop Texture (1024x512)
+    function generateSunsetPanoramaTexture() {
+      const canvas = document.createElement('canvas');
+      canvas.width = 1024;
+      canvas.height = 512;
+      const ctx = canvas.getContext('2d');
+
+      // Radiant Sunset Sky Gradient: Deep purple to rose, vibrant crimson, gold-orange, and horizon amber
+      const grad = ctx.createLinearGradient(0, 0, 0, 512);
+      grad.addColorStop(0.0, '#1c1033'); // Deep twilight purple
+      grad.addColorStop(0.25, '#43194a'); // Rich plum
+      grad.addColorStop(0.48, '#8c284e'); // Warm rose magenta
+      grad.addColorStop(0.66, '#d44933'); // Vibrant sunset crimson
+      grad.addColorStop(0.80, '#ff7a18'); // Radiant gold-orange
+      grad.addColorStop(0.92, '#ffaa2b'); // Brilliant warm golden amber
+      grad.addColorStop(1.0, '#ffd166');  // Horizon glow
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, 1024, 512);
+
+      // Glowing Sunset Sun Orb
+      const sunGrad = ctx.createRadialGradient(420, 390, 0, 420, 390, 180);
+      sunGrad.addColorStop(0.0, 'rgba(255, 255, 240, 1.0)');
+      sunGrad.addColorStop(0.12, 'rgba(255, 235, 160, 0.95)');
+      sunGrad.addColorStop(0.35, 'rgba(255, 150, 40, 0.7)');
+      sunGrad.addColorStop(0.70, 'rgba(255, 100, 20, 0.25)');
+      sunGrad.addColorStop(1.0, 'rgba(255, 70, 10, 0)');
+      ctx.fillStyle = sunGrad;
+      ctx.beginPath();
+      ctx.arc(420, 390, 180, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Soft Altocumulus Clouds Catching Warm Golden Rim Light
+      for (let c = 0; c < 14; c++) {
+        const cx = 80 + c * 75 + (c % 3) * 20;
+        const cy = 200 + (c % 5) * 32;
+        const cw = 110 + (c % 4) * 30;
+        const ch = 12 + (c % 3) * 6;
+        const cGrad = ctx.createRadialGradient(cx, cy, 0, cx, cy, cw / 2);
+        cGrad.addColorStop(0, 'rgba(255, 175, 85, 0.38)');
+        cGrad.addColorStop(0.7, 'rgba(255, 110, 50, 0.15)');
+        cGrad.addColorStop(1, 'rgba(255, 100, 50, 0)');
+        ctx.fillStyle = cGrad;
+        ctx.fillRect(cx - cw / 2, cy - ch / 2, cw, ch);
+      }
+
+      // Low Urban City & Distant Mountain Silhouette along Horizon
+      ctx.fillStyle = '#160c18';
+      ctx.beginPath();
+      ctx.moveTo(0, 512);
+      ctx.lineTo(0, 420);
+      const skyline = [
+        [50, 415], [100, 408], [140, 395], [175, 412], [215, 405], [255, 418],
+        [300, 400], [345, 404], [390, 388], [435, 410], [480, 402], [525, 415],
+        [570, 398], [620, 406], [670, 418], [725, 392], [780, 410], [840, 405],
+        [910, 416], [970, 410], [1024, 415], [1024, 512]
+      ];
+      skyline.forEach(([x, y]) => ctx.lineTo(x, y));
+      ctx.closePath();
+      ctx.fill();
+
+      const tex = new THREE.CanvasTexture(canvas);
+      return tex;
+    }
+
     // Entrance Solid Oak A-Frame Sidewalk Chalkboard Texture (512x1024)
     function generateEntranceChalkboardTexture() {
       const canvas = document.createElement('canvas');
@@ -1397,7 +1855,6 @@
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.outputColorSpace = THREE.SRGBColorSpace;
-    renderer.outputEncoding = THREE.sRGBEncoding;
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 1.25;
 
