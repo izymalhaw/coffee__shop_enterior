@@ -4,6 +4,7 @@
   "description": "Boutique Specialty Coffee Shop 3D Interior Design built with Three.js",
   "main": "index.html",
   "scripts": {
+    "build": "mkdir -p public && cp index.html preview.png public/",
     "start": "npx serve ."
   },
   "keywords": [
