@@ -1,0 +1,22 @@
+{
+  "name": "coffee-shop-interior-3d",
+  "version": "1.0.0",
+  "description": "Boutique Specialty Coffee Shop 3D Interior Design built with Three.js",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx serve .",
+    "dev": "npx serve .",
+    "build": "echo 'Static build ready'"
+  },
+  "keywords": [
+    "threejs",
+    "webgl",
+    "interior-design",
+    "coffee-shop",
+    "siphon",
+    "espresso",
+    "vercel"
+  ],
+  "author": "Yishak",
+  "license": "MIT"
+}
