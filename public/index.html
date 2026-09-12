@@ -901,6 +901,107 @@
       return tex;
     }
 
+    // Scandinavian Natural Honey Oak Furniture Texture (1024x1024)
+    function generateNordicOakFurnitureTexture() {
+      const canvas = document.createElement('canvas');
+      canvas.width = 1024;
+      canvas.height = 1024;
+      const ctx = canvas.getContext('2d');
+
+      // Base warm golden honey oak
+      ctx.fillStyle = '#a67243';
+      ctx.fillRect(0, 0, 1024, 1024);
+
+      // Multi-tonal longitudinal wood planks & fine fiber grain
+      const grainCount = 240;
+      for (let i = 0; i < grainCount; i++) {
+        const y = Math.random() * 1024;
+        const alpha = 0.08 + Math.random() * 0.20;
+        const isDark = Math.random() > 0.40;
+        ctx.strokeStyle = isDark ? `rgba(90, 52, 26, ${alpha})` : `rgba(208, 162, 108, ${alpha})`;
+        ctx.lineWidth = 0.8 + Math.random() * 2.5;
+        ctx.beginPath();
+        ctx.moveTo(0, y);
+        const cp1x = 256 + (Math.random() - 0.5) * 140;
+        const cp1y = y + (Math.random() - 0.5) * 45;
+        const cp2x = 768 + (Math.random() - 0.5) * 140;
+        const cp2y = y + (Math.random() - 0.5) * 45;
+        ctx.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, 1024, y + (Math.random() - 0.5) * 35);
+        ctx.stroke();
+      }
+
+      // Cathedral growth ring waves
+      for (let c = 0; c < 10; c++) {
+        const cx = Math.random() * 1024;
+        const cy = Math.random() * 1024;
+        ctx.strokeStyle = 'rgba(78, 44, 20, 0.14)';
+        ctx.lineWidth = 2.0 + Math.random() * 2.8;
+        ctx.beginPath();
+        ctx.ellipse(cx, cy, 340 + Math.random() * 120, 40 + Math.random() * 30, (Math.random() - 0.5) * 0.25, 0, Math.PI * 2);
+        ctx.stroke();
+      }
+
+      // Micro wood pores & ray flecks
+      ctx.fillStyle = 'rgba(72, 38, 16, 0.22)';
+      for (let p = 0; p < 800; p++) {
+        const px = Math.random() * 1024;
+        const py = Math.random() * 1024;
+        ctx.fillRect(px, py, 3.0 + Math.random() * 7, 0.8);
+      }
+
+      const tex = new THREE.CanvasTexture(canvas);
+      tex.wrapS = THREE.RepeatWrapping;
+      tex.wrapT = THREE.RepeatWrapping;
+      tex.repeat.set(2, 2);
+      return tex;
+    }
+
+    // Deep Danish Walnut & Teak Furniture Texture (1024x1024)
+    function generateWarmWalnutFurnitureTexture() {
+      const canvas = document.createElement('canvas');
+      canvas.width = 1024;
+      canvas.height = 1024;
+      const ctx = canvas.getContext('2d');
+
+      // Base warm walnut tone
+      ctx.fillStyle = '#683f24';
+      ctx.fillRect(0, 0, 1024, 1024);
+
+      // Deep flowing grain lines
+      for (let i = 0; i < 220; i++) {
+        const x = Math.random() * 1024;
+        const alpha = 0.10 + Math.random() * 0.20;
+        const isDark = Math.random() > 0.38;
+        ctx.strokeStyle = isDark ? `rgba(46, 23, 12, ${alpha})` : `rgba(170, 118, 74, ${alpha})`;
+        ctx.lineWidth = 0.8 + Math.random() * 2.6;
+        ctx.beginPath();
+        ctx.moveTo(x, 0);
+        ctx.bezierCurveTo(
+          x + (Math.random() - 0.5) * 60, 340,
+          x + (Math.random() - 0.5) * 60, 680,
+          x + (Math.random() - 0.5) * 40, 1024
+        );
+        ctx.stroke();
+      }
+
+      // Concentric growth ring arcs
+      for (let a = 0; a < 8; a++) {
+        const ax = Math.random() * 1024;
+        const ay = Math.random() * 1024;
+        ctx.strokeStyle = 'rgba(38, 18, 8, 0.18)';
+        ctx.lineWidth = 2.0 + Math.random() * 2.0;
+        ctx.beginPath();
+        ctx.ellipse(ax, ay, 300, 55, (Math.random() - 0.5) * 0.35, 0, Math.PI * 2);
+        ctx.stroke();
+      }
+
+      const tex = new THREE.CanvasTexture(canvas);
+      tex.wrapS = THREE.RepeatWrapping;
+      tex.wrapT = THREE.RepeatWrapping;
+      tex.repeat.set(2, 2);
+      return tex;
+    }
+
     // High-Contrast Black-on-White Illustrated Typography Mural (Left Wall: X = -5.4m)
     function generateLeftWallTypographyMuralTexture() {
       const canvas = document.createElement('canvas');
@@ -1973,6 +2074,8 @@ function generateChalkboardTexture() {
     const floralDecalTex = generateFloralDecalTexture();
     const muralCanvasTex = generateLeftWallTypographyMuralTexture();
     const shiplapTex = generateShiplapTexture();
+    const nordicOakFurnitureTex = generateNordicOakFurnitureTexture();
+    const warmWalnutFurnitureTex = generateWarmWalnutFurnitureTexture();
 
     const materials = {
       // Rear Flemish Masonry Wall (roughness: 0.88)
@@ -2217,47 +2320,90 @@ function generateChalkboardTexture() {
         roughness: 0.82,
         metalness: 0.02
       }),
-      // Glossy White Enamel Tolix Barstools (color: 0xfdfdfd, metalness: 0.35, roughness: 0.15)
-      whiteTolix: new THREE.MeshStandardMaterial({
-        color: 0xfdfdfd,
-        metalness: 0.35,
-        roughness: 0.15
+      // Solid Scandinavian Natural Honey Oak Furniture Material (with longitudinal grain & pores)
+      nordicOakWood: new THREE.MeshStandardMaterial({
+        color: 0xb57c48,
+        map: nordicOakFurnitureTex,
+        roughness: 0.36,
+        metalness: 0.03
       }),
-      // Tailored Cement-Grey Scandinavian Sofa (color: 0xc8c6c1, roughness: 0.85)
-      scandiSofa: new THREE.MeshStandardMaterial({
-        color: 0xc8c6c1,
-        roughness: 0.85
+      // Danish Bentwood Sculpted Plywood (Warm Teak/Oak tone with grain)
+      danishBentwood: new THREE.MeshStandardMaterial({
+        color: 0xa26a3c,
+        map: nordicOakFurnitureTex,
+        roughness: 0.38,
+        metalness: 0.03
       }),
-      // Low Wire-Frame Slipper Lounge Chairs: Slate-Blue Canvas & Cool Grey Canvas
-      slipperSlateBlue: new THREE.MeshStandardMaterial({
-        color: 0x5a6d7c,
-        roughness: 0.88
-      }),
-      slipperCoolGrey: new THREE.MeshStandardMaterial({
-        color: 0x9fa4a6,
-        roughness: 0.88
-      }),
-      // Natural Tree-Trunk Live-Edge Slabs with Warm Honey-Amber Grain
-      liveEdgeWood: new THREE.MeshStandardMaterial({
-        color: 0xa86e3b,
-        roughness: 0.42,
+      // Deep Danish Walnut & Teak Furniture Material (with flowing dark grain)
+      warmWalnutWood: new THREE.MeshStandardMaterial({
+        color: 0x764627,
+        map: warmWalnutFurnitureTex,
+        roughness: 0.34,
         metalness: 0.04
       }),
-      // Ergonomic Curved Black Bucket Shell Dining Chairs (color: 0x1a1a1a, roughness: 0.45)
-      blackShellChair: new THREE.MeshStandardMaterial({
-        color: 0x1a1a1a,
-        roughness: 0.45
-      }),
-      // Matte White / Light Carrara Laminate Pedestal & Work Table Tops
-      whiteCarraraLaminate: new THREE.MeshStandardMaterial({
-        color: 0xf7f7f7,
-        roughness: 0.28,
+      // Solid Turned Oak/Walnut Barstool Legs & Stretchers
+      barstoolLegWood: new THREE.MeshStandardMaterial({
+        color: 0x4e301d,
+        map: warmWalnutFurnitureTex,
+        roughness: 0.40,
         metalness: 0.02
       }),
-      // Continuous Modular Banquette Bench Tailored Light Grey/Off-White Upholstery
+      // Warm Cognac / Caramel Saddle Leather for Scandinavian Upholstery & Cushions
+      caramelLeather: new THREE.MeshStandardMaterial({
+        color: 0x93572c,
+        roughness: 0.62,
+        metalness: 0.02
+      }),
+      // Warm Crafted Wooden Barstools
+      whiteTolix: new THREE.MeshStandardMaterial({
+        color: 0x764627,
+        map: warmWalnutFurnitureTex,
+        roughness: 0.35,
+        metalness: 0.03
+      }),
+      // Warm Caramel Leather Scandinavian Sofa Body
+      scandiSofa: new THREE.MeshStandardMaterial({
+        color: 0x8e5229,
+        roughness: 0.65,
+        metalness: 0.02
+      }),
+      // Low Slipper Lounge Chairs: Warm Cognac & Toffee Leather
+      slipperSlateBlue: new THREE.MeshStandardMaterial({
+        color: 0x985a2e,
+        roughness: 0.64,
+        metalness: 0.02
+      }),
+      slipperCoolGrey: new THREE.MeshStandardMaterial({
+        color: 0x864e26,
+        roughness: 0.64,
+        metalness: 0.02
+      }),
+      // Natural Tree-Trunk Live-Edge Slabs with Warm Walnut Grain & Growth Rings
+      liveEdgeWood: new THREE.MeshStandardMaterial({
+        color: 0x8c542b,
+        map: warmWalnutFurnitureTex,
+        roughness: 0.35,
+        metalness: 0.03
+      }),
+      // Sculpted Scandinavian Bentwood Dining Chairs
+      blackShellChair: new THREE.MeshStandardMaterial({
+        color: 0xa26a3c,
+        map: nordicOakFurnitureTex,
+        roughness: 0.38,
+        metalness: 0.03
+      }),
+      // Solid Nordic Honey Oak Pedestal & Work Table Tops
+      whiteCarraraLaminate: new THREE.MeshStandardMaterial({
+        color: 0xb57c48,
+        map: nordicOakFurnitureTex,
+        roughness: 0.36,
+        metalness: 0.03
+      }),
+      // Continuous Modular Banquette Bench Warm Saddle Tan / Cognac Leather
       lightGreyBanquette: new THREE.MeshStandardMaterial({
-        color: 0xd9d7d2,
-        roughness: 0.88
+        color: 0x8f532b,
+        roughness: 0.64,
+        metalness: 0.02
       }),
       // Horizontal Ribbon Fireplace Inset Box & Animated Ember Bed
       fireplaceInsertMat: new THREE.MeshStandardMaterial({
@@ -3776,22 +3922,22 @@ fruitBasket.add(fruit);
       });
     }
 
-    // A. Three Tolix-Style Barstools in Glossy White Enamel at Service Counter (Z = -1.25m)
+    // A. Three Handcrafted Turned Wood Barstools at Service Counter (Z = -1.25m)
     function buildTolixBarstool(xPos, zPos = -1.25) {
       const stool = new THREE.Group();
       stool.position.set(xPos, 0, zPos);
 
-      // Square Pressed Sheet-Metal Seat (320mm × 320mm × 25mm with central slot cutout)
-      const seatTop = new THREE.Mesh(new THREE.BoxGeometry(0.32, 0.025, 0.32), materials.whiteTolix);
-      seatTop.position.y = 0.68;
+      // Solid Turned Danish Walnut Seat (340mm round with chamfered profile)
+      const seatTop = new THREE.Mesh(new THREE.CylinderGeometry(0.17, 0.165, 0.032, 32), materials.warmWalnutWood);
+      seatTop.position.y = 0.685;
       stool.add(seatTop);
 
-      // Seat Drainage Slot Accent
-      const seatSlot = new THREE.Mesh(new THREE.BoxGeometry(0.12, 0.026, 0.02), materials.blackenedStructuralSteel);
-      seatSlot.position.y = 0.68;
-      stool.add(seatSlot);
+      // Subtle Center Relief Carving Accent
+      const seatRelief = new THREE.Mesh(new THREE.CylinderGeometry(0.10, 0.10, 0.005, 24), materials.counterFlutedSlat);
+      seatRelief.position.y = 0.702;
+      stool.add(seatRelief);
 
-      // Tapered Splayed Legs (0.68m height)
+      // Tapered Solid Walnut Legs (0.68m height)
       const legAngles = [
         [-0.12, -0.12, 0.05, 0.05],
         [0.12, -0.12, -0.05, 0.05],
@@ -3799,27 +3945,27 @@ fruitBasket.add(fruit);
         [0.12, 0.12, -0.05, -0.05]
       ];
       legAngles.forEach(([lx, lz, rx, rz]) => {
-        const leg = new THREE.Mesh(new THREE.CylinderGeometry(0.012, 0.008, 0.68, 8), materials.whiteTolix);
+        const leg = new THREE.Mesh(new THREE.CylinderGeometry(0.013, 0.008, 0.68, 10), materials.barstoolLegWood);
         leg.position.set(lx * 1.15, 0.34, lz * 1.15);
         leg.rotation.x = rx;
         leg.rotation.z = rz;
         stool.add(leg);
 
-        // Rubber Foot Pad
-        const foot = new THREE.Mesh(new THREE.CylinderGeometry(0.012, 0.014, 0.02, 8), materials.blackenedStructuralSteel);
-        foot.position.set(lx * 1.35, 0.01, lz * 1.35);
-        stool.add(foot);
+        // Brushed Brass Foot Ferrule
+        const ferrule = new THREE.Mesh(new THREE.CylinderGeometry(0.009, 0.011, 0.025, 8), materials.brushedBrass);
+        ferrule.position.set(lx * 1.35, 0.0125, lz * 1.35);
+        stool.add(ferrule);
       });
 
-      // Cross-Stretcher Footrest Ring at Y = 0.22m
-      const footrestRing = new THREE.Mesh(new THREE.RingGeometry(0.14, 0.16, 16), materials.whiteTolix);
+      // Stretcher Footrest Ring at Y = 0.22m
+      const footrestRing = new THREE.Mesh(new THREE.TorusGeometry(0.15, 0.007, 8, 24), materials.blackenedStructuralSteel);
       footrestRing.rotation.x = Math.PI / 2;
       footrestRing.position.y = 0.22;
       stool.add(footrestRing);
 
-      // Upper Diagonal Gusset Brackets
-      const gusset = new THREE.Mesh(new THREE.BoxGeometry(0.24, 0.015, 0.24), materials.whiteTolix);
-      gusset.position.y = 0.62;
+      // Under-Seat Solid Wood Sub-frame Ring
+      const gusset = new THREE.Mesh(new THREE.CylinderGeometry(0.13, 0.14, 0.018, 16), materials.barstoolLegWood);
+      gusset.position.y = 0.66;
       stool.add(gusset);
 
       furnitureGroup.add(stool);
@@ -3829,7 +3975,7 @@ fruitBasket.add(fruit);
 
     [-0.8, 0.0, 0.8].forEach(sx => buildTolixBarstool(sx, -1.25));
 
-    // B. Central Scandinavian Bistro Island: 3 Round Carrara Laminate Pedestal Tables
+    // B. Central Scandinavian Bistro Island: 3 Round Nordic Honey Oak Pedestal Tables
     function buildBistroPedestalTable(xPos, zPos = 0.2) {
       const table = new THREE.Group();
       table.position.set(xPos, 0, zPos);
@@ -3844,13 +3990,13 @@ fruitBasket.add(fruit);
       column.position.y = 0.36;
       table.add(column);
 
-      // 750mm Carrara Laminate Table Top (30mm thickness at Y = 0.72m)
-      const top = new THREE.Mesh(new THREE.CylinderGeometry(0.375, 0.375, 0.03, 36), materials.whiteCarraraLaminate);
-      top.position.y = 0.71;
+      // 760mm Solid Nordic Honey Oak Table Top (35mm thickness at Y = 0.72m)
+      const top = new THREE.Mesh(new THREE.CylinderGeometry(0.38, 0.38, 0.035, 36), materials.nordicOakWood);
+      top.position.y = 0.715;
       table.add(top);
 
-      // Under-Bevel Sub-Top Ring
-      const subTop = new THREE.Mesh(new THREE.CylinderGeometry(0.32, 0.36, 0.015, 32), materials.blackenedStructuralSteel);
+      // Under-Bevel Sub-Top Walnut Ring
+      const subTop = new THREE.Mesh(new THREE.CylinderGeometry(0.33, 0.37, 0.018, 32), materials.warmWalnutWood);
       subTop.position.y = 0.69;
       table.add(subTop);
 
@@ -3858,24 +4004,24 @@ fruitBasket.add(fruit);
       return table;
     }
 
-    // Ergonomic Curved Black Bucket Shell Dining Chairs
+    // Ergonomic Sculpted Scandinavian Bentwood Dining Chairs
     function buildBlackShellChair(xPos, zPos, rotY) {
       const chair = new THREE.Group();
       chair.position.set(xPos, 0, zPos);
       chair.rotation.y = rotY;
 
-      // Curved Bucket Shell Seat & Backrest
+      // Sculpted Danish Bentwood Curved Seat
       const seatShell = new THREE.Mesh(
         new THREE.CylinderGeometry(0.22, 0.20, 0.04, 24),
-        materials.blackShellChair
+        materials.danishBentwood
       );
       seatShell.position.y = 0.44;
       chair.add(seatShell);
 
-      // Ergonomic Curved Shell Backrest
+      // Molded Bentwood Ergonomic Backrest
       const backShell = new THREE.Mesh(
         new THREE.CylinderGeometry(0.23, 0.22, 0.34, 24, 1, true, -Math.PI * 0.45, Math.PI * 0.9),
-        materials.blackShellChair
+        materials.danishBentwood
       );
       backShell.position.set(0, 0.62, -0.06);
       backShell.rotation.y = Math.PI;
@@ -3919,25 +4065,30 @@ fruitBasket.add(fruit);
     bBase.position.y = 0.19;
     banquetteGroup.add(bBase);
 
-    // Tailored Light Grey Seat Cushion (4.2m length × 0.68m depth × 0.10m thick at Y = 0.43m)
-    const bSeat = new THREE.Mesh(new THREE.BoxGeometry(0.68, 0.10, 4.2), materials.lightGreyBanquette);
+    // Tailored Warm Caramel Leather Seat Cushion (4.2m length × 0.68m depth × 0.10m thick at Y = 0.43m)
+    const bSeat = new THREE.Mesh(new THREE.BoxGeometry(0.68, 0.10, 4.2), materials.caramelLeather);
     bSeat.position.y = 0.43;
     banquetteGroup.add(bSeat);
 
     // Continuous Wall-Mounted Vertical Backrest Cushion (0.10m thick × 0.45m tall at Y = 0.72m)
-    const bBack = new THREE.Mesh(new THREE.BoxGeometry(0.10, 0.45, 4.2), materials.lightGreyBanquette);
+    const bBack = new THREE.Mesh(new THREE.BoxGeometry(0.10, 0.45, 4.2), materials.caramelLeather);
     bBack.position.set(0.28, 0.705, 0);
     banquetteGroup.add(bBack);
 
+    // Solid Nordic Oak Backrest Cap Rail
+    const bRail = new THREE.Mesh(new THREE.BoxGeometry(0.12, 0.024, 4.22), materials.nordicOakWood);
+    bRail.position.set(0.28, 0.94, 0);
+    banquetteGroup.add(bRail);
+
     furnitureGroup.add(banquetteGroup);
 
-    // 3 Rectangular Work & Study Desks (1.2m W × 0.60m D × 0.72m H) with Inverted U-Frames
+    // 3 Rectangular Work & Study Desks (1.2m W × 0.60m D × 0.72m H) with Solid Nordic Oak Tops
     function buildWorkDesk(zPos) {
       const desk = new THREE.Group();
       desk.position.set(4.2, 0, zPos);
 
-      // Matte White Carrara Laminate Table Top (1.2m Z × 0.60m X × 0.035m Y)
-      const top = new THREE.Mesh(new THREE.BoxGeometry(0.60, 0.035, 1.2), materials.whiteCarraraLaminate);
+      // Solid Nordic Honey Oak Desk Top (1.2m Z × 0.60m X × 0.038m Y)
+      const top = new THREE.Mesh(new THREE.BoxGeometry(0.60, 0.038, 1.2), materials.nordicOakWood);
       top.position.y = 0.71;
       desk.add(top);
 
@@ -3954,7 +4105,7 @@ fruitBasket.add(fruit);
 
       furnitureGroup.add(desk);
 
-      // Matching Black Shell Chair Tucked Opposite Banquette
+      // Matching Sculpted Bentwood Chair Tucked Opposite Banquette
       buildBlackShellChair(3.6, zPos, Math.PI / 2);
       return desk;
     }
@@ -3968,40 +4119,45 @@ fruitBasket.add(fruit);
     const loungeZone = new THREE.Group();
     furnitureGroup.add(loungeZone);
 
-    // Modern Boxy 3-Seater Track-Arm Sofa (2.2m L × 0.85m D × 0.72m H) in Cement Grey Fabric
+    // Modern Boxy 3-Seater Track-Arm Sofa (2.2m L × 0.85m D × 0.72m H) in Warm Caramel Leather & Solid Oak Plinth
     const sofaGroup = new THREE.Group();
     sofaGroup.position.set(-3.1, 0, 2.6);
     sofaGroup.rotation.y = -0.12;
 
-    // Sofa Plinth / Base
-    const sBase = new THREE.Mesh(new THREE.BoxGeometry(2.2, 0.18, 0.85), materials.scandiSofa);
+    // Solid Scandinavian Oak Plinth Base
+    const sBase = new THREE.Mesh(new THREE.BoxGeometry(2.22, 0.18, 0.87), materials.nordicOakWood);
     sBase.position.y = 0.09;
     sofaGroup.add(sBase);
 
-    // Low Modern Legs (4 tapered black oak feet)
+    // Solid Tapered Nordic Oak Feet
     [[-1.0, -0.38], [1.0, -0.38], [-1.0, 0.38], [1.0, 0.38]].forEach(([fx, fz]) => {
-      const foot = new THREE.Mesh(new THREE.CylinderGeometry(0.025, 0.018, 0.08, 8), materials.blackenedStructuralSteel);
+      const foot = new THREE.Mesh(new THREE.CylinderGeometry(0.025, 0.018, 0.08, 10), materials.nordicOakWood);
       foot.position.set(fx, 0.04, fz);
       sofaGroup.add(foot);
     });
 
-    // 3 Deep Cushioned Seat Pads (Y = 0.28m, height 0.14m)
+    // 3 Deep Cushioned Seat Pads in Warm Caramel Leather
     [-0.66, 0.0, 0.66].forEach(cx => {
-      const seatCushion = new THREE.Mesh(new THREE.BoxGeometry(0.64, 0.14, 0.68), materials.scandiSofa);
+      const seatCushion = new THREE.Mesh(new THREE.BoxGeometry(0.64, 0.14, 0.68), materials.caramelLeather);
       seatCushion.position.set(cx, 0.25, -0.04);
       sofaGroup.add(seatCushion);
     });
 
-    // Backrest Slab
-    const sBack = new THREE.Mesh(new THREE.BoxGeometry(2.2, 0.44, 0.18), materials.scandiSofa);
+    // Backrest Slab in Warm Caramel Leather
+    const sBack = new THREE.Mesh(new THREE.BoxGeometry(2.2, 0.44, 0.18), materials.caramelLeather);
     sBack.position.set(0, 0.50, 0.33);
     sofaGroup.add(sBack);
 
-    // Track Arms (Left & Right)
+    // Track Arms (Left & Right) in Warm Caramel Leather with Solid Nordic Oak Cap
     [-1.02, 1.02].forEach(ax => {
-      const arm = new THREE.Mesh(new THREE.BoxGeometry(0.16, 0.36, 0.85), materials.scandiSofa);
+      const arm = new THREE.Mesh(new THREE.BoxGeometry(0.16, 0.36, 0.85), materials.caramelLeather);
       arm.position.set(ax, 0.36, 0);
       sofaGroup.add(arm);
+
+      // Solid Nordic Oak Armrest Cap
+      const armCap = new THREE.Mesh(new THREE.BoxGeometry(0.18, 0.024, 0.87), materials.nordicOakWood);
+      armCap.position.set(ax, 0.55, 0);
+      sofaGroup.add(armCap);
     });
 
     // Exactly 4 Plush Accent Throw Cushions in Sofa Corners
@@ -4021,20 +4177,32 @@ fruitBasket.add(fruit);
     loungeZone.add(sofaGroup);
     registerDraggableFurniture(sofaGroup);
 
-    // 2 Low Wire-Frame Slipper Lounge Chairs
+    // 2 Low Molded Danish Bentwood Slipper Lounge Chairs
     function buildSlipperChair(xPos, zPos, rotY, seatMat) {
       const slipper = new THREE.Group();
       slipper.position.set(xPos, 0, zPos);
       slipper.rotation.y = rotY;
 
-      // Ergonomic Angled Seat Pad
-      const sSeat = new THREE.Mesh(new THREE.BoxGeometry(0.58, 0.09, 0.54), seatMat);
+      // Sculpted Bentwood Outer Shell Under Seat
+      const woodSeatShell = new THREE.Mesh(new THREE.BoxGeometry(0.60, 0.024, 0.56), materials.danishBentwood);
+      woodSeatShell.position.set(0, 0.285, 0);
+      woodSeatShell.rotation.x = -0.10;
+      slipper.add(woodSeatShell);
+
+      // Sculpted Bentwood Outer Shell Behind Backrest
+      const woodBackShell = new THREE.Mesh(new THREE.BoxGeometry(0.58, 0.42, 0.024), materials.danishBentwood);
+      woodBackShell.position.set(0, 0.53, -0.27);
+      woodBackShell.rotation.x = -0.22;
+      slipper.add(woodBackShell);
+
+      // Ergonomic Angled Seat Pad in Warm Saddle Leather
+      const sSeat = new THREE.Mesh(new THREE.BoxGeometry(0.58, 0.09, 0.54), materials.caramelLeather);
       sSeat.position.set(0, 0.34, 0);
       sSeat.rotation.x = -0.10;
       slipper.add(sSeat);
 
-      // Low Angled Back Cushion
-      const sBackCush = new THREE.Mesh(new THREE.BoxGeometry(0.56, 0.40, 0.09), seatMat);
+      // Low Angled Back Cushion in Warm Saddle Leather
+      const sBackCush = new THREE.Mesh(new THREE.BoxGeometry(0.56, 0.40, 0.09), materials.caramelLeather);
       sBackCush.position.set(0, 0.54, -0.22);
       sBackCush.rotation.x = -0.22;
       slipper.add(sBackCush);
