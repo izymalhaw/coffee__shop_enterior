@@ -159,6 +159,42 @@
       color: #120e0b;
     }
 
+    .btn-saved-flash {
+      background: linear-gradient(135deg, rgba(46, 139, 87, 0.95), rgba(34, 100, 60, 0.95)) !important;
+      color: #ffffff !important;
+      box-shadow: 0 4px 14px rgba(46, 139, 87, 0.4) !important;
+      transition: all 0.2s ease;
+    }
+
+    .toast-notify {
+      position: fixed;
+      top: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(-12px);
+      padding: 9px 20px;
+      border-radius: 999px;
+      background: rgba(22, 21, 20, 0.92);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      color: #f7f3ec;
+      font-size: 12.5px;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: 3000;
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .toast-notify.visible {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
     /* Interactive Spec Modal (positioned at top right to avoid collision with bottom drawer) */
     .spec-modal {
       position: absolute;
@@ -714,10 +750,27 @@
 
     <div class="sep"></div>
 
+    <div class="group-pill" id="positions-pill">
+      <button class="tool-btn active" id="btn-lock-pos" title="Lock furniture positions in place so rotating cannot accidentally shift them">
+        <span id="lock-icon">🔒</span> <span id="lock-text">Positions Locked</span>
+      </button>
+      <button class="tool-btn" id="btn-save-pos" title="Save current furniture arrangement and camera view">
+        💾 Save Positions
+      </button>
+      <button class="tool-btn" id="btn-reset-pos" title="Reset furniture positions to default blueprint layout">
+        ↺ Reset
+      </button>
+    </div>
+
+    <div class="sep"></div>
+
     <button class="icon-action" id="audio-btn" title="Toggle Gentle Cafe Rain & Vinyl Resonance">
       🔊
     </button>
   </div>
+
+  <!-- Floating Action Toast Notification -->
+  <div id="toast-notify" class="toast-notify" role="status" aria-live="polite"></div>
 
   <!-- Interactive Equipment Inspection Modal -->
   <div class="spec-modal glass-hud" id="spec-modal">
@@ -3921,10 +3974,17 @@ fruitBasket.add(fruit);
     const draggableFurnitureRoots = [];
     const draggableFurnitureMeshes = [];
 
-    function registerDraggableFurniture(rootGroup) {
+    function registerDraggableFurniture(rootGroup, customId) {
       if (!rootGroup) return;
       rootGroup.userData.isDraggableRoot = true;
+      rootGroup.userData.furnitureId = customId || rootGroup.name || ('furniture_' + draggableFurnitureRoots.length);
       rootGroup.userData.initialY = (rootGroup.position.y !== undefined) ? rootGroup.position.y : 0;
+      rootGroup.userData.defaultPos = {
+        x: rootGroup.position.x,
+        y: rootGroup.position.y,
+        z: rootGroup.position.z
+      };
+      rootGroup.userData.defaultRotY = rootGroup.rotation.y;
       draggableFurnitureRoots.push(rootGroup);
 
       rootGroup.traverse(child => {
@@ -3983,7 +4043,7 @@ fruitBasket.add(fruit);
       stool.add(gusset);
 
       furnitureGroup.add(stool);
-      registerDraggableFurniture(stool);
+      registerDraggableFurniture(stool, 'barstool_' + xPos.toFixed(1));
       return stool;
     }
 
@@ -4055,7 +4115,7 @@ fruitBasket.add(fruit);
       chair.add(xBrace);
 
       furnitureGroup.add(chair);
-      registerDraggableFurniture(chair);
+      registerDraggableFurniture(chair, 'chair_' + xPos.toFixed(1) + '_' + zPos.toFixed(1));
       return chair;
     }
 
@@ -4189,7 +4249,7 @@ fruitBasket.add(fruit);
     });
 
     loungeZone.add(sofaGroup);
-    registerDraggableFurniture(sofaGroup);
+    registerDraggableFurniture(sofaGroup, 'lounge_sofa');
 
     // 2 Low Molded Danish Bentwood Slipper Lounge Chairs
     function buildSlipperChair(xPos, zPos, rotY, seatMat) {
@@ -4234,7 +4294,7 @@ fruitBasket.add(fruit);
       slipper.add(sledRunnerL, sledRunnerR);
 
       loungeZone.add(slipper);
-      registerDraggableFurniture(slipper);
+      registerDraggableFurniture(slipper, 'slipper_' + xPos.toFixed(1));
       return slipper;
     }
 
@@ -4446,9 +4506,18 @@ fruitBasket.add(fruit);
     loungeSiphon.position.set(0.05, 0.35, -0.05);
     ct2.add(loungeSiphon);
 
+    bistroTable1.name = 'bistro_table_1';
+    bistroTable2.name = 'bistro_table_2';
+    bistroTable3.name = 'bistro_table_3';
+    desk1.name = 'work_desk_1';
+    desk2.name = 'work_desk_2';
+    desk3.name = 'work_desk_3';
+    ct1.name = 'coffee_table_1';
+    ct2.name = 'coffee_table_2';
+
     // Register all bistro tables, desks, and coffee tables with their anchored refreshments
     [bistroTable1, bistroTable2, bistroTable3, desk1, desk2, desk3, ct1, ct2].forEach(t => {
-      registerDraggableFurniture(t);
+      registerDraggableFurniture(t, t.name);
     });
 
     const allTableDrinks = [
@@ -4896,6 +4965,7 @@ ladderGroup.add(rung);
     const dragControls = new DragControls(draggableFurnitureMeshes, camera, renderer.domElement);
     dragControls.recursive = false;
 
+    let isPositionsLocked = true;
     let activeDragRoot = null;
     let isDraggingFurniture = false;
     let dragStartTime = 0;
@@ -4904,8 +4974,8 @@ ladderGroup.add(rung);
     const dragOffsetVec = new THREE.Vector3();
 
     dragControls.addEventListener('dragstart', (event) => {
-      // Suppress dragging if furniture layer is hidden or mesh is invisible
-      if (!isAncestorVisible(event.object) || !furnitureGroup.visible) {
+      // Suppress dragging if positions are locked, furniture layer is hidden, or mesh is invisible
+      if (isPositionsLocked || !isAncestorVisible(event.object) || !furnitureGroup.visible) {
         controls.enabled = true;
         activeDragRoot = null;
         return;
@@ -4938,7 +5008,7 @@ ladderGroup.add(rung);
     });
 
     dragControls.addEventListener('drag', (event) => {
-      if (!activeDragRoot) return;
+      if (!activeDragRoot || isPositionsLocked) return;
 
       // 1. Immediately restore clicked mesh local position
       const mesh = event.object;
@@ -4976,6 +5046,188 @@ ladderGroup.add(rung);
         isDraggingFurniture = false;
       }, 60);
     });
+
+    // =========================================================================
+    // Save & Lock Furniture & Camera Positions System
+    // =========================================================================
+
+    const STORAGE_KEY_LAYOUT = 'coffeeshop_interior_layout_v1';
+    const STORAGE_KEY_LOCKED = 'coffeeshop_interior_locked_v1';
+
+    let toastTimeout = null;
+    function showToast(msg) {
+      const toast = document.getElementById('toast-notify');
+      if (!toast) return;
+      toast.textContent = msg;
+      toast.classList.add('visible');
+      if (toastTimeout) clearTimeout(toastTimeout);
+      toastTimeout = setTimeout(() => {
+        toast.classList.remove('visible');
+      }, 2600);
+    }
+
+    function setPositionsLocked(locked, notify = true) {
+      isPositionsLocked = locked;
+      dragControls.enabled = !locked;
+
+      const lockBtn = document.getElementById('btn-lock-pos');
+      const lockIcon = document.getElementById('lock-icon');
+      const lockText = document.getElementById('lock-text');
+
+      if (locked) {
+        if (lockBtn) lockBtn.classList.add('active');
+        if (lockIcon) lockIcon.textContent = '🔒';
+        if (lockText) lockText.textContent = 'Positions Locked';
+        renderer.domElement.style.cursor = 'default';
+        if (notify) showToast('🔒 Positions Locked: Furniture fixed in place, orbit freely');
+      } else {
+        if (lockBtn) lockBtn.classList.remove('active');
+        if (lockIcon) lockIcon.textContent = '🔓';
+        if (lockText) lockText.textContent = 'Unlock Positions';
+        if (notify) showToast('🔓 Positions Unlocked: Drag furniture along the floor plane');
+      }
+
+      try {
+        localStorage.setItem(STORAGE_KEY_LOCKED, locked ? 'true' : 'false');
+      } catch (e) {}
+    }
+
+    function savePositions() {
+      const layoutData = {
+        timestamp: Date.now(),
+        camera: {
+          pos: [
+            parseFloat(camera.position.x.toFixed(3)),
+            parseFloat(camera.position.y.toFixed(3)),
+            parseFloat(camera.position.z.toFixed(3))
+          ],
+          target: [
+            parseFloat(controls.target.x.toFixed(3)),
+            parseFloat(controls.target.y.toFixed(3)),
+            parseFloat(controls.target.z.toFixed(3))
+          ]
+        },
+        furniture: {}
+      };
+
+      draggableFurnitureRoots.forEach(root => {
+        const fid = root.userData.furnitureId;
+        if (fid) {
+          layoutData.furniture[fid] = {
+            x: parseFloat(root.position.x.toFixed(3)),
+            y: parseFloat(root.position.y.toFixed(3)),
+            z: parseFloat(root.position.z.toFixed(3)),
+            rotY: parseFloat(root.rotation.y.toFixed(3))
+          };
+        }
+      });
+
+      try {
+        localStorage.setItem(STORAGE_KEY_LAYOUT, JSON.stringify(layoutData));
+        const saveBtn = document.getElementById('btn-save-pos');
+        if (saveBtn) {
+          saveBtn.classList.add('btn-saved-flash');
+          const origHtml = saveBtn.innerHTML;
+          saveBtn.innerHTML = '✓ Saved!';
+          setTimeout(() => {
+            saveBtn.classList.remove('btn-saved-flash');
+            saveBtn.innerHTML = origHtml;
+          }, 1800);
+        }
+        showToast('💾 Layout & Camera Positions Saved to Storage');
+      } catch (err) {
+        console.warn('LocalStorage unavailable:', err);
+        showToast('⚠️ Storage unavailable');
+      }
+    }
+
+    function loadSavedPositions() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY_LAYOUT);
+        if (!raw) return false;
+        const layoutData = JSON.parse(raw);
+        if (!layoutData || !layoutData.furniture) return false;
+
+        draggableFurnitureRoots.forEach(root => {
+          const fid = root.userData.furnitureId;
+          const saved = layoutData.furniture[fid];
+          if (saved) {
+            root.position.x = saved.x;
+            root.position.y = saved.y;
+            root.position.z = saved.z;
+            if (saved.rotY !== undefined) root.rotation.y = saved.rotY;
+          }
+        });
+
+        if (layoutData.camera && layoutData.camera.pos && layoutData.camera.target) {
+          camera.position.set(...layoutData.camera.pos);
+          controls.target.set(...layoutData.camera.target);
+          controls.update();
+        }
+        return true;
+      } catch (err) {
+        console.warn('Error restoring saved layout:', err);
+        return false;
+      }
+    }
+
+    function resetPositions() {
+      draggableFurnitureRoots.forEach(root => {
+        if (root.userData.defaultPos) {
+          root.position.x = root.userData.defaultPos.x;
+          root.position.y = root.userData.defaultPos.y;
+          root.position.z = root.userData.defaultPos.z;
+        }
+        if (root.userData.defaultRotY !== undefined) {
+          root.rotation.y = root.userData.defaultRotY;
+        }
+      });
+
+      camera.position.set(-2.6, 2.1, 4.8);
+      controls.target.set(0.0, 1.05, 0.0);
+      controls.update();
+
+      try {
+        localStorage.removeItem(STORAGE_KEY_LAYOUT);
+      } catch (e) {}
+
+      setPositionsLocked(true, false);
+      showToast('↺ Positions Reset to Default Floor Plan');
+    }
+
+    // Connect Layout Buttons
+    const btnLockPos = document.getElementById('btn-lock-pos');
+    if (btnLockPos) {
+      btnLockPos.addEventListener('click', () => {
+        setPositionsLocked(!isPositionsLocked, true);
+      });
+    }
+
+    const btnSavePos = document.getElementById('btn-save-pos');
+    if (btnSavePos) {
+      btnSavePos.addEventListener('click', savePositions);
+    }
+
+    const btnResetPos = document.getElementById('btn-reset-pos');
+    if (btnResetPos) {
+      btnResetPos.addEventListener('click', resetPositions);
+    }
+
+    // Initialize Layout & Lock State on startup
+    const hasSavedLayout = loadSavedPositions();
+    let initialLock = true;
+    try {
+      const savedLock = localStorage.getItem(STORAGE_KEY_LOCKED);
+      if (savedLock !== null) {
+        initialLock = (savedLock === 'true');
+      }
+    } catch (e) {}
+    setPositionsLocked(initialLock, false);
+    if (hasSavedLayout) {
+      setTimeout(() => {
+        showToast('✓ Restored Custom Saved Layout');
+      }, 900);
+    }
 
     // Raycasting & Interactive Modal Inspections for Equipment
     const raycaster = new THREE.Raycaster();
@@ -5093,7 +5345,7 @@ ladderGroup.add(rung);
             chalkboardsGroup.visible = e.target.checked;
           }
           if (id === 'toggle-furniture') {
-            dragControls.enabled = e.target.checked;
+            dragControls.enabled = e.target.checked && !isPositionsLocked;
           }
           if (id === 'toggle-drinks' && typeof allTableDrinks !== 'undefined') {
             allTableDrinks.forEach(d => { d.visible = e.target.checked; });
