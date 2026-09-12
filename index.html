@@ -104,6 +104,11 @@
       gap: 3px;
     }
 
+    #rotate-pill {
+      border: 1px solid rgba(212, 144, 42, 0.4);
+      background: rgba(28, 20, 14, 0.7);
+    }
+
     .tool-btn {
       background: transparent;
       border: none;
@@ -760,6 +765,13 @@
       <button class="tool-btn" id="btn-reset-pos" title="Reset furniture positions to default blueprint layout">
         ↺ Reset
       </button>
+    </div>
+
+    <div class="group-pill" id="rotate-pill" style="display: none;">
+      <span id="rotate-sel-name" style="font-size: 11px; color: #f3d8b6; padding: 0 8px; display: flex; align-items: center; white-space: nowrap; font-weight: 600;">Tap furniture to rotate</span>
+      <button class="tool-btn" id="btn-rot-ccw" title="Rotate 45° CCW (Shift+R / [)">⟲ -45°</button>
+      <button class="tool-btn" id="btn-rot-fine" title="Rotate 15° CW (ArrowRight / ])">↻ 15°</button>
+      <button class="tool-btn" id="btn-rot-cw" title="Rotate 45° CW (R)">⟳ +45°</button>
     </div>
 
     <div class="sep"></div>
@@ -3974,10 +3986,31 @@ fruitBasket.add(fruit);
     const draggableFurnitureRoots = [];
     const draggableFurnitureMeshes = [];
 
-    function registerDraggableFurniture(rootGroup, customId) {
+    function formatFurnitureName(id) {
+      if (!id) return 'Furniture Piece';
+      if (id.startsWith('barstool_')) {
+        const x = parseFloat(id.replace('barstool_', ''));
+        const side = x < -0.2 ? 'Left' : (x > 0.2 ? 'Right' : 'Center');
+        return `Turned Walnut Barstool (${side})`;
+      }
+      if (id.startsWith('chair_')) return 'Bentwood Dining Chair';
+      if (id === 'lounge_sofa') return 'Scandinavian Leather Sofa';
+      if (id.startsWith('slipper_')) {
+        const x = parseFloat(id.replace('slipper_', ''));
+        const side = x < -2.0 ? 'Corner' : 'Hearth';
+        return `Bentwood Slipper Chair (${side})`;
+      }
+      if (id.startsWith('bistro_table_')) return `Oak Bistro Table #${id.replace('bistro_table_', '')}`;
+      if (id.startsWith('work_desk_')) return `Oak Work Desk #${id.replace('work_desk_', '')}`;
+      if (id.startsWith('coffee_table_')) return `Live-Edge Coffee Table #${id.replace('coffee_table_', '')}`;
+      return id.replace(/_/g, ' ');
+    }
+
+    function registerDraggableFurniture(rootGroup, customId, displayName) {
       if (!rootGroup) return;
       rootGroup.userData.isDraggableRoot = true;
       rootGroup.userData.furnitureId = customId || rootGroup.name || ('furniture_' + draggableFurnitureRoots.length);
+      rootGroup.userData.furnitureName = displayName || formatFurnitureName(rootGroup.userData.furnitureId);
       rootGroup.userData.initialY = (rootGroup.position.y !== undefined) ? rootGroup.position.y : 0;
       rootGroup.userData.defaultPos = {
         x: rootGroup.position.x,
@@ -4043,7 +4076,7 @@ fruitBasket.add(fruit);
       stool.add(gusset);
 
       furnitureGroup.add(stool);
-      registerDraggableFurniture(stool, 'barstool_' + xPos.toFixed(1));
+      registerDraggableFurniture(stool, 'barstool_' + xPos.toFixed(1), 'Turned Walnut Barstool (' + (xPos < -0.2 ? 'Left' : (xPos > 0.2 ? 'Right' : 'Center')) + ')');
       return stool;
     }
 
@@ -4516,8 +4549,18 @@ fruitBasket.add(fruit);
     ct2.name = 'coffee_table_2';
 
     // Register all bistro tables, desks, and coffee tables with their anchored refreshments
-    [bistroTable1, bistroTable2, bistroTable3, desk1, desk2, desk3, ct1, ct2].forEach(t => {
-      registerDraggableFurniture(t, t.name);
+    const movablePieces = [
+      { obj: bistroTable1, id: 'bistro_table_1', name: 'Oak Bistro Table #1 (Left)' },
+      { obj: bistroTable2, id: 'bistro_table_2', name: 'Oak Bistro Table #2 (Center)' },
+      { obj: bistroTable3, id: 'bistro_table_3', name: 'Oak Bistro Table #3 (Right)' },
+      { obj: desk1, id: 'work_desk_1', name: 'Oak Work Desk #1 (North)' },
+      { obj: desk2, id: 'work_desk_2', name: 'Oak Work Desk #2 (Mid)' },
+      { obj: desk3, id: 'work_desk_3', name: 'Oak Work Desk #3 (South)' },
+      { obj: ct1, id: 'coffee_table_1', name: 'Live-Edge Coffee Table (Large Slab)' },
+      { obj: ct2, id: 'coffee_table_2', name: 'Live-Edge Coffee Table (Petite Slab)' }
+    ];
+    movablePieces.forEach(p => {
+      registerDraggableFurniture(p.obj, p.id, p.name);
     });
 
     const allTableDrinks = [
@@ -4960,18 +5003,171 @@ ladderGroup.add(rung);
       return true;
     }
 
-    // Zero-Overlay Furniture Dragging (THREE.DragControls)
+    // Zero-Overlay Furniture Dragging (THREE.DragControls) & Interactive Rotation
     // Constrained to horizontal floor plane (XZ-axes at initialY) with camera lock and bounds clamping
     const dragControls = new DragControls(draggableFurnitureMeshes, camera, renderer.domElement);
     dragControls.recursive = false;
 
     let isPositionsLocked = true;
     let activeDragRoot = null;
+    let selectedFurnitureRoot = null;
     let isDraggingFurniture = false;
     let dragStartTime = 0;
+    let lastTapRoot = null;
+    let lastTapTime = 0;
+
     const dragFloorPlane = new THREE.Plane();
     const dragPlaneHit = new THREE.Vector3();
     const dragOffsetVec = new THREE.Vector3();
+
+    // =========================================================================
+    // Glowing Floor Orientation & Selection Indicator Ring
+    // =========================================================================
+    const selectionRing = new THREE.Group();
+    selectionRing.name = 'furnitureSelectionRing';
+    selectionRing.visible = false;
+
+    // Outer circular glowing band
+    const selRingGeom = new THREE.RingGeometry(0.55, 0.62, 48);
+    const selRingMat = new THREE.MeshBasicMaterial({
+      color: 0xdf9447, // warm golden amber
+      side: THREE.DoubleSide,
+      transparent: true,
+      opacity: 0.88,
+      depthWrite: false
+    });
+    const selRingMesh = new THREE.Mesh(selRingGeom, selRingMat);
+    selRingMesh.rotation.x = -Math.PI / 2;
+    selectionRing.add(selRingMesh);
+
+    // Inner delicate accent ring
+    const selInnerGeom = new THREE.RingGeometry(0.48, 0.50, 48);
+    const selInnerMat = new THREE.MeshBasicMaterial({
+      color: 0xffe8d6,
+      side: THREE.DoubleSide,
+      transparent: true,
+      opacity: 0.55,
+      depthWrite: false
+    });
+    const selInnerMesh = new THREE.Mesh(selInnerGeom, selInnerMat);
+    selInnerMesh.rotation.x = -Math.PI / 2;
+    selectionRing.add(selInnerMesh);
+
+    // Forward orientation directional pointer arrow (indicates current facing heading)
+    const selArrowShape = new THREE.Shape();
+    selArrowShape.moveTo(0, 0.20);
+    selArrowShape.lineTo(-0.09, -0.05);
+    selArrowShape.lineTo(0, -0.01);
+    selArrowShape.lineTo(0.09, -0.05);
+    selArrowShape.closePath();
+    const selArrowGeom = new THREE.ShapeGeometry(selArrowShape);
+    const selArrowMat = new THREE.MeshBasicMaterial({
+      color: 0xffb703,
+      side: THREE.DoubleSide,
+      depthWrite: false
+    });
+    const selArrowMesh = new THREE.Mesh(selArrowGeom, selArrowMat);
+    selArrowMesh.rotation.x = -Math.PI / 2;
+    selArrowMesh.position.set(0, 0.002, 0.64);
+    selectionRing.add(selArrowMesh);
+
+    // 4 cardinal compass tick marks (0°, 90°, 180°, 270°)
+    for (let i = 0; i < 4; i++) {
+      const tick = new THREE.Mesh(
+        new THREE.BoxGeometry(0.02, 0.003, 0.08),
+        new THREE.MeshBasicMaterial({ color: 0xffd166, depthWrite: false })
+      );
+      const angle = (i * Math.PI) / 2;
+      tick.position.set(Math.sin(angle) * 0.58, 0.002, Math.cos(angle) * 0.58);
+      tick.rotation.y = angle;
+      selectionRing.add(tick);
+    }
+
+    scene.add(selectionRing);
+
+    function updateSelectionRingTransform(root) {
+      if (!root || !root.visible || isPositionsLocked) {
+        selectionRing.visible = false;
+        return;
+      }
+      selectionRing.position.set(root.position.x, 0.006, root.position.z);
+      selectionRing.rotation.y = root.rotation.y;
+
+      // Adaptive ring radius based on bounding box
+      const aabb = new THREE.Box3().setFromObject(root);
+      const sizeX = Math.max(0.4, aabb.max.x - aabb.min.x);
+      const sizeZ = Math.max(0.4, aabb.max.z - aabb.min.z);
+      const approxRadius = Math.max(0.45, Math.sqrt(sizeX * sizeX + sizeZ * sizeZ) * 0.44);
+      const scale = THREE.MathUtils.clamp(approxRadius / 0.62, 0.7, 2.2);
+      selectionRing.scale.set(scale, 1, scale);
+      selectionRing.visible = true;
+    }
+
+    function selectFurniture(root) {
+      if (isPositionsLocked || !root) return;
+      selectedFurnitureRoot = root;
+      updateSelectionRingTransform(root);
+
+      const selNameEl = document.getElementById('rotate-sel-name');
+      if (selNameEl) {
+        const name = root.userData.furnitureName || root.name || 'Furniture Piece';
+        const degrees = Math.round((THREE.MathUtils.radToDeg(root.rotation.y) % 360 + 360) % 360);
+        selNameEl.textContent = `🎯 ${name} (${degrees}°)`;
+        selNameEl.title = `Current heading: ${degrees}°`;
+      }
+      const rotatePill = document.getElementById('rotate-pill');
+      if (rotatePill && !isPositionsLocked) {
+        rotatePill.style.display = 'flex';
+      }
+    }
+
+    function deselectFurniture() {
+      selectedFurnitureRoot = null;
+      selectionRing.visible = false;
+      const selNameEl = document.getElementById('rotate-sel-name');
+      if (selNameEl) {
+        selNameEl.textContent = 'Tap furniture to rotate';
+        selNameEl.title = '';
+      }
+    }
+
+    function rotateFurniture(root, deltaRadians, notify = true) {
+      if (!root || isPositionsLocked) return;
+
+      root.rotation.y = (root.rotation.y + deltaRadians) % (Math.PI * 2);
+      const degrees = Math.round((THREE.MathUtils.radToDeg(root.rotation.y) % 360 + 360) % 360);
+      const deltaDeg = Math.round(THREE.MathUtils.radToDeg(deltaRadians));
+      const deltaSign = deltaDeg > 0 ? `+${deltaDeg}°` : `${deltaDeg}°`;
+
+      updateSelectionRingTransform(root);
+
+      const name = root.userData.furnitureName || root.name || 'Furniture Piece';
+      const selNameEl = document.getElementById('rotate-sel-name');
+      if (selNameEl) {
+        selNameEl.textContent = `🎯 ${name} (${degrees}°)`;
+        selNameEl.title = `Current heading: ${degrees}°`;
+      }
+
+      if (notify) {
+        showToast(`⟳ Rotated ${name}: ${deltaSign} → ${degrees}°`);
+      }
+    }
+
+    function rotateSelectedFurniture(deltaRadians) {
+      if (isPositionsLocked) {
+        showToast('🔒 Unlock positions to rotate furniture');
+        return;
+      }
+      if (!selectedFurnitureRoot) {
+        if (draggableFurnitureRoots.length > 0) {
+          selectFurniture(draggableFurnitureRoots[0]);
+        } else {
+          showToast('👉 Tap any furniture piece to select and rotate it');
+          return;
+        }
+      }
+      rotateFurniture(selectedFurnitureRoot, deltaRadians, true);
+    }
 
     dragControls.addEventListener('dragstart', (event) => {
       // Suppress dragging if positions are locked, furniture layer is hidden, or mesh is invisible
@@ -4990,6 +5186,18 @@ ladderGroup.add(rung);
       const mesh = event.object;
       const root = mesh.userData.draggableRoot || mesh;
       activeDragRoot = root;
+
+      // Tap / Double-Tap detection: rotate +45° on rapid double-tap
+      const now = performance.now();
+      const isDoubleTap = (lastTapRoot === root) && (now - lastTapTime < 380);
+      lastTapRoot = root;
+      lastTapTime = now;
+
+      selectFurniture(root);
+
+      if (isDoubleTap) {
+        rotateFurniture(root, Math.PI / 4, true);
+      }
 
       const initialY = (root.userData.initialY !== undefined) ? root.userData.initialY : root.position.y;
       dragFloorPlane.set(new THREE.Vector3(0, 1, 0), -initialY);
@@ -5029,6 +5237,10 @@ ladderGroup.add(rung);
         activeDragRoot.position.x = targetX;
         activeDragRoot.position.z = targetZ;
         activeDragRoot.position.y = initialY;
+
+        if (selectedFurnitureRoot === activeDragRoot) {
+          updateSelectionRingTransform(activeDragRoot);
+        }
       }
     });
 
@@ -5039,6 +5251,10 @@ ladderGroup.add(rung);
       const mesh = event.object;
       if (mesh && mesh !== activeDragRoot && mesh.userData.localPos) {
         mesh.position.copy(mesh.userData.localPos);
+      }
+
+      if (activeDragRoot) {
+        updateSelectionRingTransform(activeDragRoot);
       }
 
       activeDragRoot = null;
@@ -5073,18 +5289,22 @@ ladderGroup.add(rung);
       const lockBtn = document.getElementById('btn-lock-pos');
       const lockIcon = document.getElementById('lock-icon');
       const lockText = document.getElementById('lock-text');
+      const rotatePill = document.getElementById('rotate-pill');
 
       if (locked) {
+        deselectFurniture();
+        if (rotatePill) rotatePill.style.display = 'none';
         if (lockBtn) lockBtn.classList.add('active');
         if (lockIcon) lockIcon.textContent = '🔒';
         if (lockText) lockText.textContent = 'Positions Locked';
         renderer.domElement.style.cursor = 'default';
         if (notify) showToast('🔒 Positions Locked: Furniture fixed in place, orbit freely');
       } else {
+        if (rotatePill) rotatePill.style.display = 'flex';
         if (lockBtn) lockBtn.classList.remove('active');
         if (lockIcon) lockIcon.textContent = '🔓';
         if (lockText) lockText.textContent = 'Unlock Positions';
-        if (notify) showToast('🔓 Positions Unlocked: Drag furniture along the floor plane');
+        if (notify) showToast('🔓 Positions Unlocked: Drag furniture along floor or tap to rotate');
       }
 
       try {
@@ -5183,6 +5403,8 @@ ladderGroup.add(rung);
         }
       });
 
+      deselectFurniture();
+
       camera.position.set(-2.6, 2.1, 4.8);
       controls.target.set(0.0, 1.05, 0.0);
       controls.update();
@@ -5192,7 +5414,7 @@ ladderGroup.add(rung);
       } catch (e) {}
 
       setPositionsLocked(true, false);
-      showToast('↺ Positions Reset to Default Floor Plan');
+      showToast('↺ Positions & Rotations Reset to Default Floor Plan');
     }
 
     // Connect Layout Buttons
@@ -5212,6 +5434,69 @@ ladderGroup.add(rung);
     if (btnResetPos) {
       btnResetPos.addEventListener('click', resetPositions);
     }
+
+    // Connect Rotation HUD Buttons
+    const btnRotCcw = document.getElementById('btn-rot-ccw');
+    if (btnRotCcw) {
+      btnRotCcw.addEventListener('click', (e) => {
+        e.stopPropagation();
+        rotateSelectedFurniture(-Math.PI / 4);
+      });
+    }
+
+    const btnRotFine = document.getElementById('btn-rot-fine');
+    if (btnRotFine) {
+      btnRotFine.addEventListener('click', (e) => {
+        e.stopPropagation();
+        rotateSelectedFurniture(Math.PI / 12);
+      });
+    }
+
+    const btnRotCw = document.getElementById('btn-rot-cw');
+    if (btnRotCw) {
+      btnRotCw.addEventListener('click', (e) => {
+        e.stopPropagation();
+        rotateSelectedFurniture(Math.PI / 4);
+      });
+    }
+
+    // Hotkeys for Furniture Rotation (R: +45°, Shift+R: -45°, Right/Left Arrows or [/]: ±15°)
+    window.addEventListener('keydown', (e) => {
+      if (isPositionsLocked) return;
+      if (['INPUT', 'TEXTAREA'].includes(document.activeElement?.tagName)) return;
+
+      const targetRoot = activeDragRoot || selectedFurnitureRoot;
+      if (!targetRoot) return;
+
+      if (e.key === 'r' || e.key === 'R') {
+        e.preventDefault();
+        if (e.shiftKey) {
+          rotateFurniture(targetRoot, -Math.PI / 4, true);
+        } else {
+          rotateFurniture(targetRoot, Math.PI / 4, true);
+        }
+      } else if (e.key === 'ArrowRight' || e.key === ']') {
+        e.preventDefault();
+        rotateFurniture(targetRoot, Math.PI / 12, true);
+      } else if (e.key === 'ArrowLeft' || e.key === '[') {
+        e.preventDefault();
+        rotateFurniture(targetRoot, -Math.PI / 12, true);
+      }
+    });
+
+    // Mouse Wheel Rotation: fine rotate furniture while dragging or when Shift+wheel
+    window.addEventListener('wheel', (e) => {
+      if (isPositionsLocked) return;
+      if (activeDragRoot) {
+        e.preventDefault();
+        const delta = e.deltaY > 0 ? (Math.PI / 24) : (-Math.PI / 24);
+        rotateFurniture(activeDragRoot, delta, false);
+      } else if (selectedFurnitureRoot && e.shiftKey) {
+        e.preventDefault();
+        const delta = e.deltaY > 0 ? (Math.PI / 24) : (-Math.PI / 24);
+        rotateFurniture(selectedFurnitureRoot, delta, false);
+      }
+    }, { passive: false });
 
     // Initialize Layout & Lock State on startup
     const hasSavedLayout = loadSavedPositions();
@@ -5346,6 +5631,10 @@ ladderGroup.add(rung);
           }
           if (id === 'toggle-furniture') {
             dragControls.enabled = e.target.checked && !isPositionsLocked;
+            if (typeof selectionRing !== 'undefined') {
+              if (!e.target.checked) selectionRing.visible = false;
+              else if (selectedFurnitureRoot) selectionRing.visible = !isPositionsLocked;
+            }
           }
           if (id === 'toggle-drinks' && typeof allTableDrinks !== 'undefined') {
             allTableDrinks.forEach(d => { d.visible = e.target.checked; });
