@@ -238,6 +238,53 @@
     .spec-label { color: #8e7d6c; }
     .spec-val { color: #eae0d4; font-weight: 600; }
 
+    /* Circular Master UI Collapse / Clean View Toggle Button (44px x 44px, Top-Right) */
+    .master-hud-btn {
+      position: absolute;
+      top: 22px;
+      right: 24px;
+      width: 44px;
+      height: 44px;
+      min-width: 44px;
+      min-height: 44px;
+      padding: 0;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      color: #f7eedf;
+      cursor: pointer;
+      z-index: 120;
+      background: rgba(20, 20, 20, 0.85);
+      border: 1px solid rgba(212, 160, 100, 0.35);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      user-select: none;
+      -webkit-user-select: none;
+    }
+    .master-hud-btn:hover {
+      background: rgba(35, 28, 22, 0.95);
+      border-color: rgba(212, 144, 42, 0.8);
+      color: #ffffff;
+      box-shadow: 0 4px 18px rgba(212, 144, 42, 0.4);
+      transform: scale(1.05);
+    }
+    .master-hud-btn.collapsed {
+      background: rgba(18, 14, 11, 0.6);
+      border-color: rgba(255, 255, 255, 0.2);
+      color: #bfa993;
+    }
+
+    /* Master HUD Hidden State: Complete edge-to-edge 3D view with zero UI clutter */
+    body.hud-collapsed header,
+    body.hud-collapsed .toolbar,
+    body.hud-collapsed .layers-drawer,
+    body.hud-collapsed #layers-toggle-btn,
+    body.hud-collapsed .spec-modal {
+      display: none !important;
+    }
+
     /* Circular Mobile Layers Toggle Button (44px x 44px, bottom-right) */
     .layers-toggle-btn {
       position: absolute;
@@ -282,16 +329,17 @@
       right: 24px;
       width: 310px;
       max-width: calc(100vw - 48px);
-      background: rgba(20, 20, 20, 0.75);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-      border: 1px solid rgba(212, 160, 100, 0.22);
-      border-radius: 12px;
+      background: rgba(18, 18, 18, 0.75);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(212, 160, 100, 0.25);
+      border-radius: 14px;
       box-shadow: 0 16px 40px rgba(0, 0, 0, 0.75);
-      padding: 12px 14px;
+      padding: 14px;
       color: #fff;
       font-family: sans-serif;
-      z-index: 35;
+      font-size: 13px;
+      z-index: 100;
       opacity: 0;
       pointer-events: none;
       transform: translateY(10px) scale(0.96);
@@ -441,6 +489,12 @@
         width: auto;
         bottom: auto;
       }
+      .master-hud-btn {
+        top: 14px;
+        right: 14px;
+        min-height: 44px;
+        min-width: 44px;
+      }
       .layers-toggle-btn {
         bottom: 16px;
         right: 16px;
@@ -538,6 +592,11 @@
       <p>Scandinavian Modern &bull; Boutique Specialty Bar</p>
     </div>
   </header>
+
+  <!-- Master UI Collapse / Clean View Toggle Button (44px x 44px) -->
+  <button id="master-hud-btn" class="master-hud-btn glass-hud" title="Toggle UI / Clean View (Hotkey: H)" aria-label="Toggle UI Overlays">
+    👁
+  </button>
  
   <!-- Circular Layers Toggle Button (44px x 44px) -->
   <button id="layers-toggle-btn" class="layers-toggle-btn glass-hud" title="Toggle Scene Layers" aria-label="Toggle Scene Layers">
@@ -674,6 +733,7 @@
   <script type="module">
     import * as THREE from 'three';
     import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+    import { DragControls } from 'three/addons/controls/DragControls.js';
     import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
     import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
     import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
@@ -3867,8 +3927,26 @@ fruitBasket.add(fruit);
     });
 
     // =========================================================================
-    // 6. Scandinavian Furniture Typologies (furnitureGroup)
+    // 6. Scandinavian Furniture Typologies & Draggable System (furnitureGroup)
     // =========================================================================
+
+    const draggableFurnitureRoots = [];
+    const draggableFurnitureMeshes = [];
+
+    function registerDraggableFurniture(rootGroup) {
+      if (!rootGroup) return;
+      rootGroup.userData.isDraggableRoot = true;
+      rootGroup.userData.initialY = (rootGroup.position.y !== undefined) ? rootGroup.position.y : 0;
+      draggableFurnitureRoots.push(rootGroup);
+
+      rootGroup.traverse(child => {
+        if (child.isMesh) {
+          child.userData.draggableRoot = rootGroup;
+          child.userData.localPos = child.position.clone();
+          draggableFurnitureMeshes.push(child);
+        }
+      });
+    }
 
     // A. Three Tolix-Style Barstools in Glossy White Enamel at Service Counter (Z = -1.25m)
     function buildTolixBarstool(xPos, zPos = -1.25) {
@@ -3878,7 +3956,7 @@ fruitBasket.add(fruit);
       // Square Pressed Sheet-Metal Seat (320mm × 320mm × 25mm with central slot cutout)
       const seatTop = new THREE.Mesh(new THREE.BoxGeometry(0.32, 0.025, 0.32), materials.whiteTolix);
       seatTop.position.y = 0.68;
-stool.add(seatTop);
+      stool.add(seatTop);
 
       // Seat Drainage Slot Accent
       const seatSlot = new THREE.Mesh(new THREE.BoxGeometry(0.12, 0.026, 0.02), materials.blackenedStructuralSteel);
@@ -3897,7 +3975,7 @@ stool.add(seatTop);
         leg.position.set(lx * 1.15, 0.34, lz * 1.15);
         leg.rotation.x = rx;
         leg.rotation.z = rz;
-stool.add(leg);
+        stool.add(leg);
 
         // Rubber Foot Pad
         const foot = new THREE.Mesh(new THREE.CylinderGeometry(0.012, 0.014, 0.02, 8), materials.blackenedStructuralSteel);
@@ -3917,6 +3995,7 @@ stool.add(leg);
       stool.add(gusset);
 
       furnitureGroup.add(stool);
+      registerDraggableFurniture(stool);
       return stool;
     }
 
@@ -3930,17 +4009,17 @@ stool.add(leg);
       // Matte Black Cast-Iron Disc Pedestal Base (500mm diameter)
       const discBase = new THREE.Mesh(new THREE.CylinderGeometry(0.25, 0.26, 0.025, 32), materials.blackenedStructuralSteel);
       discBase.position.y = 0.0125;
-table.add(discBase);
+      table.add(discBase);
 
       // Central Fluted Steel Column (60mm diameter)
       const column = new THREE.Mesh(new THREE.CylinderGeometry(0.03, 0.03, 0.67, 20), materials.blackenedStructuralSteel);
       column.position.y = 0.36;
-table.add(column);
+      table.add(column);
 
       // 750mm Carrara Laminate Table Top (30mm thickness at Y = 0.72m)
       const top = new THREE.Mesh(new THREE.CylinderGeometry(0.375, 0.375, 0.03, 36), materials.whiteCarraraLaminate);
       top.position.y = 0.71;
-table.add(top);
+      table.add(top);
 
       // Under-Bevel Sub-Top Ring
       const subTop = new THREE.Mesh(new THREE.CylinderGeometry(0.32, 0.36, 0.015, 32), materials.blackenedStructuralSteel);
@@ -3963,7 +4042,7 @@ table.add(top);
         materials.blackShellChair
       );
       seatShell.position.y = 0.44;
-chair.add(seatShell);
+      chair.add(seatShell);
 
       // Ergonomic Curved Shell Backrest
       const backShell = new THREE.Mesh(
@@ -3972,13 +4051,13 @@ chair.add(seatShell);
       );
       backShell.position.set(0, 0.62, -0.06);
       backShell.rotation.y = Math.PI;
-chair.add(backShell);
+      chair.add(backShell);
 
       // Splayed Matte-Black Wire Legs
       [[-0.14, -0.14], [0.14, -0.14], [-0.14, 0.14], [0.14, 0.14]].forEach(([lx, lz]) => {
         const leg = new THREE.Mesh(new THREE.CylinderGeometry(0.009, 0.006, 0.43, 8), materials.blackenedStructuralSteel);
         leg.position.set(lx, 0.215, lz);
-chair.add(leg);
+        chair.add(leg);
       });
 
       // Wire Eiffel X-Brace Under Seat
@@ -3988,12 +4067,17 @@ chair.add(leg);
       chair.add(xBrace);
 
       furnitureGroup.add(chair);
+      registerDraggableFurniture(chair);
       return chair;
     }
 
-    // 3 Bistro Tables & Flanking Chairs
+    // 3 Bistro Pedestal Tables & Flanking Chairs
+    const bistroTable1 = buildBistroPedestalTable(-1.6, 0.2);
+    const bistroTable2 = buildBistroPedestalTable(0.0, 0.2);
+    const bistroTable3 = buildBistroPedestalTable(1.6, 0.2);
+    const bistroTables = [bistroTable1, bistroTable2, bistroTable3];
+
     [-1.6, 0.0, 1.6].forEach(tx => {
-      buildBistroPedestalTable(tx, 0.2);
       buildBlackShellChair(tx, 0.65, Math.PI);      // facing forward toward table
       buildBlackShellChair(tx, -0.25, 0);          // facing backward toward table
     });
@@ -4005,17 +4089,17 @@ chair.add(leg);
     // Continuous Timber Slatted Base (4.2m length along Z, 0.65m depth, 0.38m height)
     const bBase = new THREE.Mesh(new THREE.BoxGeometry(0.65, 0.38, 4.2), materials.counterFlutedSlat);
     bBase.position.y = 0.19;
-banquetteGroup.add(bBase);
+    banquetteGroup.add(bBase);
 
     // Tailored Light Grey Seat Cushion (4.2m length × 0.68m depth × 0.10m thick at Y = 0.43m)
     const bSeat = new THREE.Mesh(new THREE.BoxGeometry(0.68, 0.10, 4.2), materials.lightGreyBanquette);
     bSeat.position.y = 0.43;
-banquetteGroup.add(bSeat);
+    banquetteGroup.add(bSeat);
 
     // Continuous Wall-Mounted Vertical Backrest Cushion (0.10m thick × 0.45m tall at Y = 0.72m)
     const bBack = new THREE.Mesh(new THREE.BoxGeometry(0.10, 0.45, 4.2), materials.lightGreyBanquette);
     bBack.position.set(0.28, 0.705, 0);
-banquetteGroup.add(bBack);
+    banquetteGroup.add(bBack);
 
     furnitureGroup.add(banquetteGroup);
 
@@ -4027,7 +4111,7 @@ banquetteGroup.add(bBack);
       // Matte White Carrara Laminate Table Top (1.2m Z × 0.60m X × 0.035m Y)
       const top = new THREE.Mesh(new THREE.BoxGeometry(0.60, 0.035, 1.2), materials.whiteCarraraLaminate);
       top.position.y = 0.71;
-desk.add(top);
+      desk.add(top);
 
       // Black Matte Inverted U-Frame Legs at ends
       [-0.54, 0.54].forEach(dz => {
@@ -4047,7 +4131,10 @@ desk.add(top);
       return desk;
     }
 
-    [-0.9, 0.6, 2.1].forEach(dz => buildWorkDesk(dz));
+    const desk1 = buildWorkDesk(-0.9);
+    const desk2 = buildWorkDesk(0.6);
+    const desk3 = buildWorkDesk(2.1);
+    const workDesks = [desk1, desk2, desk3];
 
     // D. Corner Hearth & Lounge Zone (Sofa, Slipper Chairs, Live-Edge Tables, Cushions)
     const loungeZone = new THREE.Group();
@@ -4061,7 +4148,7 @@ desk.add(top);
     // Sofa Plinth / Base
     const sBase = new THREE.Mesh(new THREE.BoxGeometry(2.2, 0.18, 0.85), materials.scandiSofa);
     sBase.position.y = 0.09;
-sofaGroup.add(sBase);
+    sofaGroup.add(sBase);
 
     // Low Modern Legs (4 tapered black oak feet)
     [[-1.0, -0.38], [1.0, -0.38], [-1.0, 0.38], [1.0, 0.38]].forEach(([fx, fz]) => {
@@ -4074,19 +4161,19 @@ sofaGroup.add(sBase);
     [-0.66, 0.0, 0.66].forEach(cx => {
       const seatCushion = new THREE.Mesh(new THREE.BoxGeometry(0.64, 0.14, 0.68), materials.scandiSofa);
       seatCushion.position.set(cx, 0.25, -0.04);
-sofaGroup.add(seatCushion);
+      sofaGroup.add(seatCushion);
     });
 
     // Backrest Slab
     const sBack = new THREE.Mesh(new THREE.BoxGeometry(2.2, 0.44, 0.18), materials.scandiSofa);
     sBack.position.set(0, 0.50, 0.33);
-sofaGroup.add(sBack);
+    sofaGroup.add(sBack);
 
     // Track Arms (Left & Right)
     [-1.02, 1.02].forEach(ax => {
       const arm = new THREE.Mesh(new THREE.BoxGeometry(0.16, 0.36, 0.85), materials.scandiSofa);
       arm.position.set(ax, 0.36, 0);
-sofaGroup.add(arm);
+      sofaGroup.add(arm);
     });
 
     // Exactly 4 Plush Accent Throw Cushions in Sofa Corners
@@ -4100,10 +4187,11 @@ sofaGroup.add(arm);
       const cush = new THREE.Mesh(new THREE.BoxGeometry(0.32, 0.32, 0.12), c.mat);
       cush.position.set(c.x, c.y, c.z);
       cush.rotation.set(c.rx, c.ry, 0);
-sofaGroup.add(cush);
+      sofaGroup.add(cush);
     });
 
     loungeZone.add(sofaGroup);
+    registerDraggableFurniture(sofaGroup);
 
     // 2 Low Wire-Frame Slipper Lounge Chairs
     function buildSlipperChair(xPos, zPos, rotY, seatMat) {
@@ -4115,19 +4203,19 @@ sofaGroup.add(cush);
       const sSeat = new THREE.Mesh(new THREE.BoxGeometry(0.58, 0.09, 0.54), seatMat);
       sSeat.position.set(0, 0.34, 0);
       sSeat.rotation.x = -0.10;
-slipper.add(sSeat);
+      slipper.add(sSeat);
 
       // Low Angled Back Cushion
       const sBackCush = new THREE.Mesh(new THREE.BoxGeometry(0.56, 0.40, 0.09), seatMat);
       sBackCush.position.set(0, 0.54, -0.22);
       sBackCush.rotation.x = -0.22;
-slipper.add(sBackCush);
+      slipper.add(sBackCush);
 
       // Black Wire Sled Hairpin Base
       [-0.26, 0.26].forEach(sx => {
         const sled = new THREE.Mesh(new THREE.CylinderGeometry(0.007, 0.007, 0.34, 8), materials.blackenedStructuralSteel);
         sled.position.set(sx, 0.17, 0.02);
-slipper.add(sled);
+        slipper.add(sled);
       });
       const sledRunnerL = new THREE.Mesh(new THREE.BoxGeometry(0.012, 0.012, 0.50), materials.blackenedStructuralSteel);
       sledRunnerL.position.set(-0.26, 0.01, 0);
@@ -4136,11 +4224,12 @@ slipper.add(sled);
       slipper.add(sledRunnerL, sledRunnerR);
 
       loungeZone.add(slipper);
+      registerDraggableFurniture(slipper);
       return slipper;
     }
 
-    buildSlipperChair(-1.8, 1.4, -Math.PI * 0.65, materials.slipperSlateBlue);
-    buildSlipperChair(-2.1, 2.2, -Math.PI * 0.85, materials.slipperCoolGrey);
+    const slipper1 = buildSlipperChair(-1.8, 1.4, -Math.PI * 0.65, materials.slipperSlateBlue);
+    const slipper2 = buildSlipperChair(-2.1, 2.2, -Math.PI * 0.85, materials.slipperCoolGrey);
 
     // Two Organic Live-Edge Wood Slab Coffee Tables
     // Coffee Table 1 (Larger organic slab, Y = 0.38m)
@@ -4149,13 +4238,13 @@ slipper.add(sled);
     const slab1 = new THREE.Mesh(new THREE.CylinderGeometry(0.44, 0.40, 0.05, 18), materials.liveEdgeWood);
     slab1.scale.set(1.2, 1.0, 0.85);
     slab1.position.y = 0.375;
-ct1.add(slab1);
+    ct1.add(slab1);
 
     // 3 Matte Black Hairpin Legs
     [0, 2.1, 4.2].forEach(ang => {
       const leg = new THREE.Mesh(new THREE.CylinderGeometry(0.008, 0.006, 0.35, 8), materials.blackenedStructuralSteel);
       leg.position.set(Math.cos(ang) * 0.32, 0.175, Math.sin(ang) * 0.26);
-ct1.add(leg);
+      ct1.add(leg);
     });
     loungeZone.add(ct1);
 
@@ -4164,12 +4253,12 @@ ct1.add(leg);
     ct2.position.set(-3.4, 0, 1.4);
     const slab2 = new THREE.Mesh(new THREE.CylinderGeometry(0.28, 0.26, 0.045, 18), materials.liveEdgeWood);
     slab2.position.y = 0.325;
-ct2.add(slab2);
+    ct2.add(slab2);
 
     [0.8, 2.9, 5.0].forEach(ang => {
       const leg = new THREE.Mesh(new THREE.CylinderGeometry(0.008, 0.006, 0.30, 8), materials.blackenedStructuralSteel);
       leg.position.set(Math.cos(ang) * 0.20, 0.15, Math.sin(ang) * 0.20);
-ct2.add(leg);
+      ct2.add(leg);
     });
     loungeZone.add(ct2);
 
@@ -4179,7 +4268,7 @@ ct2.add(leg);
 
     // Sleek Ultra-Thin Laptop Open on Work Desk 2
     const laptopGroup = new THREE.Group();
-    laptopGroup.position.set(4.25, 0.728, 0.60);
+    laptopGroup.position.set(0.05, 0.728, 0.0);
     const laptopBase = new THREE.Mesh(new THREE.BoxGeometry(0.24, 0.008, 0.32), materials.polishedChrome);
     laptopBase.position.y = 0.004;
     const laptopScreen = new THREE.Mesh(new THREE.BoxGeometry(0.24, 0.18, 0.006), materials.polishedChrome);
@@ -4192,7 +4281,7 @@ ct2.add(leg);
     screenGlow.position.set(0, 0.09, -0.144);
     screenGlow.rotation.x = -0.22;
     laptopGroup.add(laptopBase, laptopScreen, screenGlow);
-    furnitureGroup.add(laptopGroup);
+    desk2.add(laptopGroup);
 
     // --- SPECIALTY TABLE DRINKS & HANDCRAFTED GLASSWARE (tableDrinksGroup) ---
 
@@ -4316,39 +4405,51 @@ ct2.add(leg);
       return sGroup;
     }
 
-    // Drinks on Bistro Table 1
+    // Anchored Drinks on Bistro Tables (move seamlessly with tables during drag)
     const bistroMojito = buildArtisanMojitoGlass();
-    bistroMojito.position.set(-1.55, 0.725, 0.20);
-    tableDrinksGroup.add(bistroMojito);
+    bistroMojito.position.set(0.05, 0.725, 0.0);
+    bistroTable1.add(bistroMojito);
 
-    // Drinks on Bistro Table 2
     const bistroDemitasse = buildTableDemitasse();
-    bistroDemitasse.position.set(0.05, 0.725, 0.15);
-    tableDrinksGroup.add(bistroDemitasse);
+    bistroDemitasse.position.set(0.05, 0.725, -0.05);
+    bistroTable2.add(bistroDemitasse);
 
-    // Drinks on Bistro Table 3
     const bistroSiphon = buildTableSiphonGlass();
-    bistroSiphon.position.set(1.65, 0.725, 0.20);
-    tableDrinksGroup.add(bistroSiphon);
+    bistroSiphon.position.set(0.05, 0.725, 0.0);
+    bistroTable3.add(bistroSiphon);
 
-    // Drinks on Work Desk 1
+    // Anchored Drinks on Work Desks
     const deskDemitasse = buildTableDemitasse();
-    deskDemitasse.position.set(4.25, 0.725, -0.85);
-    tableDrinksGroup.add(deskDemitasse);
+    deskDemitasse.position.set(0.05, 0.725, 0.05);
+    desk1.add(deskDemitasse);
 
-    // Drinks on Work Desk 2
     const deskMojito = buildArtisanMojitoGlass();
-    deskMojito.position.set(4.15, 0.725, 0.68);
-    tableDrinksGroup.add(deskMojito);
+    deskMojito.position.set(-0.05, 0.725, 0.08);
+    desk2.add(deskMojito);
 
-    // Drinks on Live-Edge Coffee Tables
+    // Anchored Drinks on Live-Edge Coffee Tables
     const loungeMojito = buildArtisanMojitoGlass();
-    loungeMojito.position.set(-2.75, 0.40, 1.65);
-    tableDrinksGroup.add(loungeMojito);
+    loungeMojito.position.set(0.05, 0.40, 0.05);
+    ct1.add(loungeMojito);
 
     const loungeSiphon = buildTableSiphonGlass();
-    loungeSiphon.position.set(-3.35, 0.35, 1.35);
-    tableDrinksGroup.add(loungeSiphon);
+    loungeSiphon.position.set(0.05, 0.35, -0.05);
+    ct2.add(loungeSiphon);
+
+    // Register all bistro tables, desks, and coffee tables with their anchored refreshments
+    [bistroTable1, bistroTable2, bistroTable3, desk1, desk2, desk3, ct1, ct2].forEach(t => {
+      registerDraggableFurniture(t);
+    });
+
+    const allTableDrinks = [
+      bistroMojito,
+      bistroDemitasse,
+      bistroSiphon,
+      deskDemitasse,
+      deskMojito,
+      loungeMojito,
+      loungeSiphon
+    ];
 
     // Freestanding Solid Oak A-Frame Sidewalk Chalkboard Sign at Entrance Threshold (Z = +3.2m, X = 1.2m)
     function buildEntranceAFrame() {
@@ -4768,7 +4869,7 @@ ladderGroup.add(rung);
     }
 
     // =========================================================================
-    // 11. Raycasting & Interactive Modal Inspections
+    // 11. Zero-Overlay Furniture Dragging (THREE.DragControls) & HUD Controls
     // =========================================================================
 
     function isAncestorVisible(obj) {
@@ -4780,6 +4881,93 @@ ladderGroup.add(rung);
       return true;
     }
 
+    // Zero-Overlay Furniture Dragging (THREE.DragControls)
+    // Constrained to horizontal floor plane (XZ-axes at initialY) with camera lock and bounds clamping
+    const dragControls = new DragControls(draggableFurnitureMeshes, camera, renderer.domElement);
+    dragControls.recursive = false;
+
+    let activeDragRoot = null;
+    let isDraggingFurniture = false;
+    let dragStartTime = 0;
+    const dragFloorPlane = new THREE.Plane();
+    const dragPlaneHit = new THREE.Vector3();
+    const dragOffsetVec = new THREE.Vector3();
+
+    dragControls.addEventListener('dragstart', (event) => {
+      // Suppress dragging if furniture layer is hidden or mesh is invisible
+      if (!isAncestorVisible(event.object) || !furnitureGroup.visible) {
+        controls.enabled = true;
+        activeDragRoot = null;
+        return;
+      }
+
+      isDraggingFurniture = true;
+      dragStartTime = performance.now();
+
+      // Camera Lock: automatically disable OrbitControls during drag
+      controls.enabled = false;
+
+      const mesh = event.object;
+      const root = mesh.userData.draggableRoot || mesh;
+      activeDragRoot = root;
+
+      const initialY = (root.userData.initialY !== undefined) ? root.userData.initialY : root.position.y;
+      dragFloorPlane.set(new THREE.Vector3(0, 1, 0), -initialY);
+
+      const raycaster = dragControls.getRaycaster();
+      if (raycaster.ray.intersectPlane(dragFloorPlane, dragPlaneHit)) {
+        dragOffsetVec.copy(root.position).sub(dragPlaneHit);
+      } else {
+        dragOffsetVec.set(0, 0, 0);
+      }
+
+      // Suppress displacement of clicked child mesh inside its parent group
+      if (mesh !== root && mesh.userData.localPos) {
+        mesh.position.copy(mesh.userData.localPos);
+      }
+    });
+
+    dragControls.addEventListener('drag', (event) => {
+      if (!activeDragRoot) return;
+
+      // 1. Immediately restore clicked mesh local position
+      const mesh = event.object;
+      if (mesh !== activeDragRoot && mesh.userData.localPos) {
+        mesh.position.copy(mesh.userData.localPos);
+      }
+
+      // 2. Intersect ray against horizontal floor plane Y = initialY
+      const initialY = (activeDragRoot.userData.initialY !== undefined) ? activeDragRoot.userData.initialY : 0;
+      dragFloorPlane.set(new THREE.Vector3(0, 1, 0), -initialY);
+
+      const raycaster = dragControls.getRaycaster();
+      if (raycaster.ray.intersectPlane(dragFloorPlane, dragPlaneHit)) {
+        // 3. Move root along XZ floor plane, strictly clamping bounds & Y height
+        const targetX = THREE.MathUtils.clamp(dragPlaneHit.x + dragOffsetVec.x, -5.0, 5.0);
+        const targetZ = THREE.MathUtils.clamp(dragPlaneHit.z + dragOffsetVec.z, -3.3, 3.3);
+
+        activeDragRoot.position.x = targetX;
+        activeDragRoot.position.z = targetZ;
+        activeDragRoot.position.y = initialY;
+      }
+    });
+
+    dragControls.addEventListener('dragend', (event) => {
+      // Camera Lock: automatically re-enable OrbitControls
+      controls.enabled = true;
+
+      const mesh = event.object;
+      if (mesh && mesh !== activeDragRoot && mesh.userData.localPos) {
+        mesh.position.copy(mesh.userData.localPos);
+      }
+
+      activeDragRoot = null;
+      setTimeout(() => {
+        isDraggingFurniture = false;
+      }, 60);
+    });
+
+    // Raycasting & Interactive Modal Inspections for Equipment
     const raycaster = new THREE.Raycaster();
     const pointer = new THREE.Vector2();
     const modal = document.getElementById('spec-modal');
@@ -4789,7 +4977,8 @@ ladderGroup.add(rung);
     const modalGrid = document.getElementById('modal-grid');
 
     function onPointerDown(event) {
-      if (event.target.closest('.glass-hud')) return;
+      if (isDraggingFurniture || (performance.now() - dragStartTime < 250)) return;
+      if (event.target.closest('.glass-hud') || event.target.closest('#master-hud-btn')) return;
       pointer.x = (event.clientX / window.innerWidth) * 2 - 1;
       pointer.y = -(event.clientY / window.innerHeight) * 2 + 1;
 
@@ -4821,6 +5010,35 @@ ladderGroup.add(rung);
       modal.classList.remove('visible');
     });
     window.addEventListener('pointerdown', onPointerDown);
+
+    // Master UI Fullscreen / Clean View Collapse Toggle (44px x 44px Button & 'H' Hotkey)
+    const masterHudBtn = document.getElementById('master-hud-btn');
+    function toggleMasterHUD() {
+      const isCollapsed = document.body.classList.toggle('hud-collapsed');
+      if (masterHudBtn) {
+        masterHudBtn.classList.toggle('collapsed', isCollapsed);
+        masterHudBtn.innerHTML = isCollapsed ? '✕' : '👁';
+        masterHudBtn.title = isCollapsed ? 'Restore UI Panels (Hotkey: H)' : 'Hide All UI Overlays (Hotkey: H)';
+        masterHudBtn.setAttribute('aria-label', isCollapsed ? 'Restore UI Panels' : 'Hide All UI Overlays');
+      }
+      if (isCollapsed && layersDrawer) {
+        layersDrawer.classList.remove('open');
+        if (layersBtn) layersBtn.classList.remove('active');
+      }
+    }
+    if (masterHudBtn) {
+      masterHudBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        toggleMasterHUD();
+      });
+    }
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'h' || e.key === 'H') {
+        if (!['INPUT', 'TEXTAREA'].includes(document.activeElement?.tagName)) {
+          toggleMasterHUD();
+        }
+      }
+    });
 
     // Camera Preset Buttons
     document.querySelectorAll('[data-view]').forEach(btn => {
@@ -4863,6 +5081,12 @@ ladderGroup.add(rung);
           grp.visible = e.target.checked;
           if (id === 'toggle-wallart' && chalkboardsGroup) {
             chalkboardsGroup.visible = e.target.checked;
+          }
+          if (id === 'toggle-furniture') {
+            dragControls.enabled = e.target.checked;
+          }
+          if (id === 'toggle-drinks' && typeof allTableDrinks !== 'undefined') {
+            allTableDrinks.forEach(d => { d.visible = e.target.checked; });
           }
         });
       }
