@@ -2006,7 +2006,7 @@ function generateChalkboardTexture() {
     const initialAspect = window.innerWidth / window.innerHeight;
     const initialFov = initialAspect < 1.0 ? 52 : 42;
     const camera = new THREE.PerspectiveCamera(initialFov, initialAspect, 0.1, 45);
-    camera.position.set(-2.8, 2.2, 5.0);
+    camera.position.set(-2.6, 2.1, 4.8);
 
     const renderer = new THREE.WebGLRenderer({
       canvas,
@@ -2022,18 +2022,30 @@ function generateChalkboardTexture() {
     // Shadowless High-Performance Architecture (Strictly Zero Cast Shadows)
     renderer.shadowMap.enabled = false;
 
-    // OrbitControls tuned for touch and mobile interaction
+    // OrbitControls tuned for stable, smooth touch and mobile interaction
     const controls = new OrbitControls(camera, canvas);
     controls.enableDamping = true;
-    controls.dampingFactor = 0.08;
-    controls.maxPolarAngle = Math.PI / 2.05; // Hard floor limit
-    controls.minDistance = 2.2;
-    controls.maxDistance = 14.0;
+    controls.dampingFactor = 0.06;
+    controls.rotateSpeed = 0.70;
+    controls.enablePan = false; // Locks pivot firmly to the room center, preventing drift
+    controls.minPolarAngle = Math.PI * 0.12; // ~21.6°: Prevents disorienting zenith flip
+    controls.maxPolarAngle = Math.PI / 2.12; // ~84.9°: Hard floor limit, prevents going below floor
+    controls.minDistance = 2.4; // Keeps clear of furniture collision
+    controls.maxDistance = 8.8; // Constrains orbit within room vicinity, never drifting away
     controls.touches = {
       ONE: THREE.TOUCH.ROTATE,
       TWO: THREE.TOUCH.DOLLY_PAN
     };
-    controls.target.set(0.4, 1.05, -0.6);
+    controls.target.set(0.0, 1.05, 0.0);
+
+    let isUserRotating = false;
+    controls.addEventListener('start', () => {
+      isUserRotating = true;
+      isMovingCam = false;
+    });
+    controls.addEventListener('end', () => {
+      isUserRotating = false;
+    });
 
     function updateCameraFrustum() {
       const aspect = window.innerWidth / window.innerHeight;
@@ -2545,10 +2557,12 @@ envelope.add(floor);
     envelope.add(ceiling);
 
     // Four Heavy Reclaimed Solid Timber Beams (0.24m H × 0.20m D) spanning X-axis (10.8m length)
+    const ceilingBeams = [];
     [-2.4, -0.8, 0.8, 2.4].forEach(bz => {
       const beam = new THREE.Mesh(new THREE.BoxGeometry(10.8, 0.24, 0.20), materials.reclaimedTimberBeam);
       beam.position.set(0, 3.38, bz);
-envelope.add(beam);
+      envelope.add(beam);
+      ceilingBeams.push(beam);
     });
 
     // --- REAR MASONRY FEATURE WALL & FLANKING SCANDINAVIAN SHIPLAP (Z = -3.8m) ---
@@ -4721,32 +4735,32 @@ ladderGroup.add(rung);
 
     const views = {
       default: {
-        pos: new THREE.Vector3(-2.8, 2.2, 5.0),
-        target: new THREE.Vector3(0.5, 1.10, -0.5)
+        pos: new THREE.Vector3(-2.6, 2.1, 4.8),
+        target: new THREE.Vector3(0.0, 1.05, 0.0)
       },
       mural: {
-        pos: new THREE.Vector3(-0.6, 1.65, 0.4),
-        target: new THREE.Vector3(5.35, 1.50, 0.0)
+        pos: new THREE.Vector3(-0.8, 1.60, 0.4),
+        target: new THREE.Vector3(2.6, 1.45, 0.0)
       },
       bistro: {
-        pos: new THREE.Vector3(0.0, 1.45, 1.8),
-        target: new THREE.Vector3(0.0, 0.85, 0.2)
+        pos: new THREE.Vector3(0.0, 1.50, 2.2),
+        target: new THREE.Vector3(0.0, 0.90, 0.2)
       },
       espresso: {
-        pos: new THREE.Vector3(0.85, 1.35, -0.8),
-        target: new THREE.Vector3(0.85, 1.10, barCenterZ)
+        pos: new THREE.Vector3(0.85, 1.35, -0.6),
+        target: new THREE.Vector3(0.85, 1.05, barCenterZ)
       },
       siphon: {
-        pos: new THREE.Vector3(-0.85, 1.35, -0.8),
-        target: new THREE.Vector3(-0.85, 1.15, barCenterZ)
+        pos: new THREE.Vector3(-0.85, 1.35, -0.6),
+        target: new THREE.Vector3(-0.85, 1.05, barCenterZ)
       },
       lounge: {
-        pos: new THREE.Vector3(-1.4, 1.45, 3.5),
-        target: new THREE.Vector3(-3.0, 0.85, 1.8)
+        pos: new THREE.Vector3(-1.2, 1.50, 3.6),
+        target: new THREE.Vector3(-2.5, 0.90, 2.0)
       },
       entrance: {
-        pos: new THREE.Vector3(1.0, 1.40, 2.5),
-        target: new THREE.Vector3(1.2, 0.85, 3.3)
+        pos: new THREE.Vector3(0.8, 1.40, 2.4),
+        target: new THREE.Vector3(1.0, 0.90, 3.0)
       }
     };
 
@@ -5153,6 +5167,34 @@ ladderGroup.add(rung);
       }
 
       controls.update();
+
+      // Dynamic Architectural Section Culling (No Wall Hides User Vision)
+      // When rotating or viewing from angles where a wall stands between the camera
+      // and the interior, automatically hide that wall!
+      const cx = camera.position.x;
+      const cy = camera.position.y;
+      const cz = camera.position.z;
+
+      // 1. Right Wall & Graphic Mural (X = +5.4m):
+      // If camera is to the right (cx > 2.8m, or cx > 1.4m while rotating), hide so interior is 100% visible
+      const rightWallOccludes = isUserRotating ? (cx > 1.4) : (cx > 2.8);
+      const isWallArtLayerOn = layerToggles['toggle-wallart'] ? document.getElementById('toggle-wallart').checked : true;
+      rightWall.visible = !rightWallOccludes;
+      artisticWallGroup.visible = !rightWallOccludes && isWallArtLayerOn;
+
+      // 2. Rear Wall & Menu Chalkboard (Z = -3.8m):
+      // If camera is behind (cz < -1.6m, or cz < -0.8m while rotating), hide so interior is 100% visible
+      const rearWallOccludes = isUserRotating ? (cz < -0.8) : (cz < -1.6);
+      brickFeatureWall.visible = !rearWallOccludes;
+      rearWallLeft.visible = !rearWallOccludes;
+      rearWallRight.visible = !rearWallOccludes;
+      chalkboardsGroup.visible = !rearWallOccludes;
+
+      // 3. Concrete Ceiling Slab & Timber Beams (Y = 3.5m):
+      // If camera is viewing from above (cy > 2.9m), hide so user can view inside cleanly
+      const ceilingOccludes = isUserRotating ? (cy > 2.7) : (cy > 3.0);
+      ceiling.visible = !ceilingOccludes;
+      ceilingBeams.forEach(b => { b.visible = !ceilingOccludes; });
 
       // Delicate filament pulse on active point lights
       edisonFixtures.forEach((f, i) => {
