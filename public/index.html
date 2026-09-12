@@ -696,7 +696,7 @@
   <div class="toolbar glass-hud">
     <div class="group-pill">
       <button class="tool-btn active" data-view="default">🎥 3/4 Perspective</button>
-      <button class="tool-btn" data-view="sunset">☀️ Casement &amp; Mural</button>
+      <button class="tool-btn" data-view="mural">🎨 Artistic Mural</button>
       <button class="tool-btn" data-view="bistro">☕ Bistro Island</button>
       <button class="tool-btn" data-view="espresso">⚡ Sonifer Hub</button>
       <button class="tool-btn" data-view="siphon">🧪 Siphon Bar</button>
@@ -707,8 +707,8 @@
     <div class="sep"></div>
 
     <div class="group-pill">
-      <button class="tool-btn active" data-light="golden">🌅 Golden Sunset</button>
-      <button class="tool-btn" data-light="daylight">☀️ 5000K Morning</button>
+      <button class="tool-btn active" data-light="daylight">☀️ Crisp White Sun</button>
+      <button class="tool-btn" data-light="warm">🌅 Warm Ambient</button>
       <button class="tool-btn" data-light="evening">🌙 Midnight Ambiance</button>
     </div>
 
@@ -1898,14 +1898,14 @@ function generateChalkboardTexture() {
 
     const canvas = document.getElementById('webgl-canvas');
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x0b0907);
-    scene.fog = new THREE.FogExp2(0x24140d, 0.016);
+    scene.background = new THREE.Color(0x161514);
+    scene.fog = new THREE.FogExp2(0x161514, 0.010);
 
     // Dynamic Mobile Viewport & Frustum: 52° in mobile portrait, 42° in desktop/landscape
     const initialAspect = window.innerWidth / window.innerHeight;
     const initialFov = initialAspect < 1.0 ? 52 : 42;
     const camera = new THREE.PerspectiveCamera(initialFov, initialAspect, 0.1, 45);
-    camera.position.set(-1.6, 1.55, 3.6);
+    camera.position.set(-2.8, 2.2, 5.0);
 
     const renderer = new THREE.WebGLRenderer({
       canvas,
@@ -1927,7 +1927,7 @@ function generateChalkboardTexture() {
     controls.dampingFactor = 0.08;
     controls.maxPolarAngle = Math.PI / 2.05; // Hard floor limit
     controls.minDistance = 2.2;
-    controls.maxDistance = 9.5;
+    controls.maxDistance = 14.0;
     controls.touches = {
       ONE: THREE.TOUCH.ROTATE,
       TWO: THREE.TOUCH.DOLLY_PAN
@@ -2651,179 +2651,7 @@ chalkboardsGroup.add(chalkboard);
       ]
     });
 
-    // --- FRONT ENTRANCE WALL & SOLID OAK TIMBER DOOR (Z = +3.8m) ---
-    // Front Left Wall (X = -5.4m to 0.7m, W = 6.1m)
-    const frontWallLeft = new THREE.Mesh(new THREE.BoxGeometry(6.1, 3.5, 0.25), materials.scandiShiplap);
-    frontWallLeft.position.set(-2.35, 1.75, 3.925);
-envelope.add(frontWallLeft);
-
-    // Front Right Wall (X = +1.7m to +5.4m, W = 3.7m)
-    const frontWallRight = new THREE.Mesh(new THREE.BoxGeometry(3.7, 3.5, 0.25), materials.scandiShiplap);
-    frontWallRight.position.set(3.55, 1.75, 3.925);
-envelope.add(frontWallRight);
-
-    // Front Header above Doorway (X = 0.7m to 1.7m, Y = 2.2m to 3.5m, H = 1.3m)
-    const frontHeader = new THREE.Mesh(new THREE.BoxGeometry(1.0, 1.3, 0.25), materials.scandiShiplap);
-    frontHeader.position.set(1.2, 2.85, 3.925);
-    envelope.add(frontHeader);
-
-    // Solid Heavy Oak Timber Door (1.0m W × 2.2m H × 0.06m D at X = 1.2m, Z = 3.8m)
-    const entranceDoorGroup = new THREE.Group();
-    entranceDoorGroup.position.set(1.2, 0, 3.8);
-
-    // Door Frame Outer Casing
-    const doorCasingTop = new THREE.Mesh(new THREE.BoxGeometry(1.08, 0.06, 0.12), materials.americanWalnutFrame);
-    doorCasingTop.position.set(0, 2.21, 0);
-    const doorCasingL = new THREE.Mesh(new THREE.BoxGeometry(0.06, 2.24, 0.12), materials.americanWalnutFrame);
-    doorCasingL.position.set(-0.51, 1.12, 0);
-    const doorCasingR = new THREE.Mesh(new THREE.BoxGeometry(0.06, 2.24, 0.12), materials.americanWalnutFrame);
-    doorCasingR.position.set(0.51, 1.12, 0);
-    entranceDoorGroup.add(doorCasingTop, doorCasingL, doorCasingR);
-
-    // Main Oak Door Slab
-    const doorLeaf = new THREE.Mesh(new THREE.BoxGeometry(0.96, 2.18, 0.055), materials.solidOakDoor);
-    doorLeaf.position.set(0, 1.09, 0);
-entranceDoorGroup.add(doorLeaf);
-
-    // Vertical Plank Grooves / Recessed Panels
-    [-0.32, -0.16, 0.0, 0.16, 0.32].forEach(px => {
-      const vGroove = new THREE.Mesh(new THREE.BoxGeometry(0.012, 2.14, 0.058), materials.reclaimedTimberBeam);
-      vGroove.position.set(px, 1.09, 0);
-      entranceDoorGroup.add(vGroove);
-    });
-
-    // Cast Iron Kickplate at base of door
-    const kickPlate = new THREE.Mesh(new THREE.BoxGeometry(0.96, 0.22, 0.062), materials.castIronHardware);
-    kickPlate.position.set(0, 0.11, 0);
-entranceDoorGroup.add(kickPlate);
-
-    // Heavy Cast Iron Strap Hinges
-    [0.35, 1.10, 1.85].forEach(hy => {
-      const strap = new THREE.Mesh(new THREE.BoxGeometry(0.24, 0.045, 0.066), materials.castIronHardware);
-      strap.position.set(-0.35, hy, 0);
-      entranceDoorGroup.add(strap);
-    });
-
-    // Cast Iron Lever Handle & Backplate
-    const handleBackplate = new THREE.Mesh(new THREE.BoxGeometry(0.05, 0.22, 0.066), materials.castIronHardware);
-    handleBackplate.position.set(0.38, 1.02, 0);
-    const doorHandle = new THREE.Mesh(new THREE.CylinderGeometry(0.012, 0.012, 0.12, 8), materials.castIronHardware);
-    doorHandle.rotation.z = Math.PI / 2;
-    doorHandle.position.set(0.32, 1.02, 0.05);
-    entranceDoorGroup.add(handleBackplate, doorHandle);
-
-    envelope.add(entranceDoorGroup);
-
-    // --- LEFT-HAND PERIMETER WALL WITH CASEMENT WINDOW & MURAL ARCHITECTURE (X = -5.4m) ---
-    // Wall Dimensions: 7.6m depth, 3.5m height, 250mm thickness.
-    // Casement Window Opening: 1.2m W (along Z: center Z = 0.5m, Z from -0.1 to 1.1), 1.4m H (center Y = 1.8m, Y from 1.1 to 2.5)
-
-    // Left Wall Section Below Window (Y = 0 to 1.1m, H = 1.1m, D = 7.6m)
-    const leftWallBottom = new THREE.Mesh(new THREE.BoxGeometry(0.25, 1.1, 7.6), materials.scandiShiplap);
-    leftWallBottom.position.set(-5.525, 0.55, 0);
-envelope.add(leftWallBottom);
-
-    // Left Wall Section Above Window (Y = 2.5m to 3.5m, H = 1.0m, D = 7.6m)
-    const leftWallTop = new THREE.Mesh(new THREE.BoxGeometry(0.25, 1.0, 7.6), materials.scandiShiplap);
-    leftWallTop.position.set(-5.525, 3.0, 0);
-envelope.add(leftWallTop);
-
-    // Left Wall Section Rear of Window (Z = -3.8m to -0.1m, D = 3.7m, H = 1.4m)
-    const leftWallRear = new THREE.Mesh(new THREE.BoxGeometry(0.25, 1.4, 3.7), materials.scandiShiplap);
-    leftWallRear.position.set(-5.525, 1.8, -1.95);
-envelope.add(leftWallRear);
-
-    // Left Wall Section Front of Window (Z = 1.1m to 3.8m, D = 2.7m, H = 1.4m)
-    const leftWallFront = new THREE.Mesh(new THREE.BoxGeometry(0.25, 1.4, 2.7), materials.scandiShiplap);
-    leftWallFront.position.set(-5.525, 1.8, 2.45);
-envelope.add(leftWallFront);
-
-    // Solid Wood Window Sill (40mm thick, extending 280mm into 250mm reveal)
-    const windowSill = new THREE.Mesh(new THREE.BoxGeometry(0.28, 0.04, 1.28), materials.reclaimedTimberBeam);
-    windowSill.position.set(-5.48, 1.08, 0.5);
-envelope.add(windowSill);
-
-    // 250mm Wall Reveal Liners (Top & Sides)
-    const revealTop = new THREE.Mesh(new THREE.BoxGeometry(0.25, 0.02, 1.2), materials.scandiShiplap);
-    revealTop.position.set(-5.525, 2.49, 0.5);
-    const revealSideL = new THREE.Mesh(new THREE.BoxGeometry(0.25, 1.4, 0.02), materials.scandiShiplap);
-    revealSideL.position.set(-5.525, 1.8, -0.09);
-    const revealSideR = new THREE.Mesh(new THREE.BoxGeometry(0.25, 1.4, 0.02), materials.scandiShiplap);
-    revealSideR.position.set(-5.525, 1.8, 1.09);
-    envelope.add(revealTop, revealSideL, revealSideR);
-
-    // Symmetrical Double Casement Window (1.2m W × 1.4m H at X = -5.4m, center Y = 1.8m, center Z = 0.5m)
-    const casementWindowGroup = new THREE.Group();
-    casementWindowGroup.position.set(-5.40, 1.8, 0.5);
-
-    const darkCharcoalFrameMat = materials.blackenedStructuralSteel;
-
-    // Outer Casement Frame (1.2m in Z, 1.4m in Y, 0.07m in X)
-    const cFrameTop = new THREE.Mesh(new THREE.BoxGeometry(0.07, 0.05, 1.2), darkCharcoalFrameMat);
-    cFrameTop.position.set(0, 0.675, 0);
-    const cFrameBot = new THREE.Mesh(new THREE.BoxGeometry(0.07, 0.05, 1.2), darkCharcoalFrameMat);
-    cFrameBot.position.set(0, -0.675, 0);
-    const cFrameL = new THREE.Mesh(new THREE.BoxGeometry(0.07, 1.4, 0.05), darkCharcoalFrameMat);
-    cFrameL.position.set(0, 0, -0.575);
-    const cFrameR = new THREE.Mesh(new THREE.BoxGeometry(0.07, 1.4, 0.05), darkCharcoalFrameMat);
-    cFrameR.position.set(0, 0, 0.575);
-    casementWindowGroup.add(cFrameTop, cFrameBot, cFrameL, cFrameR);
-
-    // Center Astragal Meeting Rail (0.05m Z × 1.35m Y × 0.06m X)
-    const astragalRail = new THREE.Mesh(new THREE.BoxGeometry(0.06, 1.35, 0.05), darkCharcoalFrameMat);
-    astragalRail.position.set(0, 0, 0);
-    casementWindowGroup.add(astragalRail);
-
-    // Left Sash Leaf Frame & Glass (Z = -0.2875m)
-    const sashLeft = new THREE.Mesh(new THREE.BoxGeometry(0.045, 1.28, 0.52), darkCharcoalFrameMat);
-    sashLeft.position.set(0, 0, -0.2875);
-    const glassLeft = new THREE.Mesh(new THREE.BoxGeometry(0.02, 1.22, 0.46), materials.casementPrivacyGlass);
-    glassLeft.position.set(0, 0, -0.2875);
-    casementWindowGroup.add(glassLeft);
-
-    // Right Sash Leaf Frame & Glass (Z = +0.2875m)
-    const glassRight = new THREE.Mesh(new THREE.BoxGeometry(0.02, 1.22, 0.46), materials.casementPrivacyGlass);
-    glassRight.position.set(0, 0, 0.2875);
-    casementWindowGroup.add(glassRight);
-
-    // Horizontal & Vertical Sash Glazing Bars (Muntins)
-    [-0.2875, 0.2875].forEach(sz => {
-      const hMuntin = new THREE.Mesh(new THREE.BoxGeometry(0.035, 0.025, 0.46), darkCharcoalFrameMat);
-      hMuntin.position.set(0, 0, sz);
-      casementWindowGroup.add(hMuntin);
-    });
-
-    // Solid Brass Lever Latches on Meeting Rail
-    [-0.08, 0.08].forEach(ly => {
-      const latchBase = new THREE.Mesh(new THREE.BoxGeometry(0.02, 0.06, 0.03), materials.solidBrass);
-      latchBase.position.set(0.035, ly, 0);
-      const latchLever = new THREE.Mesh(new THREE.CylinderGeometry(0.006, 0.006, 0.08, 8), materials.solidBrass);
-      latchLever.position.set(0.05, ly, 0);
-      latchLever.rotation.x = Math.PI / 4;
-      casementWindowGroup.add(latchBase, latchLever);
-    });
-
-    // Window Glow Plane behind privacy glass (simulating bright sunset glare through frosted casement)
-    const windowGlowPlane = new THREE.Mesh(
-      new THREE.PlaneGeometry(1.22, 1.38),
-      materials.windowGlowPlaneMat
-    );
-    windowGlowPlane.rotation.y = Math.PI / 2;
-    windowGlowPlane.position.set(-0.06, 0, 0);
-    casementWindowGroup.add(windowGlowPlane);
-
-    envelope.add(casementWindowGroup);
-
-    // Exterior Sunset Sky Panorama Backdrop (outside casement window at X = -7.2m)
-    const sunsetSkyGeo = new THREE.CylinderGeometry(15, 15, 12, 36, 1, true, Math.PI * 0.78, Math.PI * 0.62);
-    const sunsetSkyMat = new THREE.MeshBasicMaterial({
-      map: generateSunsetPanoramaTexture(),
-      side: THREE.BackSide,
-      depthWrite: false
-    });
-    const sunsetSkyDome = new THREE.Mesh(sunsetSkyGeo, sunsetSkyMat);
-    sunsetSkyDome.position.set(-1.8, 3.5, 0.5);
-    envelope.add(sunsetSkyDome);
+    // Open Architectural Cutaway: Front entrance doors wall, doors, left window perimeter wall, and casement windows removed
 
     // =========================================================================
     // 5. Service Counter Architecture & Barista Equipment Workflow
@@ -4634,21 +4462,21 @@ ladderGroup.add(rung);
       edisonFixtures.push({ fixture, pointLight, filament, baseIntensity: cfg.intensity });
     });
 
-    // Warm Golden-Orange Directional Sunlight through Casement Window (X = -7.0m, Y = 2.2m, Z = 0.5m):
-    // Strictly shadowless architecture: intensity 2.6, color 0xff8818
-    const sunlight = new THREE.DirectionalLight(0xff8818, 2.6);
-    sunlight.position.set(-7.0, 2.2, 0.5);
+    // Crisp White Directional Sunlight (Shadowless Architecture):
+    // Natural white daylight (~5800K, color: 0xfffaf2, intensity: 2.5)
+    const sunlight = new THREE.DirectionalLight(0xfffaf2, 2.5);
+    sunlight.position.set(-5.5, 6.0, 4.0);
     sunlight.target.position.set(0.4, 0.9, -0.5);
     sunlight.castShadow = false;
     scene.add(sunlight);
     scene.add(sunlight.target);
 
-    // Secondary Sunset Fill & Bounce: THREE.HemisphereLight (sky: 0xffc299, ground: 0x3d261a, intensity: 0.45)
-    const hemiLight = new THREE.HemisphereLight(0xffc299, 0x3d261a, 0.45);
+    // Natural Sky & Floor Fill Bounce: THREE.HemisphereLight (sky: 0xf4f8ff, ground: 0x5a4d3f, intensity: 0.70)
+    const hemiLight = new THREE.HemisphereLight(0xf4f8ff, 0x5a4d3f, 0.70);
     scene.add(hemiLight);
 
-    // Ambient Illumination: Rich, warm shadowless ambient light (0x4a382e, intensity: 0.95)
-    const ambientLight = new THREE.AmbientLight(0x4a382e, 0.95);
+    // Crisp Neutral Warm Ambient Illumination (0x58534c, intensity: 0.85)
+    const ambientLight = new THREE.AmbientLight(0x58534c, 0.85);
     scene.add(ambientLight);
 
     // =========================================================================
@@ -4725,11 +4553,11 @@ ladderGroup.add(rung);
 
     const views = {
       default: {
-        pos: new THREE.Vector3(-2.8, 1.85, 4.4),
+        pos: new THREE.Vector3(-2.8, 2.2, 5.0),
         target: new THREE.Vector3(0.5, 1.10, -0.5)
       },
-      sunset: {
-        pos: new THREE.Vector3(-0.6, 1.55, 0.4),
+      mural: {
+        pos: new THREE.Vector3(-0.6, 1.65, 0.4),
         target: new THREE.Vector3(5.35, 1.50, 0.0)
       },
       bistro: {
@@ -4768,36 +4596,36 @@ ladderGroup.add(rung);
 
     // Photometric Atmosphere Modes
     function setLightingMode(mode) {
-      if (mode === 'golden') {
-        sunlight.color.setHex(0xff8818);
-        sunlight.intensity = 2.6;
-        sunlight.position.set(-7.0, 2.2, 0.5);
-        hemiLight.color.setHex(0xffc299);
-        hemiLight.groundColor.setHex(0x3d261a);
-        hemiLight.intensity = 0.45;
-        ambientLight.color.setHex(0x4a382e);
-        ambientLight.intensity = 0.95;
+      if (mode === 'daylight' || mode === 'golden') {
+        sunlight.color.setHex(0xfffaf2); // Crisp pure white daylight
+        sunlight.intensity = 2.5;
+        sunlight.position.set(-5.5, 6.0, 4.0);
+        hemiLight.color.setHex(0xf4f8ff);
+        hemiLight.groundColor.setHex(0x5a4d3f);
+        hemiLight.intensity = 0.70;
+        ambientLight.color.setHex(0x58534c);
+        ambientLight.intensity = 0.85;
+        edisonFixtures.forEach(f => {
+          if (f.pointLight && f.baseIntensity > 0) f.pointLight.intensity = f.baseIntensity * 0.9;
+        });
+        if (bloomPass) bloomPass.strength = 0.22;
+      } else if (mode === 'warm') {
+        sunlight.color.setHex(0xffebd2); // Gentle warm ambient
+        sunlight.intensity = 2.0;
+        sunlight.position.set(-6.0, 4.5, 2.5);
+        hemiLight.color.setHex(0xfff2e5);
+        hemiLight.groundColor.setHex(0x4a3a2a);
+        hemiLight.intensity = 0.55;
+        ambientLight.color.setHex(0x4a423a);
+        ambientLight.intensity = 0.80;
         edisonFixtures.forEach(f => {
           if (f.pointLight && f.baseIntensity > 0) f.pointLight.intensity = f.baseIntensity;
         });
-        if (bloomPass) bloomPass.strength = 0.35;
-      } else if (mode === 'daylight') {
-        sunlight.color.setHex(0xfff1e0);
-        sunlight.intensity = 2.2;
-        sunlight.position.set(-6.5, 4.5, 1.5);
-        hemiLight.color.setHex(0xffffff);
-        hemiLight.groundColor.setHex(0x443322);
-        hemiLight.intensity = 0.50;
-        ambientLight.color.setHex(0x403530);
-        ambientLight.intensity = 0.85;
-        edisonFixtures.forEach(f => {
-          if (f.pointLight && f.baseIntensity > 0) f.pointLight.intensity = f.baseIntensity * 0.85;
-        });
-        if (bloomPass) bloomPass.strength = 0.22;
+        if (bloomPass) bloomPass.strength = 0.30;
       } else if (mode === 'evening') {
-        sunlight.color.setHex(0x223048);
-        sunlight.intensity = 0.45;
-        sunlight.position.set(-7.0, 1.8, 0.5);
+        sunlight.color.setHex(0x283858);
+        sunlight.intensity = 0.50;
+        sunlight.position.set(-6.0, 3.0, 2.0);
         hemiLight.color.setHex(0x352840);
         hemiLight.groundColor.setHex(0x110c08);
         hemiLight.intensity = 0.35;
